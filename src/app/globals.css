@@ -1,26 +1,379 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Gothic&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #333333;
+  --muted: #9ca3af;
+  --surface: #111111;
+  --surface-2: #1a1a1a;
+  --accent: #cc3366;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-display: "League Gothic", sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+}
+
+.section-inner {
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 5vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.abnjun-tab-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  color: #f8fafc;
+  padding: 1rem 1.25rem;
+  border-radius: 9999px;
+  transition: all 0.25s ease;
+}
+
+.abnjun-tab-button.active {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.24);
+}
+
+.abnjun-tab-button:hover {
+  background: rgba(255,255,255,.16);
+}
+
+.btn-slide {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.45);
+  color: #fff;
+}
+
+.btn-slide:hover {
+  background: rgba(0,0,0,.65);
+}
+.screenshot-parent{
+flex-direction: row;
+}
+.screenshot-parent>div{
+width:49%;
+}
+@media (max-width: 768px) {
+  .section-heading {
+    font-size: clamp(2.25rem, 8vw, 3.25rem);
+  }
+  .screenshot-parent{
+flex-direction: column;
+gap:10px;
+}
+.screenshot-parent>div{
+width:100%;
+}
+}
+
+
+
+
+
+.cta-section {
+  background: linear-gradient(180deg, #434343 0%, #3d3939 100%);
+  color: #ffffff;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  overflow: hidden;
+}
+
+.cta-wrapper {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+}
+
+.cta-intro {
+  max-width: 970px;
+  margin: 0 auto 60px;
+}
+
+.cta-subtext {
+  margin: 0 0 8px;
+  font-family: "Barlow", sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 45px;
+  text-transform: uppercase;
+  color: #ffffff;
+  letter-spacing: -0.1px;
+}
+
+.cta-accent {
+  margin: 0 0 8px;
+  font-family: "League Gothic", sans-serif;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #df1300;
+  letter-spacing: 0;
+}
+
+.cta-main-title {
+  margin: 0 0 12px;
+  font-family: "League Gothic", sans-serif;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #ffffff;
+  letter-spacing: 0;
+}
+
+.cta-intro-text,
+.cta-outro-text {
+  margin: 0 auto;
+  max-width: 900px;
+  font-family: "Barlow", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.05;
+  color: #ffffff;
+}
+
+.cta-pricing-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 60px;
+}
+
+.cta-pricing-card {
+  width: 313px;
+  min-height: 477px;
+  background: #000000;
+  border-radius: 6px;
+  padding: 34px 28px 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+}
+
+.cta-pricing-card.active-card {
+  position: relative;
+  z-index: 3;
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+  margin-left: -24px;
+  margin-right: -24px;
+}
+
+.cta-pricing-card.faded-card {
+  position: relative;
+  z-index: 1;
+  opacity: 0.35;
+  filter: blur(4px);
+  transform: scale(0.92);
+}
+
+.cta-card-title {
+  margin: 0 0 34px;
+  font-family: "Barlow", sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.cta-card-price {
+  margin-bottom: 34px;
+}
+
+.cta-card-price span {
+  font-family: "League Gothic", sans-serif;
+  font-size: 60px;
+  font-weight: 400;
+  line-height: 1;
+  color: #df1300;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.cta-card-features {
+  list-style: disc;
+  padding-left: 18px;
+  margin: 0 auto;
+  max-width: 210px;
+  text-align: left;
+}
+
+.cta-card-features li {
+  margin-bottom: 5px;
+  font-family: "Barlow", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #ffffff;
+}
+
+.cta-outro {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.cta-button-wrap {
+  margin-top: 24px;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: "League Gothic", sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  background: #ffffff;
+  color: #3d3939;
+}
+
+.cta-arrow {
+  display: inline-block;
+  font-size: 18px;
+  line-height: 1;
+}
+
+@media (max-width: 991px) {
+  .cta-main-title {
+    font-size: 50px;
+  }
+
+  .cta-accent {
+    font-size: 32px;
+  }
+
+  .cta-subtext {
+    font-size: 20px;
+    line-height: 1.3;
+  }
+
+  .cta-pricing-row {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .cta-pricing-card.active-card,
+  .cta-pricing-card.faded-card {
+    margin-left: 0;
+    margin-right: 0;
+    transform: none;
+    filter: none;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .cta-section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  .cta-intro {
+    margin-bottom: 40px;
+  }
+
+  .cta-main-title {
+    font-size: 38px;
+  }
+
+  .cta-accent {
+    font-size: 28px;
+  }
+
+  .cta-subtext {
+    font-size: 18px;
+  }
+
+  .cta-intro-text,
+  .cta-outro-text {
+    font-size: 16px;
+    line-height: 1.2;
+  }
+
+  .cta-pricing-row {
+    margin-bottom: 40px;
+  }
+
+  .cta-pricing-card {
+    width: 100%;
+    max-width: 340px;
+    min-height: auto;
+    padding: 28px 22px;
+  }
+
+  .cta-card-title {
+    font-size: 22px;
+  }
+
+  .cta-card-price span {
+    font-size: 52px;
+  }
+
+  .cta-button {
+    font-size: 20px;
+    padding: 12px 20px;
+  }
+
+  .hide-mobile {
+    display: none;
+  }
 }
