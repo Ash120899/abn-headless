@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 import Hero from '@/components/Hero'
 import Overview from '@/components/Overview'
 import ServicesTabs from '@/components/ServicesTabs'
@@ -15,29 +13,37 @@ import CTA from '@/components/CTA'
 const WP_API_URL = 'https://abnjunction.com/wp-json/wp/v2'
 
 async function getCaseStudy(slug) {
-  const res = await fetch(
-    `${WP_API_URL}/case_study?slug=${slug}`,
-    { cache: 'no-store' }
-  )
-  const data = await res.json()
-  return data[0]
+  try {
+    const res = await fetch(
+      `${WP_API_URL}/case_study?slug=${slug}`,
+      { cache: 'no-store', signal: AbortSignal.timeout(5000) }
+    )
+    if (!res.ok) throw new Error(`Failed to fetch case study: ${res.status}`)
+    const data = await res.json()
+    return data[0]
+  } catch (err) {
+    console.error('Error fetching case study:', err)
+    throw err
+  }
 }
 export async function generateMetadata({ params }) {
   const { slug } = await params
 
-  const res = await fetch(
-    `${WP_API_URL}/case_study?slug=${slug}&_embed`
-  )
+  try {
+    const res = await fetch(
+      `${WP_API_URL}/case_study?slug=${slug}&_embed`,
+      { signal: AbortSignal.timeout(5000) }
+    )
+    if (!res.ok) throw new Error(`Failed to fetch metadata: ${res.status}`)
+    const data = await res.json()
+    const post = data[0]
 
-  const data = await res.json()
-  const post = data[0]
-
-  if (!post) {
-    return {
-      title: "Case Study - ABN Junction",
-      description: "Explore our case studies",
+    if (!post) {
+      return {
+        title: "Case Study - ABN Junction",
+        description: "Explore our case studies",
+      }
     }
-  }
 
   // 🔥 CLEAN WP DATA
   const wpTitle = post.title?.rendered?.replace(/<[^>]+>/g, "")
@@ -81,71 +87,100 @@ export async function generateMetadata({ params }) {
       images: featuredImage ? [featuredImage] : [],
     },
   }
+  } catch (err) {
+    console.error('Error generating metadata:', err)
+    return {
+      title: "Case Study - ABN Junction",
+      description: "Explore our case studies",
+    }
+  }
 }
 async function enrichSections(sections) {
   const newSections = []
 
   for (const section of sections) {
+    try {
+      // 🔥 SCREENSHOTS
+      if (section.acf_fc_layout === "screenshots") {
+        const images = []
 
-    // 🔥 SCREENSHOTS
-    if (section.acf_fc_layout === "screenshots") {
-      const images = []
+        for (const img of section.images || []) {
+          try {
+            const res = await fetch(
+              `${WP_API_URL}/media/${img.screenshot}`,
+              { signal: AbortSignal.timeout(5000) }
+            )
+            if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
+            const media = await res.json()
 
-      for (const img of section.images || []) {
-        const res = await fetch(
-          `${WP_API_URL}/media/${img.screenshot}`
-        )
-        const media = await res.json()
+            images.push({
+              url: media.source_url
+            })
+          } catch (err) {
+            console.error('Error fetching screenshot:', err)
+          }
+        }
 
-        images.push({
-          url: media.source_url
+        newSections.push({ ...section, images })
+        continue
+      }
+
+      // 🔥 TESTIMONIAL IMAGE
+      if (section.acf_fc_layout === "testimonial") {
+        let imageUrl = null
+
+        if (section.images) {
+          try {
+            const res = await fetch(
+              `${WP_API_URL}/media/${section.images}`,
+              { signal: AbortSignal.timeout(5000) }
+            )
+            if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
+            const media = await res.json()
+            imageUrl = media.source_url
+          } catch (err) {
+            console.error('Error fetching testimonial image:', err)
+          }
+        }
+
+        newSections.push({
+          ...section,
+          image: imageUrl
         })
+
+        continue
       }
 
-      newSections.push({ ...section, images })
-      continue
-    }
+      // 🔥 CLIENT LOGOS
+      if (section.acf_fc_layout === "clients_section") {
+        const logos = []
 
-    // 🔥 TESTIMONIAL IMAGE
-    if (section.acf_fc_layout === "testimonial") {
-      let imageUrl = null
+        for (const logo of section.logos || []) {
+          try {
+            const res = await fetch(
+              `${WP_API_URL}/media/${logo.image}`,
+              { signal: AbortSignal.timeout(5000) }
+            )
+            if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
+            const media = await res.json()
 
-      if (section.images) {
-        const res = await fetch(
-          `${WP_API_URL}/media/${section.images}`
-        )
-        const media = await res.json()
-        imageUrl = media.source_url
+            logos.push({
+              url: media.source_url
+            })
+          } catch (err) {
+            console.error('Error fetching client logo:', err)
+          }
+        }
+
+        newSections.push({ ...section, logos })
+        continue
       }
 
-      newSections.push({
-        ...section,
-        image: imageUrl
-      })
-
-      continue
+      newSections.push(section)
+    } catch (err) {
+      console.error('Error processing section:', err)
+      newSections.push(section)
     }
-
-    // 🔥 CLIENT LOGOS
-    if (section.acf_fc_layout === "clients_section") {
-      const logos = []
-
-      for (const logo of section.logos || []) {
-        const res = await fetch(
-          `${WP_API_URL}/media/${logo.image}`
-        )
-        const media = await res.json()
-
-        logos.push({
-          url: media.source_url
-        })
-      }
-
-      newSections.push({ ...section, logos })
-      continue
-    }
-
-    newSections.push(section)
   }
 
   return newSections
