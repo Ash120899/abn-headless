@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import Hero from '@/components/Hero'
 import Overview from '@/components/Overview'
 import ServicesTabs from '@/components/ServicesTabs'
