@@ -1,5 +1,3 @@
-// src/app/case-studies/[slug]/page.js
-
 export const runtime = 'edge';
 
 import Hero from '@/components/Hero'
@@ -157,7 +155,7 @@ export default async function Page({ params }) {
   const rawSections = data?.acf?.content_sections || []
 
 
-console.log("RAW SECTIONS:", JSON.stringify(rawSections, null, 2))
+
 const sections = await enrichSections(rawSections)
 
   return (
