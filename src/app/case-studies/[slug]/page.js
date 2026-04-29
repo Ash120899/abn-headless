@@ -6,4 +6,4 @@ export default function Page() {
   } catch (e) {
     return <pre>{JSON.stringify(e, null, 2)}</pre>;
   }
-}
+}console.log("PAGE LOADED");
