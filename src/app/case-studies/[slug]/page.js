@@ -12,9 +12,11 @@ import Clients from '@/components/Clients'
 import CTA from '@/components/CTA'
 
 
+const WP_API_URL = 'https://abnjunction.com/wp-json/wp/v2'
+
 async function getCaseStudy(slug) {
   const res = await fetch(
-    `https://abnjunction.com/wp-json/wp/v2/case_study?slug=${slug}`,
+    `${WP_API_URL}/case_study?slug=${slug}`,
     { cache: 'no-store' }
   )
   const data = await res.json()
@@ -24,7 +26,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/case_study?slug=${slug}&_embed`
+    `${WP_API_URL}/case_study?slug=${slug}&_embed`
   )
 
   const data = await res.json()
@@ -91,7 +93,7 @@ async function enrichSections(sections) {
 
       for (const img of section.images || []) {
         const res = await fetch(
-          `https://abnjunction.com/wp-json/wp/v2/media/${img.screenshot}`
+          `${WP_API_URL}/media/${img.screenshot}`
         )
         const media = await res.json()
 
@@ -110,7 +112,7 @@ async function enrichSections(sections) {
 
       if (section.images) {
         const res = await fetch(
-          `https://abnjunction.com/wp-json/wp/v2/media/${section.images}`
+          `${WP_API_URL}/media/${section.images}`
         )
         const media = await res.json()
         imageUrl = media.source_url
@@ -130,7 +132,7 @@ async function enrichSections(sections) {
 
       for (const logo of section.logos || []) {
         const res = await fetch(
-          `https://abnjunction.com/wp-json/wp/v2/media/${logo.image}`
+          `${WP_API_URL}/media/${logo.image}`
         )
         const media = await res.json()
 
