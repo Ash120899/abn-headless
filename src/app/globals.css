@@ -292,6 +292,10 @@ width:100%;
   line-height: 1;
 }
 
+.hero-section {
+background-image: url('https://abnjunction.com/wp-content/uploads/2026/05/shutterstock_2150106461-scaled-1-scaled.jpg');
+}
+
 @media (max-width: 991px) {
   .cta-main-title {
     font-size: 50px;
