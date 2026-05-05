@@ -294,6 +294,12 @@ width:100%;
 
 .hero-section {
 background-image: url('https://abnjunction.com/wp-content/uploads/2026/05/shutterstock_2150106461-scaled-1-scaled.jpg');
+background-size: cover;
+background-position: center;
+}
+.hero-section>div{
+    justify-content: left;
+    width: 80%;
 }
 
 @media (max-width: 991px) {
