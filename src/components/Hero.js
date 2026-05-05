@@ -1,6 +1,6 @@
 export default function Hero({ data }) {
   return (
-    <section className="bg-black text-white">
+    <section className="bg-black text-white hero-section">
       <div className="section-inner min-h-[680px] flex items-center py-24">
         <div className="grid gap-14 lg:grid-cols-[1fr_minmax(320px,420px)] items-center">
           <div className="max-w-2xl">
