@@ -197,17 +197,32 @@ export default async function Page({ params }) {
 
 const sections = await enrichSections(rawSections)
 
+
+const caseDetails = sections.find(
+  (s) => s.acf_fc_layout === 'case_details_section'
+)
+
+const metrics = caseDetails?.metrics || []
+const heroSection = sections.find(
+  (s) => s.acf_fc_layout === 'hero_section'
+)
+
+const heroDesc = heroSection?.client_description
   return (
     <div>
 
       {sections.map(( section, index) => {
         switch (section.acf_fc_layout) {
 
-          case 'hero_section':
-            return <Hero key={index} data={section} />
+        case 'hero_section':
+  return <Hero key={index} data={section} metrics={metrics} />
 
           case 'overview_section':
-            return <Overview key={index} data={section} />
+            return    <Overview
+      key={index}
+      data={section}
+      heroDescription={heroDesc}
+    />
 
           case 'services_tabs_section':
             return <ServicesTabs key={index} data={section} />
@@ -215,8 +230,7 @@ const sections = await enrichSections(rawSections)
        case 'case_details_section':
   return <CaseDetails key={index} data={section} />
 
-          case 'results_metrics':
-            return <Results key={index} data={section} />
+         
 
           
 

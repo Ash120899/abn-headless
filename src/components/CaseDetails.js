@@ -18,7 +18,7 @@ export default function CaseDetails({ data }) {
             </ul>
           </div>
 
-          <div className="space-y-6">
+          {/* <div className="space-y-6">
             <h2 className="section-heading text-white">{data.result_metric_title}</h2>
             <div className="grid gap-4">
               {data.metrics?.map((item, i) => (
@@ -35,7 +35,7 @@ export default function CaseDetails({ data }) {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           </div>
 

@@ -291,7 +291,57 @@ width:100%;
   font-size: 18px;
   line-height: 1;
 }
+/* HERO BACKGROUND */
+.hero-section {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}
 
+/* TEXT GLOW */
+.hero-section h1,
+.hero-section h2 {
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ANIMATION */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: #000;
+}
+
+.swiper-pagination-bullet {
+  background: #999;
+  opacity: 0.5;
+}
+
+.swiper-pagination-bullet-active {
+  background: #000;
+  opacity: 1;
+}
+
+.testimonial-section .swiper-pagination-bullet {
+  background: #777;
+  opacity: 0.4;
+}
+
+.testimonial-section .swiper-pagination-bullet-active {
+  background: #f97316;
+  opacity: 1;
+}
+.animate-fadeUp {
+  animation: fadeUp 0.8s ease forwards;
+}
 .hero-section {
 background-image: url('https://abnjunction.com/wp-content/uploads/2026/05/shutterstock_2150106461-scaled-1-scaled.jpg');
 background-size: cover;
@@ -300,6 +350,15 @@ background-position: center;
 .hero-section>div{
     justify-content: left;
     width: 80%;
+        z-index: 9999;
+    position: relative;
+}
+.hero-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(175.14deg, rgba(0, 0, 0, 0) 9.53%, rgba(0, 0, 0, 0.75) 44.77%);
+    z-index: 2;
 }
 
 @media (max-width: 991px) {
