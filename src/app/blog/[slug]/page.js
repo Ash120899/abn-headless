@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 export default function BlogPost({ params }) {
   return (
     <div style={{ padding: "100px", color: "white", background: "black" }}>
