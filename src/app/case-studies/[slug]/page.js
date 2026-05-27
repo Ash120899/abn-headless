@@ -10,6 +10,8 @@ import Gallery from '@/components/Gallery'
 import Testimonial from '@/components/Testimonial'
 import Clients from '@/components/Clients'
 import CTA from '@/components/CTA'
+import OtherCasesSlider from '@/components/OtherCasesSlider'
+import OtherBlogsSlider from '@/components/OtherBlogsSlider'
 
 
 const WP_API_URL = 'https://abnjunction.com/wp-json/wp/v2'
@@ -242,7 +244,13 @@ const heroDesc = heroSection?.client_description
     return <Testimonial key={index} data={section} />
 
           case 'clients_section':
-            return <Clients key={index} data={section} />
+                return <>
+                  <Clients key={index} data={section} />
+                  {/* Insert other case studies slider after clients */}
+                  <OtherCasesSlider currentSlug={slug} />
+                  {/* Also show other blog posts below the other cases */}
+                  <OtherBlogsSlider currentSlug={slug} />
+                </>
 
        
 

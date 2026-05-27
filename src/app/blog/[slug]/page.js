@@ -7,6 +7,9 @@ import React, {
 } from "react";
 
 import * as cheerio from "cheerio";
+import OtherCasesSlider from "@/components/OtherCasesSlider";
+import OtherBlogsSlider from "@/components/OtherBlogsSlider";
+import DNAParallax from "@/components/DNAParallax";
 
 export const runtime = "edge";
 
@@ -213,9 +216,9 @@ export default function BlogPage(props) {
 
             {/* SOCIALS */}
             <div className="flex items-center gap-8 text-muted">
-              <a href="#" className="hover-accent transition">X</a>
-              <a href="#" className="hover-accent transition">LinkedIn</a>
-              <a href="#" className="hover-accent transition">Facebook</a>
+              <a href="https://www.instagram.com/abnjunction/" className="hover-accent transition">Instagram</a>
+              <a href="https://www.linkedin.com/company/abnjunction/" className="hover-accent transition">LinkedIn</a>
+              <a href="https://www.facebook.com/abnjunction/" className="hover-accent transition">Facebook</a>
             </div>
 
           </div>
@@ -230,6 +233,8 @@ export default function BlogPage(props) {
         </div>
 
       </section>
+
+        {/* OTHER CONTENT: other cases + other blogs (moved to bottom of page) */}
 
       {/* CONTENT */}
       <section
@@ -332,6 +337,11 @@ export default function BlogPage(props) {
         </div>
 
       </section>
+      {/* Place other cases and other blogs at the end of the page */}
+       <DNAParallax currentSlug={slug} />
+      <OtherCasesSlider currentSlug={slug} />
+      <OtherBlogsSlider currentSlug={slug} />
+    
 
     </main>
   );
