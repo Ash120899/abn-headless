@@ -43,7 +43,19 @@ export default function CaseDetails({ data }) {
         <div className="space-y-12">
           <section className="space-y-6">
             <h2 className="text-4xl font-semibold">Challenge</h2>
-            <p className="text-muted leading-8 whitespace-pre-line">{data.challenge_text}</p>
+            <div
+  className="
+    text-muted
+    leading-8
+    prose
+    prose-li:mb-4
+    prose-strong:text-black
+    max-w-none
+  "
+  dangerouslySetInnerHTML={{
+    __html: data.challenge_text,
+  }}
+/>
           </section>
 
           <section className="space-y-6">
