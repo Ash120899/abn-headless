@@ -13,11 +13,11 @@ export default function Gallery({ data }) {
   if (!images.length) return null
 
   return (
-    <section className="bg-white text-black py-24">
+    <section className="bg-background text-foreground py-24">
       <div className="section-inner max-w-6xl mx-auto px-4 md:px-6">
 
         {/* TITLE */}
-        <h2 className="section-heading text-black mb-16 text-center">
+        <h2 className="section-heading text-foreground mb-16 text-center">
           Screenshots
         </h2>
 
@@ -39,7 +39,7 @@ export default function Gallery({ data }) {
         >
           {images.map((img, i) => (
             <SwiperSlide key={i}>
-              <div className="rounded-[28px] overflow-hidden border border-gray-200 shadow-lg">
+              <div className="rounded-[28px] overflow-hidden border border-theme shadow-lg">
 
                 <img
                   src={img.url}

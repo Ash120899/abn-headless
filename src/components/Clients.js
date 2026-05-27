@@ -8,7 +8,7 @@ export default function Clients({ data }) {
   const duplicated = [...logos, ...logos]
 
   return (
-    <section className="relative bg-black text-white py-24 overflow-hidden">
+    <section className="relative bg-surface text-foreground py-24 overflow-hidden">
 
       {/* BG GLOW */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-orange-500/10 blur-[140px] rounded-full"></div>
@@ -19,7 +19,7 @@ export default function Clients({ data }) {
         {/* HEADING */}
         <div className="text-center mb-14">
 
-          <p className="text-xs uppercase tracking-[0.35em] text-orange-400 mb-4">
+          <p className="text-xs uppercase tracking-[0.35em] text-accent mb-4">
             TRUSTED BY
           </p>
 
@@ -53,7 +53,7 @@ export default function Clients({ data }) {
                 className="group flex-shrink-0 mx-3"
               >
 
-                <div className="relative flex items-center justify-center w-[180px] h-[110px] rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-xl overflow-hidden transition duration-500 hover:border-orange-400/30 hover:bg-white/[0.08]">
+                <div className="relative flex items-center justify-center w-[180px] h-[110px] rounded-3xl border border-theme bg-surface-weak backdrop-blur-xl overflow-hidden transition duration-500">
 
                   {/* GLOW */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-700">
@@ -64,7 +64,7 @@ export default function Clients({ data }) {
                   <img
                     src={logo.url}
                     alt={`client-${i}`}
-                    className="relative z-10 max-h-14 w-auto object-contain opacity-70 grayscale transition duration-500 group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-105"
+                    className="relative z-10 max-h-14 w-auto object-contain opacity-100  transition duration-500 group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-105"
                   />
 
                 </div>

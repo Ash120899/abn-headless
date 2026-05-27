@@ -67,7 +67,7 @@ export default function Testimonial({ data }) {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-black text-white py-24 overflow-hidden"
+      className="relative bg-surface text-foreground py-24 overflow-hidden"
     >
       {/* BACKGROUND GLOW */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -83,7 +83,7 @@ export default function Testimonial({ data }) {
         {/* HEADING */}
         <div className="testimonial-heading text-center mb-16">
 
-          <p className="text-orange-400 uppercase tracking-[0.35em] text-xs mb-4">
+          <p className="text-accent uppercase tracking-[0.35em] text-xs mb-4">
             Testimonials
           </p>
 
@@ -135,7 +135,7 @@ export default function Testimonial({ data }) {
     <div className="absolute -inset-[1px] rounded-[32px] bg-gradient-to-r from-orange-500/20 via-pink-500/10 to-purple-500/20 blur-xl opacity-70 group-hover:opacity-100 transition duration-700"></div>
 
     {/* GLASS CARD */}
-    <div className="relative bg-white/[0.04] backdrop-blur-2xl border border-white/10 rounded-[32px] overflow-hidden px-6 md:px-8 py-6 md:py-7 shadow-[0_8px_40px_rgba(0,0,0,0.45)]">
+    <div className="relative bg-surface-weak backdrop-blur-2xl border border-theme rounded-[32px] overflow-hidden px-6 md:px-8 py-6 md:py-7 shadow-[0_8px_40px_rgba(0,0,0,0.45)]">
 
       {/* TOP GLOW */}
       <div className="absolute inset-0 bg-gradient-to-br from-orange-500/[0.03] via-transparent to-purple-500/[0.05] pointer-events-none"></div>
@@ -151,7 +151,7 @@ export default function Testimonial({ data }) {
             {/* IMAGE GLOW */}
             <div className="absolute -inset-2 bg-gradient-to-r from-orange-500/30 to-pink-500/30 blur-xl rounded-2xl opacity-80"></div>
 
-            <div className="relative w-20 h-20 rounded-2xl overflow-hidden border border-white/15 bg-white/10 backdrop-blur-xl">
+            <div className="relative w-20 h-20 rounded-2xl overflow-hidden border border-theme bg-surface-weak backdrop-blur-xl">
 
               {imageUrl ? (
                 <img
@@ -160,7 +160,7 @@ export default function Testimonial({ data }) {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-xs text-white/40">
+                <div className="w-full h-full flex items-center justify-center text-xs text-muted">
                   No Image
                 </div>
               )}
@@ -172,11 +172,11 @@ export default function Testimonial({ data }) {
           {/* NAME */}
           <div className="pt-1">
 
-            <h3 className="text-base font-semibold text-white leading-tight">
+            <h3 className="text-base font-semibold text-foreground leading-tight">
               {item.name}
             </h3>
 
-            <p className="text-sm text-white/50 mt-1">
+            <p className="text-sm text-muted mt-1">
               {item.role}
             </p>
 
@@ -188,12 +188,12 @@ export default function Testimonial({ data }) {
         <div className="flex-1">
 
           {/* QUOTE */}
-          <div className="text-orange-400 text-3xl leading-none mb-0 opacity-90">
+          <div className="text-accent text-3xl leading-none mb-0 opacity-90">
             “
           </div>
 
           {/* TEXT */}
-          <p className="text-[15px] md:text-[17px] leading-8 text-white/75 font-light">
+          <p className="text-[15px] md:text-[17px] leading-8 text-muted font-light">
             {item.text}
           </p>
 

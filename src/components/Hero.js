@@ -1,11 +1,19 @@
 'use client'
 
 export default function Hero({ data, metrics = [] }) {
+    const heroImage = data?.hero_image;
+
   return (
-    <section className="hero-section relative text-white overflow-hidden">
+
+    
+    <section className="hero-section relative text-foreground overflow-hidden" style={{
+    backgroundImage: `url(${heroImage})`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+  }}>
 
       {/* OVERLAY */}
-      <div className="absolute inset-0 bg-black/60 z-0"></div>
+      <div className="absolute inset-0 z-0" style={{ background: 'var(--overlay)' }}></div>
 
       {/* CONTENT */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-6 md:pt-10 pb-6">
@@ -17,7 +25,7 @@ export default function Hero({ data, metrics = [] }) {
           </h1>
 
           {data.image && (
-            <div className="bg-white/15 backdrop-blur-md p-2 rounded-xl border border-white/20 shadow-lg">
+            <div className="bg-surface-weak backdrop-blur-md p-2 rounded-xl border border-theme shadow-lg">
               <img
                 src={data.image}
                 alt={data.title}
@@ -28,15 +36,15 @@ export default function Hero({ data, metrics = [] }) {
         </div>
 
         {/* LABEL */}
-        <p className="text-xs tracking-[0.3em] text-white/100 mb-3 animate-fadeUp [animation-delay:0.2s] font-bold">
+        <p className="text-xs tracking-[0.3em] text-foreground mb-3 animate-fadeUp [animation-delay:0.2s] font-bold">
           CASE STUDY
         </p>
 
         {/* BREADCRUMB */}
-        <p className="text-sm text-white/70 mb-8 animate-fadeUp [animation-delay:0.25s]">
+        <p className="text-sm text-muted mb-8 animate-fadeUp [animation-delay:0.25s]">
           <a
             href="https://abnjunction.com/case-studies"
-            className="text-orange-400 hover:underline font-semibold"
+            className="text-accent hover:underline font-semibold"
           >
             Case Studies
           </a>{' '}
@@ -44,7 +52,7 @@ export default function Hero({ data, metrics = [] }) {
         </p>
 
         {/* MAIN HEADING */}
-        <h2 className="text-2xl md:text-4xl font-semibold max-w-3xl leading-tight text-white/90 animate-fadeUp [animation-delay:0.3s]">
+        <h2 className="text-2xl md:text-4xl font-semibold max-w-3xl leading-tight text-foreground animate-fadeUp [animation-delay:0.3s]">
           {data.title}’s Successful Partnership with ABN Junction
         </h2>
 
@@ -61,10 +69,10 @@ export default function Hero({ data, metrics = [] }) {
               {metrics.map((item, i) => (
                 <div
                   key={i}
-                  className="group flex items-center gap-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-6 py-5 shadow-xl transition duration-300 hover:-translate-y-1 hover:bg-white/20 hover:shadow-2xl"
+                  className="group flex items-center gap-4 bg-surface-weak backdrop-blur-xl border border-theme rounded-2xl px-6 py-5 shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
                 >
                   {/* ICON */}
-                  <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center transition group-hover:scale-110">
+                  <div className="w-12 h-12 rounded-lg bg-surface-weak flex items-center justify-center transition group-hover:scale-110">
                     <img
                       src={item.icon?.url || item.icon}
                       alt={item.label}
@@ -74,10 +82,10 @@ export default function Hero({ data, metrics = [] }) {
 
                   {/* TEXT */}
                   <div>
-                    <p className="text-lg md:text-xl font-semibold text-white group-hover:text-orange-300">
+                    <p className="text-lg md:text-xl font-semibold text-foreground group-hover:text-accent">
                       {item.value}
                     </p>
-                    <p className="text-xs md:text-sm text-white/70">
+                    <p className="text-xs md:text-sm text-muted">
                       {item.label}
                     </p>
                   </div>
