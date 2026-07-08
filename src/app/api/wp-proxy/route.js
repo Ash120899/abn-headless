@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 const WP_API_URL = "https://abnjunction.com/wp-json/wp/v2";
 
 export async function GET(request) {
