@@ -1,5 +1,6 @@
 export const runtime = 'edge';
 
+import { cache } from 'react'
 import Hero from '@/components/Hero'
 import Overview from '@/components/Overview'
 import ServicesTabs from '@/components/ServicesTabs'
@@ -16,10 +17,11 @@ import OtherBlogsSlider from '@/components/OtherBlogsSlider'
 
 const WP_API_URL = 'https://abnjunction.com/wp-json/wp/v2'
 
-async function getCaseStudy(slug) {
+// cache() memoizes this per-request, so generateMetadata and Page share one fetch instead of two
+const getCaseStudy = cache(async (slug) => {
   try {
     const res = await fetch(
-      `${WP_API_URL}/case_study?slug=${slug}`,
+      `${WP_API_URL}/case_study?slug=${slug}&_embed`,
       { cache: 'no-store', signal: AbortSignal.timeout(5000) }
     )
     if (!res.ok) throw new Error(`Failed to fetch case study: ${res.status}`)
@@ -29,18 +31,12 @@ async function getCaseStudy(slug) {
     console.error('Error fetching case study:', err)
     throw err
   }
-}
+})
 export async function generateMetadata({ params }) {
   const { slug } = await params
 
   try {
-    const res = await fetch(
-      `${WP_API_URL}/case_study?slug=${slug}&_embed`,
-      { signal: AbortSignal.timeout(5000) }
-    )
-    if (!res.ok) throw new Error(`Failed to fetch metadata: ${res.status}`)
-    const data = await res.json()
-    const post = data[0]
+    const post = await getCaseStudy(slug)
 
     if (!post) {
       return {
@@ -99,120 +95,91 @@ export async function generateMetadata({ params }) {
     }
   }
 }
+async function fetchMediaUrl(id) {
+  const res = await fetch(`${WP_API_URL}/media/${id}`, { signal: AbortSignal.timeout(5000) })
+  if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
+  const media = await res.json()
+  return media.source_url
+}
+
+// Resolves every section concurrently, and every image/logo within a section
+// concurrently too, instead of awaiting them one at a time.
 async function enrichSections(sections) {
-  const newSections = []
-
-  for (const section of sections) {
-    try {
-      // 🔥 SCREENSHOTS
-      if (section.acf_fc_layout === "screenshots") {
-        const images = []
-
-        for (const img of section.images || []) {
-          try {
-            const res = await fetch(
-              `${WP_API_URL}/media/${img.screenshot}`,
-              { signal: AbortSignal.timeout(5000) }
-            )
-            if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
-            const media = await res.json()
-
-            images.push({
-              url: media.source_url
+  return Promise.all(
+    sections.map(async (section) => {
+      try {
+        // 🔥 SCREENSHOTS
+        if (section.acf_fc_layout === "screenshots") {
+          const resolvedImages = await Promise.all(
+            (section.images || []).map(async (img) => {
+              try {
+                return { url: await fetchMediaUrl(img.screenshot) }
+              } catch (err) {
+                console.error('Error fetching screenshot:', err)
+                return null
+              }
             })
-          } catch (err) {
-            console.error('Error fetching screenshot:', err)
-          }
+          )
+
+          return { ...section, images: resolvedImages.filter(Boolean) }
         }
 
-        newSections.push({ ...section, images })
-        continue
-      }
+        // 🔥 TESTIMONIAL IMAGE
+        if (section.acf_fc_layout === "testimonial") {
+          let imageUrl = null
 
-      // 🔥 TESTIMONIAL IMAGE
-      if (section.acf_fc_layout === "testimonial") {
-        let imageUrl = null
-
-        if (section.images) {
-          try {
-            const res = await fetch(
-              `${WP_API_URL}/media/${section.images}`,
-              { signal: AbortSignal.timeout(5000) }
-            )
-            if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
-            const media = await res.json()
-            imageUrl = media.source_url
-          } catch (err) {
-            console.error('Error fetching testimonial image:', err)
+          if (section.images) {
+            try {
+              imageUrl = await fetchMediaUrl(section.images)
+            } catch (err) {
+              console.error('Error fetching testimonial image:', err)
+            }
           }
+
+          return { ...section, image: imageUrl }
         }
 
-        newSections.push({
-          ...section,
-          image: imageUrl
-        })
-
-        continue
-      }
-
-      // 🔥 CLIENT LOGOS
-      if (section.acf_fc_layout === "clients_section") {
-        const logos = []
-
-        for (const logo of section.logos || []) {
-          try {
-            const res = await fetch(
-              `${WP_API_URL}/media/${logo.image}`,
-              { signal: AbortSignal.timeout(5000) }
-            )
-            if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
-            const media = await res.json()
-
-            logos.push({
-              url: media.source_url
+        // 🔥 CLIENT LOGOS
+        if (section.acf_fc_layout === "clients_section") {
+          const resolvedLogos = await Promise.all(
+            (section.logos || []).map(async (logo) => {
+              try {
+                return { url: await fetchMediaUrl(logo.image) }
+              } catch (err) {
+                console.error('Error fetching client logo:', err)
+                return null
+              }
             })
-          } catch (err) {
-            console.error('Error fetching client logo:', err)
-          }
+          )
+
+          return { ...section, logos: resolvedLogos.filter(Boolean) }
         }
 
-        newSections.push({ ...section, logos })
-        continue
-      }
+        // 🔥 HERO DARK-MODE IMAGE OVERRIDE (ACF may return an attachment ID, an image array, or a URL)
+        if (section.acf_fc_layout === "hero_section" && section.hero_image_dark) {
+          let heroImageDark = section.hero_image_dark
 
-      // 🔥 HERO DARK-MODE IMAGE OVERRIDE (ACF may return an attachment ID, an image array, or a URL)
-      if (section.acf_fc_layout === "hero_section" && section.hero_image_dark) {
-        let heroImageDark = section.hero_image_dark
-
-        if (heroImageDark && typeof heroImageDark === "object") {
-          heroImageDark = heroImageDark.url || null
-        } else if (/^\d+$/.test(String(heroImageDark))) {
-          try {
-            const res = await fetch(
-              `${WP_API_URL}/media/${heroImageDark}`,
-              { signal: AbortSignal.timeout(5000) }
-            )
-            if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
-            const media = await res.json()
-            heroImageDark = media.source_url
-          } catch (err) {
-            console.error('Error fetching hero dark image:', err)
-            heroImageDark = null
+          if (heroImageDark && typeof heroImageDark === "object") {
+            heroImageDark = heroImageDark.url || null
+          } else if (/^\d+$/.test(String(heroImageDark))) {
+            try {
+              heroImageDark = await fetchMediaUrl(heroImageDark)
+            } catch (err) {
+              console.error('Error fetching hero dark image:', err)
+              heroImageDark = null
+            }
           }
+
+          return { ...section, hero_image_dark: heroImageDark }
         }
 
-        newSections.push({ ...section, hero_image_dark: heroImageDark })
-        continue
+        return section
+      } catch (err) {
+        console.error('Error processing section:', err)
+        return section
       }
-
-      newSections.push(section)
-    } catch (err) {
-      console.error('Error processing section:', err)
-      newSections.push(section)
-    }
-  }
-
-  return newSections
+    })
+  )
 }
 export default async function Page({ params }) {
   const { slug } = await params
