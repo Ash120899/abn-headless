@@ -1,0 +1,29 @@
+HTTP/1.1 200 OK
+Date: Wed, 08 Jul 2026 14:16:12 GMT
+Content-Type: application/json; charset=UTF-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+CF-Ray: a17fb48f1c8ed04b-DEL
+CF-Cache-Status: DYNAMIC
+Access-Control-Allow-Origin: http://localhost:3000
+Allow: GET
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Link: <https://abnjunction.com/wp-json/wp/v2/case_study?per_page=1&_embed&page=2>; rel="next"
+Server: cloudflare
+Vary: Origin,Accept-Encoding
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type
+Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, PATCH, DELETE
+Access-Control-Expose-Headers: X-WP-Total, X-WP-TotalPages, Link
+Content-Security-Policy: upgrade-insecure-requests
+Panel: hpanel
+Platform: hostinger
+X-Content-Type-Options: nosniff
+X-Powered-By: PHP/8.5.4
+X-Robots-Tag: noindex
+X-Turbo-Charged-By: LiteSpeed
+X-Wp-Total: 10
+X-Wp-Totalpages: 10
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=fxRKpp2wTcjpLWH6sHb0jLYSFfeZTHtuaJ6NrHaiyzBaW8Pm0PcYPK8h5Obgyf1Vj1JQZ%2Bas%2Bii2oXMnSNv5l3A1VCAjUWbZ72Q8yYvySttA75d5Kaf6GNBJ9hNleToxpeE%3D"}]}
+alt-svc: h3=":443"; ma=86400
+

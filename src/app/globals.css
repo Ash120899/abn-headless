@@ -110,30 +110,26 @@ width:100%;
 }
 }
 
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
 
-
-
-
-.cta-section {
-  background: linear-gradient(180deg, #434343 0%, #3d3939 100%);
-  color: #ffffff;
-  padding-top: 80px;
-  padding-bottom: 80px;
-  overflow: hidden;
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-.cta-wrapper {
-  width: 100%;
-  max-width: 1140px;
-  margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
-  text-align: center;
+.cta-section {
+  background: var(--background);
+  padding-top: 120px;
+  padding-bottom: 120px;
 }
 
 .cta-intro {
   max-width: 970px;
   margin: 0 auto 60px;
+  text-align: center;
 }
 
 .cta-subtext {
@@ -143,7 +139,7 @@ width:100%;
   font-weight: 400;
   line-height: 45px;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--foreground);
   letter-spacing: -0.1px;
 }
 
@@ -165,7 +161,7 @@ width:100%;
   font-weight: 400;
   line-height: 1;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--foreground);
   letter-spacing: 0;
 }
 
@@ -177,7 +173,7 @@ width:100%;
   font-size: 18px;
   font-weight: 400;
   line-height: 1.05;
-  color: #ffffff;
+  color: var(--muted);
 }
 
 .cta-pricing-row {
@@ -191,10 +187,11 @@ width:100%;
 .cta-pricing-card {
   width: 313px;
   min-height: 477px;
-  background: #000000;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   border-radius: 6px;
   padding: 34px 28px 30px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 }
 
@@ -223,7 +220,7 @@ width:100%;
   font-weight: 500;
   line-height: 1;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--foreground);
 }
 
 .cta-card-price {
@@ -254,12 +251,13 @@ width:100%;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.3;
-  color: #ffffff;
+  color: var(--muted);
 }
 
 .cta-outro {
   max-width: 860px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .cta-button-wrap {
@@ -272,8 +270,8 @@ width:100%;
   justify-content: center;
   gap: 8px;
   padding: 14px 24px;
-  border: 1px solid #ffffff;
-  color: #ffffff;
+  border: 1px solid var(--foreground);
+  color: var(--foreground);
   text-decoration: none;
   text-transform: uppercase;
   font-family: "League Gothic", sans-serif;
@@ -285,8 +283,8 @@ width:100%;
 }
 
 .cta-button:hover {
-  background: #ffffff;
-  color: #3d3939;
+  background: var(--foreground);
+  color: var(--background);
 }
 /* Accent utility classes for theme-aware coloring */
 .text-accent { color: var(--accent) !important; }
@@ -492,19 +490,94 @@ background-position: center;
 .bg-overlay { background: var(--overlay) !important; }
 .bg-surface-weak { background: var(--surface-weak) !important; }
 
-/* Content area that wraps HTML injected from WP — makes elements theme-aware */
+/* Draggable card sliders (OtherCasesSlider / OtherBlogsSlider) */
+.slider-scrollbar {
+  cursor: grab;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--surface-weak);
+}
+
+.slider-scrollbar.dragging {
+  cursor: grabbing;
+  user-select: none;
+  scroll-snap-type: none;
+}
+
+.slider-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.slider-scrollbar::-webkit-scrollbar-track {
+  background: var(--surface-weak);
+  border-radius: 9999px;
+}
+
+.slider-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 9999px;
+}
+
+.slider-scrollbar::-webkit-scrollbar-thumb:hover {
+  opacity: 0.8;
+}
+
+/* Content area that wraps HTML injected from WP — makes elements theme-aware and
+   matches the case-study body copy (text-lg/leading-8 paragraphs, spaced sections).
+   Uses descendant selectors (not just direct children) since WP block markup often
+   nests paragraphs/images inside wrapper divs. */
 .content-area {
   color: var(--muted);
+  font-size: 1.125rem;
+  line-height: 2rem;
 }
 .content-area h2,
 .content-area h3,
-.content-area strong {
+.content-area strong,
+.content-area b {
   color: var(--foreground);
+}
+.content-area h2 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 600;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+}
+.content-area h3 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
 }
 .content-area p,
 .content-area li,
 .content-area td {
   color: var(--muted);
+  line-height: 2rem;
+}
+.content-area p,
+.content-area ul,
+.content-area ol,
+.content-area blockquote,
+.content-area table,
+.content-area figure {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.content-area ul,
+.content-area ol {
+  padding-left: 1.5rem;
+}
+.content-area li + li {
+  margin-top: 0.5rem;
+}
+/* WP content often separates lines with <br> instead of real paragraphs;
+   give those line breaks the same breathing room as a paragraph gap. */
+.content-area br {
+  content: "";
+  display: block;
+  margin-top: 0.75rem;
 }
 .content-area a {
   color: var(--accent);
@@ -515,8 +588,10 @@ background-position: center;
   color: var(--foreground);
 }
 .content-area img {
+  display: block;
   border: 1px solid var(--border);
   border-radius: 32px;
+  margin: 2.5rem auto;
 }
 .content-area table {
   width: 100%;

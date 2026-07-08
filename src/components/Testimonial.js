@@ -99,7 +99,7 @@ export default function Testimonial({ data }) {
           <Swiper
             modules={[Pagination, Autoplay]}
             slidesPerView={1}
-            
+            centeredSlides={true}
             loop={true}
             speed={1000}
             autoplay={{
@@ -135,7 +135,7 @@ export default function Testimonial({ data }) {
     <div className="absolute -inset-[1px] rounded-[32px] bg-gradient-to-r from-orange-500/20 via-pink-500/10 to-purple-500/20 blur-xl opacity-70 group-hover:opacity-100 transition duration-700"></div>
 
     {/* GLASS CARD */}
-    <div className="relative bg-surface-weak backdrop-blur-2xl border border-theme rounded-[32px] overflow-hidden px-6 md:px-8 py-6 md:py-7 shadow-[0_8px_40px_rgba(0,0,0,0.45)]">
+    <div className="relative bg-surface-weak backdrop-blur-2xl border border-theme rounded-[32px] overflow-hidden px-6 md:px-8 py-6 md:py-7 shadow-[0_8px_40px_var(--overlay)]">
 
       {/* TOP GLOW */}
       <div className="absolute inset-0 bg-gradient-to-br from-orange-500/[0.03] via-transparent to-purple-500/[0.05] pointer-events-none"></div>

@@ -1,7 +1,15 @@
 'use client'
 
+import useTheme from '@/hooks/useTheme'
+
 export default function Hero({ data, metrics = [] }) {
-    const heroImage = data?.hero_image;
+    const theme = useTheme();
+
+    // Optional per-theme override, set via an ACF "hero_image_dark" sub-field on the Hero layout in WP admin
+    const heroImage =
+      theme === 'dark'
+        ? data?.hero_image_dark || data?.hero_image
+        : data?.hero_image;
 
   return (
 

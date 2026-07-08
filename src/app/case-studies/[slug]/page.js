@@ -53,16 +53,16 @@ export async function generateMetadata({ params }) {
   const wpTitle = post.title?.rendered?.replace(/<[^>]+>/g, "")
   const wpExcerpt = post.excerpt?.rendered?.replace(/<[^>]+>/g, "")
 
-  // 🔥 AIOSEO DATA (may be empty)
-  const seoTitle = post.aioseo?.title
-  const seoDescription = post.aioseo?.description
+  // 🔥 AIOSEO DATA (exposed by the plugin under `aioseo_head_json`, may be empty)
+  const seoTitle = post.aioseo_head_json?.title
+  const seoDescription = post.aioseo_head_json?.description
 
   // ✅ FINAL FALLBACK LOGIC
   const finalTitle = seoTitle || `${wpTitle} - ABN Junction`
   const finalDescription =
     seoDescription || wpExcerpt || "ABN Junction Case Study"
 
-  const url = `https://abnjunction.com/case-studies/${slug}`
+  const url = post.aioseo_head_json?.canonical_url || `https://abnjunction.com/case-studies/${slug}`
 
   const featuredImage =
     post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null
@@ -180,6 +180,31 @@ async function enrichSections(sections) {
         continue
       }
 
+      // 🔥 HERO DARK-MODE IMAGE OVERRIDE (ACF may return an attachment ID, an image array, or a URL)
+      if (section.acf_fc_layout === "hero_section" && section.hero_image_dark) {
+        let heroImageDark = section.hero_image_dark
+
+        if (heroImageDark && typeof heroImageDark === "object") {
+          heroImageDark = heroImageDark.url || null
+        } else if (/^\d+$/.test(String(heroImageDark))) {
+          try {
+            const res = await fetch(
+              `${WP_API_URL}/media/${heroImageDark}`,
+              { signal: AbortSignal.timeout(5000) }
+            )
+            if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
+            const media = await res.json()
+            heroImageDark = media.source_url
+          } catch (err) {
+            console.error('Error fetching hero dark image:', err)
+            heroImageDark = null
+          }
+        }
+
+        newSections.push({ ...section, hero_image_dark: heroImageDark })
+        continue
+      }
+
       newSections.push(section)
     } catch (err) {
       console.error('Error processing section:', err)
@@ -244,20 +269,15 @@ const heroDesc = heroSection?.client_description
     return <Testimonial key={index} data={section} />
 
           case 'clients_section':
-                return <>
-                  <Clients key={index} data={section} />
-                  {/* Insert other case studies slider after clients */}
-                  <OtherCasesSlider currentSlug={slug} />
-                  {/* Also show other blog posts below the other cases */}
-                  <OtherBlogsSlider currentSlug={slug} />
-                </>
-
-       
+                return <Clients key={index} data={section} />
 
           default:
             return null
         }
       })}
+
+      <OtherCasesSlider currentSlug={slug} />
+      <OtherBlogsSlider currentSlug={slug} />
 
       <CTA />
 

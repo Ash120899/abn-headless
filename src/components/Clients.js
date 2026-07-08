@@ -33,10 +33,16 @@ export default function Clients({ data }) {
         <div className="relative overflow-hidden w-full">
 
           {/* LEFT FADE */}
-          <div className="absolute left-0 top-0 z-20 h-full w-32 bg-gradient-to-r from-black to-transparent pointer-events-none"></div>
+          <div
+            className="absolute left-0 top-0 z-20 h-full w-32 pointer-events-none"
+            style={{ background: 'linear-gradient(to right, var(--surface), transparent)' }}
+          ></div>
 
           {/* RIGHT FADE */}
-          <div className="absolute right-0 top-0 z-20 h-full w-32 bg-gradient-to-l from-black to-transparent pointer-events-none"></div>
+          <div
+            className="absolute right-0 top-0 z-20 h-full w-32 pointer-events-none"
+            style={{ background: 'linear-gradient(to left, var(--surface), transparent)' }}
+          ></div>
 
           {/* TRACK */}
           <div
@@ -78,20 +84,6 @@ export default function Clients({ data }) {
         </div>
 
       </div>
-
-      {/* GLOBAL CSS */}
-      <style jsx global>{`
-        @keyframes marquee {
-          from {
-            transform: translateX(0);
-          }
-
-          to {
-            transform: translateX(-50%);
-          }
-        }
-      `}</style>
-
     </section>
   )
 }
