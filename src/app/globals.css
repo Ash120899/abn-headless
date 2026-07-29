@@ -605,3 +605,477 @@ background-position: center;
 .content-area th {
   background: var(--surface-2);
 }
+
+/* ============================================================
+   SITE HEADER / MEGA MENUS / FOOTER — shared across every page.
+   Deliberately dark and self-contained (its own tokens below),
+   independent of the site's light/dark toggle, same rationale
+   as the CTA and video-scroll sections. Every color/background/
+   border-color below is !important so nothing — theme toggle,
+   Tailwind utilities, cascade-layer quirks — can ever repaint it.
+   ============================================================ */
+:root {
+  --site-bg: #050708;
+  --site-panel: #10171b;
+  --site-white: #f7fbfc;
+  --site-muted: #a9b4ba;
+  --site-cyan: #38c5e7;
+  --site-line: rgba(255, 255, 255, 0.11);
+  --site-max: 1320px;
+  --site-header-h: 76px;
+}
+
+.site-header-spacer {
+  height: var(--site-header-h);
+}
+
+.site-header .wrap,
+.site-footer .wrap {
+  width: min(calc(100% - 32px), var(--site-max));
+  margin: 0 auto;
+}
+
+.site-header {
+  position: fixed !important;
+  inset: 0 0 auto 0;
+  height: var(--site-header-h);
+  z-index: 100;
+  background: rgba(4, 8, 10, 0.86) !important;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--site-line) !important;
+}
+
+.site-header-inner {
+  height: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+/* Explicit placement: if .site-nav is display:none (mobile), grid
+   auto-placement would otherwise shift .site-header-actions into the
+   middle track instead of the right-hand one. */
+.site-logo {
+  grid-column: 1;
+}
+.site-nav {
+  grid-column: 2;
+}
+.site-header-actions {
+  grid-column: 3;
+}
+
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.site-logo-img {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+.site-footer-brand .site-logo-img {
+  height: 48px;
+}
+
+.site-nav {
+  display: flex;
+  justify-content: center;
+  gap: clamp(14px, 2.5vw, 34px);
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.site-nav-link,
+.site-nav-btn {
+  border: 0;
+  background: transparent !important;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 28px 0;
+  position: relative;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.site-nav-link:after,
+.site-nav-btn:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 17px;
+  width: 0;
+  height: 2px;
+  background: var(--site-cyan) !important;
+  transform: translateX(-50%);
+  transition: 0.2s;
+}
+.site-nav-link:hover:after,
+.site-nav-btn:hover:after,
+.site-nav-btn.open:after {
+  width: 100%;
+}
+
+.site-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.site-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--site-cyan) !important;
+  color: #001116 !important;
+  font-weight: 900;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.site-cta.outline {
+  background: transparent !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+}
+
+.site-mobile-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border-radius: 50%;
+  border: 1px solid var(--site-line) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #fff !important;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* The ThemeToggle button normally uses the page's theme variables
+   (--foreground/--border/--surface-weak), which is exactly what the
+   header must never do — in light mode those resolve dark-on-dark
+   against this always-dark header, making it nearly invisible. */
+.site-header-actions .btn-slide {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--site-line) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #fff !important;
+}
+.site-header-actions .btn-slide:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+}
+pre.code-content {
+    text-wrap: wrap;
+}
+
+.site-mega {
+  position: fixed;
+  top: var(--site-header-h);
+  left: 50%;
+  transform: translate(-50%, 12px);
+  width: min(1100px, calc(100vw - 32px));
+  max-height: calc(100vh - var(--site-header-h) - 16px);
+  overflow-y: auto;
+  background: linear-gradient(145deg, #11191d, #080c0f) !important;
+  border: 1px solid var(--site-line) !important;
+  border-radius: 0 0 24px 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.22s;
+  z-index: 90;
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.5);
+}
+.site-mega.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+.site-mega-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr 0.9fr;
+}
+.site-mega-col {
+  padding: 34px;
+}
+.site-mega-col + .site-mega-col {
+  border-left: 1px solid var(--site-line) !important;
+}
+.site-eyebrow {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ff493d !important;
+}
+.site-mega h2 {
+  font-size: 26px;
+  line-height: 1.1;
+  margin: 12px 0 10px;
+  color: var(--site-white) !important;
+}
+.site-muted {
+  color: var(--site-muted) !important;
+  line-height: 1.65;
+}
+.site-core-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 22px;
+}
+.site-core-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.035) !important;
+  border: 1px solid transparent !important;
+}
+.site-core-item:hover {
+  border-color: rgba(56, 197, 231, 0.4) !important;
+  background: rgba(56, 197, 231, 0.07) !important;
+}
+.site-core-item strong {
+  display: block;
+  font-size: 14px;
+  color: var(--site-white) !important;
+}
+.site-core-item small {
+  display: block;
+  color: var(--site-muted) !important;
+  font-size: 12px;
+  margin-top: 3px;
+}
+.site-core-item b {
+  color: var(--site-cyan) !important;
+  font-size: 12px;
+}
+.site-mega-title {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--site-cyan) !important;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+.site-mega-links {
+  display: grid;
+  gap: 8px;
+}
+.site-mega-links a {
+  padding: 10px 11px;
+  border-radius: 10px;
+  color: #dbe5e9 !important;
+  font-size: 14px;
+}
+.site-mega-links a:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+.site-case-chip {
+  padding: 18px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(56, 197, 231, 0.13), rgba(111, 90, 255, 0.08)) !important;
+  border: 1px solid rgba(56, 197, 231, 0.28) !important;
+}
+.site-case-chip strong {
+  font-size: 38px;
+  color: var(--site-cyan) !important;
+}
+.site-case-chip h3 {
+  font-size: 18px;
+  margin: 6px 0 8px;
+  color: var(--site-white) !important;
+}
+.site-case-chip p {
+  font-size: 13px;
+  color: var(--site-muted) !important;
+  line-height: 1.55;
+}
+
+.site-mobile-nav {
+  position: fixed;
+  top: var(--site-header-h);
+  left: 0;
+  right: 0;
+  z-index: 95;
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+  max-height: calc(100vh - var(--site-header-h));
+  overflow-y: auto;
+  background: #0b1115 !important;
+  border-bottom: 1px solid var(--site-line) !important;
+}
+.site-mobile-nav a {
+  padding: 14px 16px;
+  border-radius: 10px;
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 15px;
+}
+.site-mobile-nav a:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+.site-mobile-nav .site-cta {
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+
+.site-mobile-accordion-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 0;
+  background: transparent !important;
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.site-mobile-accordion-btn:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+.site-mobile-accordion-caret {
+  color: var(--site-cyan) !important;
+  transition: transform 0.2s;
+}
+.site-mobile-accordion-btn.open .site-mobile-accordion-caret {
+  transform: rotate(180deg);
+}
+.site-mobile-accordion-panel {
+  display: grid;
+  gap: 2px;
+  padding: 4px 8px 8px 16px;
+}
+.site-mobile-accordion-panel a {
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--site-muted) !important;
+  font-size: 14px;
+  font-weight: 500;
+}
+.site-mobile-accordion-panel a:hover {
+  color: var(--site-white) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+@media (max-width: 1050px) {
+  .site-nav {
+    display: none;
+  }
+  .site-mobile-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .site-header-actions .site-cta.outline {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .site-header-actions .site-cta:not(.outline) {
+    display: none;
+  }
+  .site-logo {
+    font-size: 17px;
+  }
+}
+@media (max-width: 1150px) {
+  .site-mega-grid {
+    grid-template-columns: 1fr;
+  }
+  .site-mega-col + .site-mega-col {
+    border-left: none !important;
+    border-top: 1px solid var(--site-line) !important;
+  }
+}
+
+/* FOOTER */
+.site-footer {
+  background: var(--site-bg) !important;
+  border-top: 1px solid var(--site-line) !important;
+}
+.site-footer-main {
+  padding: 70px 0 46px;
+  display: grid;
+  grid-template-columns: 1.4fr repeat(4, 0.8fr);
+  gap: 32px;
+}
+.site-footer-brand p {
+  color: var(--site-muted) !important;
+  font-size: 14px;
+  line-height: 1.55;
+  margin-top: 14px;
+}
+.site-footer-col {
+  display: grid;
+  align-content: start;
+  gap: 11px;
+}
+.site-footer-col a,
+.site-footer-col span {
+  color: var(--site-muted) !important;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.site-footer-col a:hover {
+  color: var(--site-white) !important;
+}
+.site-footer-col h4 {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--site-cyan) !important;
+  margin: 0 0 8px;
+}
+.site-footer-bottom {
+  padding: 24px 0 34px;
+  border-top: 1px solid var(--site-line) !important;
+  display: flex;
+  justify-content: space-between;
+  color: #7f8b90 !important;
+  font-size: 12px;
+}
+@media (max-width: 1050px) {
+  .site-footer-main {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .site-footer-brand {
+    grid-column: span 3;
+  }
+}
+@media (max-width: 700px) {
+  .site-footer-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .site-footer-brand {
+    grid-column: span 2;
+  }
+  .site-footer-bottom {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+@media (max-width: 460px) {
+  .site-footer-main {
+    grid-template-columns: 1fr;
+  }
+  .site-footer-brand {
+    grid-column: span 1;
+  }
+}
