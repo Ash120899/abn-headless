@@ -901,19 +901,42 @@ pre.code-content {
   line-height: 1.55;
 }
 
+.site-mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999999998;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+.site-mobile-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
 .site-mobile-nav {
   position: fixed;
-  top: var(--site-header-h);
-  left: 0;
+  top: 0;
   right: 0;
+  bottom: 0;
+  left: auto;
+  width: min(340px, 85vw);
   z-index: 999999999;
   display: grid;
+  align-content: start;
   gap: 4px;
-  padding: 16px;
-  max-height: calc(100vh - var(--site-header-h));
+  padding: calc(var(--site-header-h) + 16px) 16px 16px;
+  max-height: 100vh;
   overflow-y: auto;
   background: #0b1115 !important;
-  border-bottom: 1px solid var(--site-line) !important;
+  border-left: 1px solid var(--site-line) !important;
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.45);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+.site-mobile-nav.open {
+  transform: translateX(0);
 }
 .site-mobile-nav a {
   padding: 14px 16px;

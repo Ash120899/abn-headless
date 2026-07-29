@@ -313,39 +313,42 @@ export default function SiteHeader() {
       </section>
 
       {/* MOBILE NAV */}
-      {mobileOpen && (
-        <div className="site-mobile-nav">
-          <a href="https://abnjunction.com/about-us/" onClick={closeAll}>About Us</a>
+      <div
+        className={`site-mobile-backdrop ${mobileOpen ? "open" : ""}`}
+        onClick={closeAll}
+        aria-hidden="true"
+      />
+      <div className={`site-mobile-nav ${mobileOpen ? "open" : ""}`} aria-hidden={!mobileOpen}>
+        <a href="https://abnjunction.com/about-us/" onClick={closeAll}>About Us</a>
 
-          {MENUS.map((m) => (
-            <div key={m.key} className="site-mobile-accordion">
-              <button
-                type="button"
-                className={`site-mobile-accordion-btn ${mobileExpanded === m.key ? "open" : ""}`}
-                onClick={() => toggleMobileSection(m.key)}
-                aria-expanded={mobileExpanded === m.key}
-              >
-                {m.label}
-                <span className="site-mobile-accordion-caret">▾</span>
-              </button>
-              {mobileExpanded === m.key && (
-                <div className="site-mobile-accordion-panel">
-                  {MOBILE_MENU_LINKS[m.key].map((item) => (
-                    <a key={item.label} href={item.href} onClick={closeAll}>
-                      {item.label}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+        {MENUS.map((m) => (
+          <div key={m.key} className="site-mobile-accordion">
+            <button
+              type="button"
+              className={`site-mobile-accordion-btn ${mobileExpanded === m.key ? "open" : ""}`}
+              onClick={() => toggleMobileSection(m.key)}
+              aria-expanded={mobileExpanded === m.key}
+            >
+              {m.label}
+              <span className="site-mobile-accordion-caret">▾</span>
+            </button>
+            {mobileExpanded === m.key && (
+              <div className="site-mobile-accordion-panel">
+                {MOBILE_MENU_LINKS[m.key].map((item) => (
+                  <a key={item.label} href={item.href} onClick={closeAll}>
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
 
-          <a href="https://abnjunction.com/contact-us/" onClick={closeAll}>Contact</a>
-          <a className="site-cta" href="https://abnjunction.com/contact-us/" onClick={closeAll}>
-            Book a Strategy Call →
-          </a>
-        </div>
-      )}
+        <a href="https://abnjunction.com/contact-us/" onClick={closeAll}>Contact</a>
+        <a className="site-cta" href="https://abnjunction.com/contact-us/" onClick={closeAll}>
+          Book a Strategy Call →
+        </a>
+      </div>
     </div>
   );
 }
