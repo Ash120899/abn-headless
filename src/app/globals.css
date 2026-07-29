@@ -639,7 +639,7 @@ background-position: center;
   position: fixed !important;
   inset: 0 0 auto 0;
   height: var(--site-header-h);
-  z-index: 100;
+  z-index: 9999999999;
   background: rgba(4, 8, 10, 0.86) !important;
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--site-line) !important;
