@@ -791,7 +791,7 @@ pre.code-content {
   opacity: 0;
   visibility: hidden;
   transition: 0.22s;
-  z-index: 90;
+  z-index: 999999;
   box-shadow: 0 35px 80px rgba(0, 0, 0, 0.5);
 }
 .site-mega.open {
@@ -906,7 +906,7 @@ pre.code-content {
   top: var(--site-header-h);
   left: 0;
   right: 0;
-  z-index: 95;
+  z-index: 999999999;
   display: grid;
   gap: 4px;
   padding: 16px;
