@@ -5,7 +5,11 @@ export default function SiteFooter() {
         <div className="site-footer-brand">
           <div className="site-logo">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/abn-logo.webp" alt="ABN Junction" className="site-logo-img" />
+            <img
+              src="https://abnjunction.com/wp-content/uploads/2026/07/abn-logo.webp"
+              alt="ABN Junction"
+              className="site-logo-img"
+            />
           </div>
           <p>
             Digital marketing, design, development, video and security—connected into one accountable

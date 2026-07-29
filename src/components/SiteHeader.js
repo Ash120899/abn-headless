@@ -123,7 +123,11 @@ export default function SiteHeader() {
         <div className="wrap site-header-inner">
           <Link className="site-logo" href="/" onClick={closeAll}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/abn-logo.webp" alt="ABN Junction" className="site-logo-img" />
+            <img
+              src="https://abnjunction.com/wp-content/uploads/2026/07/abn-logo.webp"
+              alt="ABN Junction"
+              className="site-logo-img"
+            />
           </Link>
 
           <nav className="site-nav" aria-label="Primary">
