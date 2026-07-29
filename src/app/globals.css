@@ -1021,6 +1021,19 @@ pre.code-content {
   line-height: 1.55;
   margin-top: 14px;
 }
+.site-footer-badges {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+.site-footer-badge-img {
+  height: 42px;
+  width: auto;
+  display: block;
+}
 .site-footer-col {
   display: grid;
   align-content: start;
@@ -1034,6 +1047,45 @@ pre.code-content {
 }
 .site-footer-col a:hover {
   color: var(--site-white) !important;
+}
+
+.site-footer-social {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+/* Higher specificity than .site-footer-col a so the brand colors below win */
+.site-footer-social a.site-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  color: #fff !important;
+  font-size: inherit;
+  line-height: 1;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.site-footer-social a.site-social-icon:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+  color: #fff !important;
+}
+.site-social-linkedin {
+  background: #0a66c2 !important;
+}
+.site-social-facebook {
+  background: #1877f2 !important;
+}
+.site-social-youtube {
+  background: #ff0000 !important;
+}
+.site-social-instagram {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888) !important;
 }
 .site-footer-col h4 {
   font-size: 12px;
