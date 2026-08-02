@@ -30,7 +30,7 @@ export default function Clients({ data }) {
         </div>
 
         {/* WRAPPER */}
-        <div className="relative overflow-hidden w-full">
+        <div className="clients-marquee-wrapper relative overflow-hidden w-full">
 
           {/* LEFT FADE */}
           <div
@@ -45,12 +45,7 @@ export default function Clients({ data }) {
           ></div>
 
           {/* TRACK */}
-          <div
-            className="flex w-max animate-marquee"
-            style={{
-              animation: 'marquee 30s linear infinite',
-            }}
-          >
+          <div className="flex w-max animate-marquee">
 
             {duplicated.map((logo, i) => (
 
@@ -66,12 +61,14 @@ export default function Clients({ data }) {
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/[0.08] to-purple-500/[0.08]"></div>
                   </div>
 
-                  {/* LOGO */}
-                  <img
-                    src={logo.url}
-                    alt={`client-${i}`}
-                    className="relative z-10 max-h-14 w-auto object-contain opacity-100  transition duration-500 group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-105"
-                  />
+                  {/* LOGO (white backdrop so dark/mixed-color logos stay visible against the dark glass card) */}
+                  <div className="relative z-10 flex items-center justify-center w-[140px] h-[84px] rounded-2xl bg-white p-3">
+                    <img
+                      src={logo.url}
+                      alt={`client-${i}`}
+                      className="max-h-12 w-auto object-contain transition duration-500 group-hover:scale-105"
+                    />
+                  </div>
 
                 </div>
 

@@ -5,6 +5,11 @@ import SiteFooter from "../components/SiteFooter";
 export const metadata = {
   title: "Astra Ortho Hospital Case Study",
   description: "Astra Ortho Hospital case study page replicated from ABN Junction.",
+  icons: {
+    icon: "/siteicon.png",
+    shortcut: "/siteicon.png",
+    apple: "/siteicon.png",
+  },
 };
 
 export default function RootLayout({ children }) {

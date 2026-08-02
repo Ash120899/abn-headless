@@ -193,6 +193,8 @@ width:100%;
   padding: 34px 28px 30px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .cta-pricing-card.active-card {
@@ -262,6 +264,17 @@ width:100%;
 
 .cta-button-wrap {
   margin-top: 24px;
+}
+
+.cta-card-button-wrap {
+  margin-top: auto;
+  padding-top: 24px;
+  text-align: center;
+}
+
+.cta-card-button-wrap .cta-button {
+  padding: 10px 18px;
+  font-size: 18px;
 }
 
 .cta-button {
@@ -349,6 +362,15 @@ width:100%;
 }
 .animate-fadeUp {
   animation: fadeUp 0.8s ease forwards;
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Pause the "Our Clients" logo marquee while the pointer is over it */
+.clients-marquee-wrapper:hover .animate-marquee {
+  animation-play-state: paused;
 }
 .hero-section {
 background-size: cover;
@@ -489,6 +511,17 @@ background-position: center;
 .border-theme-strong { border-color: rgba(255,255,255,0.12) !important; }
 .bg-overlay { background: var(--overlay) !important; }
 .bg-surface-weak { background: var(--surface-weak) !important; }
+
+/* Case-study hero: always sits on a dark background image, so its text must
+   stay white in both themes — light mode's near-black --foreground (#111111)
+   is otherwise unreadable here. */
+.hero-section.text-foreground,
+.hero-section .text-foreground {
+  color: #ffffff !important;
+}
+.hero-section .text-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
 
 /* Draggable card sliders (OtherCasesSlider / OtherBlogsSlider) */
 .slider-scrollbar {
@@ -1153,4 +1186,11 @@ pre.code-content {
   .site-footer-brand {
     grid-column: span 1;
   }
+}
+h3{
+    
+    margin-top: 1rem!important;
+}
+.screenshot-section img {
+    object-fit: contain !important;
 }

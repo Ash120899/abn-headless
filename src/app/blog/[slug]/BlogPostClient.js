@@ -214,22 +214,18 @@ export default function BlogPostClient({ slug }) {
       </div>
 
       {/* HERO */}
-      <section
-        className="relative overflow-hidden border-b border-theme"
-        style={
-          featuredImage
-            ? {
-                backgroundImage: `url(${featuredImage})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }
-            : undefined
-        }
-      >
+      <section className="relative overflow-hidden border-b border-theme">
 
-        {/* BACKGROUND: decorative glow when there's no featured image, dark overlay for legibility when there is */}
+        {/* FEATURED IMAGE (sits above the title/meta instead of behind them, so nothing overlaps) */}
         {featuredImage ? (
-          <div className="absolute inset-0 z-0" style={{ background: "var(--overlay)" }} />
+          <div className="w-full h-[280px] md:h-[420px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={featuredImage}
+              alt={post.title.rendered.replace(/<[^>]+>/g, "")}
+              className="w-full h-full object-cover"
+            />
+          </div>
         ) : (
           <div className="absolute inset-0 opacity-40">
             <div className="absolute top-[-200px] left-[-100px] w-[600px] h-[600px] rounded-full blur-[140px] bg-orange-500/20" />
@@ -303,7 +299,7 @@ export default function BlogPostClient({ slug }) {
       {/* CONTENT */}
       <section
         className="
-          max-w-[1280px]
+          max-w-[1760px]
           mx-auto
 
           px-6
@@ -319,7 +315,7 @@ export default function BlogPostClient({ slug }) {
 
             grid-cols-1
 
-            lg:grid-cols-[240px_minmax(0,920px)_300px]
+            lg:grid-cols-[280px_minmax(0,920px)_300px]
 
             gap-20
 
@@ -336,7 +332,7 @@ export default function BlogPostClient({ slug }) {
 
                 <p className="text-[11px] tracking-[4px] uppercase text-accent font-semibold mb-10">Table Of Contents</p>
 
-                <div className="space-y-7">
+                <div className="space-y-2">
 
                   {toc.map((item) => (
 
@@ -344,12 +340,12 @@ export default function BlogPostClient({ slug }) {
 
                       <a
                         href={`#${item.id}`}
-                        className="block text-[16px] leading-[1.8] text-muted hover:text-foreground transition"
+                        className="block text-[16px] leading-[1.4] text-muted hover:text-foreground transition"
                       >
                         {item.text}
                       </a>
 
-                      <div className="w-10 h-[1px] bg-surface-weak mt-6" />
+                      <div className="w-10 h-[1px] bg-surface-weak mt-2" />
 
                     </div>
 
@@ -390,7 +386,7 @@ export default function BlogPostClient({ slug }) {
                   growth and acquisition.
                 </p>
 
-                <button className="mt-10 bg-accent text-white px-8 py-4 rounded-full text-[16px] font-medium hover:scale-[1.03] transition">Start Now</button>
+                <a href="https://abnjunction.com/contact-us/" className="mt-10 inline-block bg-accent text-white px-8 py-4 rounded-full text-[16px] font-medium hover:scale-[1.03] transition">Start Now</a>
 
               </div>
 

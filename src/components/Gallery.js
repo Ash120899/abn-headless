@@ -14,7 +14,7 @@ export default function Gallery({ data }) {
 
   return (
     <section className="bg-background text-foreground py-24">
-      <div className="section-inner max-w-6xl mx-auto px-4 md:px-6">
+      <div className="section-inner max-w-6xl mx-auto px-4 md:px-6 screenshot-section">
 
         {/* TITLE */}
         <h2 className="section-heading text-foreground mb-16 text-center">

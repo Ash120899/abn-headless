@@ -83,12 +83,12 @@ export default function OtherBlogsSlider({ currentSlug }) {
           {...dragHandlers}
         >
           {items.map((it) => (
-            <Link key={it.slug} href={`/blog/${it.slug}`} className="snap-start min-w-[260px] max-w-[320px] flex-shrink-0">
+            <Link key={it.slug} href={`/blog/${it.slug}`} className="snap-start min-w-[260px] max-w-[320px] lg:min-w-0 lg:max-w-none lg:w-[calc((100%-3rem)/3)] flex-shrink-0">
               <article className="rounded-[20px] overflow-hidden border border-theme bg-surface p-4 h-full flex flex-col justify-between hover:shadow-lg transition">
-                <div className="h-[140px] w-full mb-4 rounded-md overflow-hidden bg-surface-2 flex items-center justify-center">
+                <div className="h-[140px] lg:h-[200px] w-full mb-4 rounded-md overflow-hidden bg-surface-2 flex items-center justify-center">
                   {it.featured ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={it.featured} alt={it.title} className="w-full h-full object-fill" />
+                    <img src={it.featured} alt={it.title} className="w-full h-full object-contain" />
                   ) : (
                     <div className="text-muted">No image</div>
                   )}

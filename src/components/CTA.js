@@ -77,6 +77,13 @@ export default function CTA() {
   <li key={service}>{service}</li>
                 ))}
               </ul>
+
+              <div className="cta-card-button-wrap">
+                <a href="https://abnjunction.com/contact-us/" className="cta-button">
+                  CONSULT NOW
+                  <span className="cta-arrow">➜</span>
+                </a>
+              </div>
             </div>
           ))}
         </div>
@@ -93,7 +100,7 @@ export default function CTA() {
           </p>
 
           <div className="cta-button-wrap">
-            <a href="#" className="cta-button">
+            <a href="https://abnjunction.com/contact-us/" className="cta-button">
               START YOUR JOURNEY
               <span className="cta-arrow">➜</span>
             </a>

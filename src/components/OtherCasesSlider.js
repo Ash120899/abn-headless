@@ -35,12 +35,24 @@ export default function OtherCasesSlider({ currentSlug }) {
 
         const filtered = (Array.isArray(data) ? data : []).filter((p) => p.slug !== currentSlug).slice(0, 6);
 
-        const mapped = filtered.map((p) => ({
-          slug: p.slug,
-          title: p.title?.rendered || "",
-          excerpt: p.excerpt?.rendered?.replace(/<[^>]+>/g, "") || "",
-          featured: p._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null,
-        }));
+        const mapped = filtered.map((p) => {
+          const heroSection = (p.acf?.content_sections || []).find(
+            (s) => s.acf_fc_layout === "hero_section"
+          );
+
+          return {
+            slug: p.slug,
+            title: p.title?.rendered || "",
+            // WP's core excerpt/content fields hold stale, duplicated placeholder
+            // text on this site — the real per-post copy lives in the ACF hero
+            // section, which is what the actual case-study page renders.
+            excerpt:
+              heroSection?.client_description?.replace(/<[^>]+>/g, "") ||
+              p.excerpt?.rendered?.replace(/<[^>]+>/g, "") ||
+              "",
+            featured: p._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null,
+          };
+        });
 
         if (mounted) {
           setItems(mapped);
@@ -91,7 +103,7 @@ export default function OtherCasesSlider({ currentSlug }) {
               <div className="h-[160px] w-full mb-4 rounded-md overflow-hidden bg-surface-2 flex items-center justify-center">
                 {it.featured ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={it.featured} alt={it.title} className="w-full h-full object-fill" />
+                  <img src={it.featured} alt={it.title} className="w-full h-full object-contain" />
                 ) : (
                   <div className="text-muted">No image</div>
                 )}
