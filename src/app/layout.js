@@ -6,14 +6,12 @@ export const metadata = {
   title: "Astra Ortho Hospital Case Study",
   description: "Astra Ortho Hospital case study page replicated from ABN Junction.",
   icons: {
-    // Served via an API route, not a /public file directly — abnjunction.com's
-    // proxy only forwards specific path prefixes (/blog, /case-studies, /_next,
-    // /api, etc.) to this app, so a root-level static file here 404s. The WP
-    // media logo isn't square either, so it stretches when squeezed into a
-    // favicon slot; this route serves a properly cropped, padded square version.
-    icon: "/api/site-icon",
-    shortcut: "/api/site-icon",
-    apple: "/api/site-icon",
+    // Hosted on WordPress rather than /public — abnjunction.com's proxy only
+    // forwards specific path prefixes (/blog, /case-studies, /_next, etc.) to
+    // this app, so a root-level static file here (e.g. /siteicon.png) 404s.
+    icon: "https://abnjunction.com/wp-content/uploads/2024/05/cropped-Logo-e1724158810255.png",
+    shortcut: "https://abnjunction.com/wp-content/uploads/2024/05/cropped-Logo-e1724158810255.png",
+    apple: "https://abnjunction.com/wp-content/uploads/2024/05/cropped-Logo-e1724158810255.png",
   },
 };
 
