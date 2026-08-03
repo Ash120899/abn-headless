@@ -9,9 +9,11 @@ export const metadata = {
     // Hosted on WordPress rather than /public — abnjunction.com's proxy only
     // forwards specific path prefixes (/blog, /case-studies, /_next, etc.) to
     // this app, so a root-level static file here (e.g. /siteicon.png) 404s.
-    icon: "https://abnjunction.com/wp-content/uploads/2024/05/cropped-Logo-e1724158810255.png",
-    shortcut: "https://abnjunction.com/wp-content/uploads/2024/05/cropped-Logo-e1724158810255.png",
-    apple: "https://abnjunction.com/wp-content/uploads/2024/05/cropped-Logo-e1724158810255.png",
+    // This is the square-cropped mark (256x256), not the wide wordmark, so it
+    // doesn't stretch when squeezed into a favicon slot.
+    icon: "https://abnjunction.com/wp-content/uploads/2026/08/favicon-mark.png",
+    shortcut: "https://abnjunction.com/wp-content/uploads/2026/08/favicon-mark.png",
+    apple: "https://abnjunction.com/wp-content/uploads/2026/08/favicon-mark.png",
   },
 };
 
