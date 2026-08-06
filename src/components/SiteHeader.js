@@ -3,6 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import useFocusTrap from "@/hooks/useFocusTrap";
+import {
+  PRIMARY_LINKS,
+  CTA_LINK,
+  SERVICE_PILLARS,
+  SERVICE_DETAILS,
+  DIGITAL_MARKETING_LINKS,
+  SERVICES_EXPLORE_LINKS,
+  CASE_STUDY_FEATURED,
+  CASE_STUDY_LINKS,
+  RESOURCE_LEARN_LINKS,
+  RESOURCE_USE_LINKS,
+} from "@/data/navigation";
 
 const MENUS = [
   { key: "services", label: "Services" },
@@ -10,47 +23,59 @@ const MENUS = [
   { key: "resources", label: "Resources" },
 ];
 
-// Same links as the desktop mega menus, flattened for the mobile accordion.
-const MOBILE_MENU_LINKS = {
-  services: [
-    { label: "Digital Marketing", href: "https://abnjunction.com/services/digital-marketing/" },
-    { label: "Graphics & Web Design", href: "https://abnjunction.com/services/web-and-graphic-design/" },
-    { label: "Web Development", href: "https://abnjunction.com/services/web-development/" },
-    { label: "Video Production", href: "https://abnjunction.com/services/video-production/" },
-    { label: "Data & Web Security", href: "https://abnjunction.com/services/web-data-security/" },
-    { label: "Performance Marketing", href: "#" },
-    { label: "Google Ads", href: "#" },
-    { label: "Meta Ads", href: "#" },
-    { label: "SEO", href: "https://abnjunction.com/services/digital-marketing/seo/" },
-    { label: "Social Media", href: "https://abnjunction.com/services/digital-marketing/social-media-marketing/" },
-  ],
-  case: [
-    { label: "Performance Marketing Cases", href: "#" },
-    { label: "SEO Growth Cases", href: "#" },
-    { label: "Web & Conversion Cases", href: "#" },
-    { label: "Creative & Video Cases", href: "#" },
-    { label: "View All Case Studies", href: "https://abnjunction.com/case-studies/" },
-  ],
-  resources: [
-    { label: "Blog", href: "https://abnjunction.com/blogs/" },
-    { label: "Guides", href: "#" },
-    { label: "Marketing Glossary", href: "#" },
-    { label: "FAQs", href: "#" },
-    { label: "Tools & Applications", href: "#" },
-    { label: "Calculators", href: "#" },
-    { label: "Templates", href: "#" },
-    { label: "ABN Updates", href: "#" },
-  ],
+const TOP_LEVEL_BACK_TARGET = {
+  services: "main",
+  case: "main",
+  resources: "main",
 };
 
+function servicePanelKey(pillarKey) {
+  return `service-${pillarKey}`;
+}
+
+function backTargetFor(panel) {
+  if (panel.startsWith("service-")) return "services";
+  return TOP_LEVEL_BACK_TARGET[panel] || "main";
+}
+
 const CLOSE_DELAY = 200;
+const PANEL_TRANSITION_MS = 280;
+
+// Internal anchors ("/#section") use next/link; everything else is an
+// external WordPress URL or a placeholder "#".
+function ExploreLink({ href, children, onClick }) {
+  if (href.startsWith("/")) {
+    return (
+      <Link href={href} onClick={onClick}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a href={href} onClick={onClick}>
+      {children}
+    </a>
+  );
+}
+
+const MOBILE_SERVICES_EXPLORE_LINKS = SERVICES_EXPLORE_LINKS.filter(
+  (l) => l.label !== "View All Services" && l.label !== "See Results"
+);
 
 export default function SiteHeader() {
   const [openMenu, setOpenMenu] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [mobileExpanded, setMobileExpanded] = useState(null);
+
+  // Mobile drill-down panel state.
+  const [activePanel, setActivePanel] = useState("main");
+  const [leavingPanel, setLeavingPanel] = useState(null);
+  const [navDirection, setNavDirection] = useState(null); // "forward" | "back" | null
+  const [enteringPrimed, setEnteringPrimed] = useState(true);
+
   const rootRef = useRef(null);
   const closeTimeoutRef = useRef(null);
+  const drawerRef = useRef(null);
+  const hamburgerRef = useRef(null);
 
   function clearCloseTimer() {
     if (closeTimeoutRef.current) {
@@ -82,22 +107,74 @@ export default function SiteHeader() {
     setOpenMenu((cur) => (cur === key ? null : key));
   }
 
-  function toggleMobile() {
-    setOpenMenu(null);
-    setMobileExpanded(null);
-    setMobileOpen((v) => !v);
+  function resetPanels() {
+    setActivePanel("main");
+    setLeavingPanel(null);
+    setNavDirection(null);
+    setEnteringPrimed(true);
   }
 
-  function toggleMobileSection(key) {
-    setMobileExpanded((cur) => (cur === key ? null : key));
+  function toggleMobile() {
+    setOpenMenu(null);
+    const opening = !mobileOpen;
+    setMobileOpen(opening);
+    if (!opening) resetPanels();
+  }
+
+  function openPanel(key) {
+    setLeavingPanel(activePanel);
+    setNavDirection("forward");
+    setEnteringPrimed(true);
+    setActivePanel(key);
+  }
+
+  function goBackPanel() {
+    const target = backTargetFor(activePanel);
+    setLeavingPanel(activePanel);
+    setNavDirection("back");
+    setEnteringPrimed(false);
+    setActivePanel(target);
   }
 
   function closeAll() {
     clearCloseTimer();
     setOpenMenu(null);
     setMobileOpen(false);
-    setMobileExpanded(null);
+    resetPanels();
   }
+
+  // Force the incoming panel on a back-navigation to start pinned at its
+  // "-40%, off left" resting spot with no transition, then flip to .active
+  // on the next frame so the browser animates it in from the left. Without
+  // this the panel may have already settled at its default off-right spot
+  // and would re-enter from the wrong side.
+  useEffect(() => {
+    if (navDirection !== "back" || enteringPrimed) return;
+    const raf = requestAnimationFrame(() => setEnteringPrimed(true));
+    return () => cancelAnimationFrame(raf);
+  }, [navDirection, enteringPrimed]);
+
+  // Clear the leaving panel once its exit transition has finished.
+  useEffect(() => {
+    if (!leavingPanel) return;
+    const t = setTimeout(() => {
+      setLeavingPanel(null);
+      setNavDirection(null);
+    }, PANEL_TRANSITION_MS);
+    return () => clearTimeout(t);
+  }, [leavingPanel]);
+
+  // Lock background scroll while the drawer is open.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.documentElement.style.overflow = prev;
+    };
+  }, [mobileOpen]);
+
+  useFocusTrap(drawerRef, mobileOpen, { returnFocusRef: hamburgerRef });
 
   useEffect(() => {
     function onDocClick(e) {
@@ -117,6 +194,19 @@ export default function SiteHeader() {
     };
   }, []);
 
+  function panelClassName(key) {
+    if (key === activePanel) {
+      if (navDirection === "back" && !enteringPrimed) {
+        return "site-mobile-panel pending-left";
+      }
+      return "site-mobile-panel active";
+    }
+    if (key === leavingPanel) {
+      return navDirection === "forward" ? "site-mobile-panel exit-left" : "site-mobile-panel";
+    }
+    return "site-mobile-panel";
+  }
+
   return (
     <div ref={rootRef}>
       <header className="site-header">
@@ -131,8 +221,8 @@ export default function SiteHeader() {
           </Link>
 
           <nav className="site-nav" aria-label="Primary">
-            <a className="site-nav-link" href="https://abnjunction.com/about-us/" onClick={closeAll}>
-              About Us
+            <a className="site-nav-link" href={PRIMARY_LINKS.aboutUs.href} onClick={closeAll}>
+              {PRIMARY_LINKS.aboutUs.label}
             </a>
             {MENUS.map((m) => (
               <button
@@ -143,12 +233,13 @@ export default function SiteHeader() {
                 onMouseEnter={() => openOnHover(m.key)}
                 onMouseLeave={scheduleClose}
                 aria-expanded={openMenu === m.key}
+                aria-controls={`site-mega-${m.key}`}
               >
                 {m.label} ▾
               </button>
             ))}
-            <a className="site-nav-link" href="https://abnjunction.com/contact-us/" onClick={closeAll}>
-              Contact
+            <a className="site-nav-link" href={PRIMARY_LINKS.contact.href} onClick={closeAll}>
+              {PRIMARY_LINKS.contact.label}
             </a>
           </nav>
 
@@ -156,15 +247,17 @@ export default function SiteHeader() {
             <a className="site-cta outline" href="https://abnjunction.com/case-studies/" onClick={closeAll}>
               See Results
             </a>
-            <a className="site-cta" href="https://abnjunction.com/contact-us/">
-              Book a Strategy Call →
+            <a className="site-cta" href={CTA_LINK.href}>
+              {CTA_LINK.label}
             </a>
             <ThemeToggle />
             <button
+              ref={hamburgerRef}
               type="button"
               className="site-mobile-btn"
               aria-label={mobileOpen ? "Close mobile menu" : "Open mobile menu"}
               aria-expanded={mobileOpen}
+              aria-controls="site-mobile-drawer"
               onClick={toggleMobile}
             >
               {mobileOpen ? "✕" : "☰"}
@@ -175,6 +268,7 @@ export default function SiteHeader() {
 
       {/* SERVICES MEGA MENU */}
       <section
+        id="site-mega-services"
         className={`site-mega ${openMenu === "services" ? "open" : ""}`}
         onMouseEnter={clearCloseTimer}
         onMouseLeave={scheduleClose}
@@ -187,62 +281,35 @@ export default function SiteHeader() {
               Digital marketing, design, development, video and security, working as one connected system.
             </p>
             <div className="site-core-list">
-              <a className="site-core-item" href="https://abnjunction.com/services/digital-marketing/" onClick={closeAll}>
-                <span>
-                  <strong>Digital Marketing</strong>
-                  <small>Paid, organic, social, CRM and analytics</small>
-                </span>
-                <b>01</b>
-              </a>
-              <a className="site-core-item" href="https://abnjunction.com/services/web-and-graphic-design/" onClick={closeAll}>
-                <span>
-                  <strong>Graphics &amp; Web Design</strong>
-                  <small>Branding, UX/UI, landing pages and creatives</small>
-                </span>
-                <b>02</b>
-              </a>
-              <a className="site-core-item" href="https://abnjunction.com/services/web-development/" onClick={closeAll}>
-                <span>
-                  <strong>Web Development</strong>
-                  <small>Next.js, WordPress, Shopify and custom builds</small>
-                </span>
-                <b>03</b>
-              </a>
-              <a className="site-core-item" href="https://abnjunction.com/services/video-production/" onClick={closeAll}>
-                <span>
-                  <strong>Video Production</strong>
-                  <small>Campaign films, social video and motion</small>
-                </span>
-                <b>04</b>
-              </a>
-              <a className="site-core-item" href="https://abnjunction.com/services/web-data-security/" onClick={closeAll}>
-                <span>
-                  <strong>Data &amp; Web Security</strong>
-                  <small>Tracking, privacy, hardening and monitoring</small>
-                </span>
-                <b>05</b>
-              </a>
+              {SERVICE_PILLARS.map((p) => (
+                <a key={p.key} className="site-core-item" href={p.href} onClick={closeAll}>
+                  <span>
+                    <strong>{p.label}</strong>
+                    <small>{p.blurb}</small>
+                  </span>
+                  <b>{p.num}</b>
+                </a>
+              ))}
             </div>
           </div>
           <div className="site-mega-col">
             <div className="site-mega-title">Digital Marketing</div>
             <div className="site-mega-links">
-              <a href="#" onClick={closeAll}>Performance Marketing</a>
-              <a href="#" onClick={closeAll}>Google Ads</a>
-              <a href="#" onClick={closeAll}>Meta Ads</a>
-              <a href="https://abnjunction.com/services/digital-marketing/seo/" onClick={closeAll}>SEO</a>
-              <a href="https://abnjunction.com/services/digital-marketing/social-media-marketing/" onClick={closeAll}>Social Media</a>
-              <a href="https://abnjunction.com/services/digital-marketing/email-whatsapp-marketing/" onClick={closeAll}>Email, WhatsApp &amp; CRM</a>
-              <a href="#" onClick={closeAll}>Analytics &amp; Conversion Tracking</a>
+              {DIGITAL_MARKETING_LINKS.map((l) => (
+                <a key={l.label} href={l.href} onClick={closeAll}>
+                  {l.label}
+                </a>
+              ))}
             </div>
           </div>
           <div className="site-mega-col">
             <div className="site-mega-title">Explore</div>
             <div className="site-mega-links">
-              <Link href="/#junction" onClick={closeAll}>How Services Connect</Link>
-              <Link href="/#process" onClick={closeAll}>How We Work</Link>
-              <a href="https://abnjunction.com/case-studies/" onClick={closeAll}>See Results</a>
-              <a href="https://abnjunction.com/contact-us/" onClick={closeAll}>Discuss Your Project</a>
+              {SERVICES_EXPLORE_LINKS.map((l) => (
+                <ExploreLink key={l.label} href={l.href} onClick={closeAll}>
+                  {l.label}
+                </ExploreLink>
+              ))}
             </div>
           </div>
         </div>
@@ -250,6 +317,7 @@ export default function SiteHeader() {
 
       {/* CASE STUDIES MEGA MENU */}
       <section
+        id="site-mega-case"
         className={`site-mega ${openMenu === "case" ? "open" : ""}`}
         onMouseEnter={clearCloseTimer}
         onMouseLeave={scheduleClose}
@@ -262,18 +330,18 @@ export default function SiteHeader() {
           </div>
           <div className="site-mega-col">
             <div className="site-case-chip">
-              <strong>9×</strong>
-              <h3>ROAS Growth System</h3>
-              <p>Paid media, shopping and SEO working as one commercial system.</p>
+              <strong>{CASE_STUDY_FEATURED.multiplier}</strong>
+              <h3>{CASE_STUDY_FEATURED.title}</h3>
+              <p>{CASE_STUDY_FEATURED.blurb}</p>
             </div>
           </div>
           <div className="site-mega-col">
             <div className="site-mega-links">
-              <a href="#" onClick={closeAll}>Performance Marketing Cases</a>
-              <a href="#" onClick={closeAll}>SEO Growth Cases</a>
-              <a href="#" onClick={closeAll}>Web &amp; Conversion Cases</a>
-              <a href="#" onClick={closeAll}>Creative &amp; Video Cases</a>
-              <a href="https://abnjunction.com/case-studies/" onClick={closeAll}>View All Case Studies</a>
+              {CASE_STUDY_LINKS.map((l) => (
+                <a key={l.label} href={l.href} onClick={closeAll}>
+                  {l.label}
+                </a>
+              ))}
             </div>
           </div>
         </div>
@@ -281,6 +349,7 @@ export default function SiteHeader() {
 
       {/* RESOURCES MEGA MENU */}
       <section
+        id="site-mega-resources"
         className={`site-mega ${openMenu === "resources" ? "open" : ""}`}
         onMouseEnter={clearCloseTimer}
         onMouseLeave={scheduleClose}
@@ -294,19 +363,21 @@ export default function SiteHeader() {
           <div className="site-mega-col">
             <div className="site-mega-title">Learn</div>
             <div className="site-mega-links">
-              <a href="https://abnjunction.com/blogs/" onClick={closeAll}>Blog</a>
-              <a href="#" onClick={closeAll}>Guides</a>
-              <a href="#" onClick={closeAll}>Marketing Glossary</a>
-              <a href="#" onClick={closeAll}>FAQs</a>
+              {RESOURCE_LEARN_LINKS.map((l) => (
+                <a key={l.label} href={l.href} onClick={closeAll}>
+                  {l.label}
+                </a>
+              ))}
             </div>
           </div>
           <div className="site-mega-col">
             <div className="site-mega-title">Use</div>
             <div className="site-mega-links">
-              <a href="#" onClick={closeAll}>Tools &amp; Applications</a>
-              <a href="#" onClick={closeAll}>Calculators</a>
-              <a href="#" onClick={closeAll}>Templates</a>
-              <a href="#" onClick={closeAll}>ABN Updates</a>
+              {RESOURCE_USE_LINKS.map((l) => (
+                <a key={l.label} href={l.href} onClick={closeAll}>
+                  {l.label}
+                </a>
+              ))}
             </div>
           </div>
         </div>
@@ -318,36 +389,177 @@ export default function SiteHeader() {
         onClick={closeAll}
         aria-hidden="true"
       />
-      <div className={`site-mobile-nav ${mobileOpen ? "open" : ""}`} aria-hidden={!mobileOpen}>
-        <a href="https://abnjunction.com/about-us/" onClick={closeAll}>About Us</a>
-
-        {MENUS.map((m) => (
-          <div key={m.key} className="site-mobile-accordion">
+      <div
+        ref={drawerRef}
+        id="site-mobile-drawer"
+        className={`site-mobile-nav ${mobileOpen ? "open" : ""}`}
+        aria-hidden={!mobileOpen}
+      >
+        <div className="site-mobile-nav-body">
+          <section id="site-mobile-panel-main" className={panelClassName("main")}>
+            <a className="site-mobile-row" href={PRIMARY_LINKS.aboutUs.href} onClick={closeAll}>
+              {PRIMARY_LINKS.aboutUs.label}
+            </a>
             <button
               type="button"
-              className={`site-mobile-accordion-btn ${mobileExpanded === m.key ? "open" : ""}`}
-              onClick={() => toggleMobileSection(m.key)}
-              aria-expanded={mobileExpanded === m.key}
+              className="site-mobile-row"
+              aria-expanded={activePanel === "services"}
+              aria-controls="site-mobile-panel-services"
+              onClick={() => openPanel("services")}
             >
-              {m.label}
-              <span className="site-mobile-accordion-caret">▾</span>
+              Services <span className="chev">▾</span>
             </button>
-            {mobileExpanded === m.key && (
-              <div className="site-mobile-accordion-panel">
-                {MOBILE_MENU_LINKS[m.key].map((item) => (
-                  <a key={item.label} href={item.href} onClick={closeAll}>
-                    {item.label}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+            <button
+              type="button"
+              className="site-mobile-row"
+              aria-expanded={activePanel === "case"}
+              aria-controls="site-mobile-panel-case"
+              onClick={() => openPanel("case")}
+            >
+              Case Studies <span className="chev">▾</span>
+            </button>
+            <button
+              type="button"
+              className="site-mobile-row"
+              aria-expanded={activePanel === "resources"}
+              aria-controls="site-mobile-panel-resources"
+              onClick={() => openPanel("resources")}
+            >
+              Resources <span className="chev">▾</span>
+            </button>
+            <a className="site-mobile-row" href={PRIMARY_LINKS.contact.href} onClick={closeAll}>
+              {PRIMARY_LINKS.contact.label}
+            </a>
+          </section>
 
-        <a href="https://abnjunction.com/contact-us/" onClick={closeAll}>Contact</a>
-        <a className="site-cta" href="https://abnjunction.com/contact-us/" onClick={closeAll}>
-          Book a Strategy Call →
-        </a>
+          <section id="site-mobile-panel-services" className={panelClassName("services")}>
+            <div className="site-mobile-screen-head">
+              <button type="button" className="site-mobile-back" onClick={goBackPanel} aria-label="Back to main menu">
+                ← Main menu
+              </button>
+              <h2>Services</h2>
+              <p>Five connected service pillars. Everything your growth story needs under one junction.</p>
+            </div>
+            <div className="site-mobile-cards">
+              {SERVICE_PILLARS.map((p) => (
+                <button
+                  key={p.key}
+                  type="button"
+                  className="site-mobile-card"
+                  aria-expanded={activePanel === servicePanelKey(p.key)}
+                  aria-controls={`site-mobile-panel-${servicePanelKey(p.key)}`}
+                  onClick={() => openPanel(servicePanelKey(p.key))}
+                >
+                  <span className="num">{p.num}</span>
+                  <span>
+                    <strong>{p.label}</strong>
+                    <small>{p.blurb}</small>
+                  </span>
+                  <span className="arrow">→</span>
+                </button>
+              ))}
+            </div>
+            <div className="site-mobile-group-label">Explore</div>
+            <div className="site-mobile-simple-list">
+              {MOBILE_SERVICES_EXPLORE_LINKS.map((l) => (
+                <ExploreLink key={l.label} href={l.href} onClick={closeAll}>
+                  {l.label}
+                </ExploreLink>
+              ))}
+            </div>
+          </section>
+
+          {SERVICE_PILLARS.map((p) => {
+            const detail = SERVICE_DETAILS[p.key];
+            const panelKey = servicePanelKey(p.key);
+            return (
+              <section key={panelKey} id={`site-mobile-panel-${panelKey}`} className={panelClassName(panelKey)}>
+                <div className="site-mobile-screen-head">
+                  <button type="button" className="site-mobile-back" onClick={goBackPanel} aria-label="Back to all services">
+                    ← All Services
+                  </button>
+                  <div className="site-eyebrow">{detail.eyebrow}</div>
+                  <h2>{p.label}</h2>
+                  <p>{detail.description}</p>
+                </div>
+                <div className="site-mobile-simple-list">
+                  {detail.links.map((l) => (
+                    <a key={l.label} href={l.href} onClick={closeAll}>
+                      {l.label}
+                    </a>
+                  ))}
+                </div>
+                <a
+                  className="site-cta"
+                  style={{ width: "100%", marginTop: 16 }}
+                  href={p.href}
+                  onClick={closeAll}
+                >
+                  Explore {p.label} →
+                </a>
+              </section>
+            );
+          })}
+
+          <section id="site-mobile-panel-case" className={panelClassName("case")}>
+            <div className="site-mobile-screen-head">
+              <button type="button" className="site-mobile-back" onClick={goBackPanel} aria-label="Back to main menu">
+                ← Main menu
+              </button>
+              <h2>Case Studies</h2>
+              <p>Proof before promises.</p>
+            </div>
+            <div className="site-mobile-featured">
+              <div className="site-eyebrow">Featured case study</div>
+              <b>{CASE_STUDY_FEATURED.multiplier}</b>
+              <h3>{CASE_STUDY_FEATURED.title}</h3>
+              <p>{CASE_STUDY_FEATURED.blurb}</p>
+              <a className="site-cta" style={{ width: "100%" }} href={CASE_STUDY_FEATURED.href} onClick={closeAll}>
+                View Case Study →
+              </a>
+            </div>
+            <div className="site-mobile-group-label">Browse by capability</div>
+            <div className="site-mobile-simple-list">
+              {CASE_STUDY_LINKS.map((l) => (
+                <a key={l.label} href={l.href} onClick={closeAll}>
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </section>
+
+          <section id="site-mobile-panel-resources" className={panelClassName("resources")}>
+            <div className="site-mobile-screen-head">
+              <button type="button" className="site-mobile-back" onClick={goBackPanel} aria-label="Back to main menu">
+                ← Main menu
+              </button>
+              <h2>Resources</h2>
+              <p>Knowledge and tools worth returning for.</p>
+            </div>
+            <div className="site-mobile-group-label">Learn</div>
+            <div className="site-mobile-simple-list">
+              {RESOURCE_LEARN_LINKS.map((l) => (
+                <a key={l.label} href={l.href} onClick={closeAll}>
+                  {l.label}
+                </a>
+              ))}
+            </div>
+            <div className="site-mobile-group-label">Use</div>
+            <div className="site-mobile-simple-list">
+              {RESOURCE_USE_LINKS.map((l) => (
+                <a key={l.label} href={l.href} onClick={closeAll}>
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <div className="site-mobile-drawer-cta">
+          <a className="site-cta" href={CTA_LINK.href} onClick={closeAll}>
+            {CTA_LINK.label}
+          </a>
+        </div>
       </div>
     </div>
   );
