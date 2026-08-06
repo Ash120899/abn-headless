@@ -95,11 +95,22 @@ export async function generateMetadata({ params }) {
     }
   }
 }
-async function fetchMediaUrl(id) {
-  const res = await fetch(`${WP_API_URL}/media/${id}`, { signal: AbortSignal.timeout(5000) })
-  if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
-  const media = await res.json()
-  return media.source_url
+// A case study page can trigger 20-30+ of these concurrently (one per
+// logo/screenshot), and the WP host occasionally 500s a handful of them
+// under that burst even though every id resolves fine on its own — so
+// retry transient failures with a short backoff before giving up.
+async function fetchMediaUrl(id, retries = 2) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const res = await fetch(`${WP_API_URL}/media/${id}`, { signal: AbortSignal.timeout(5000) })
+      if (!res.ok) throw new Error(`Media fetch failed: ${res.status}`)
+      const media = await res.json()
+      return media.source_url
+    } catch (err) {
+      if (attempt >= retries) throw err
+      await new Promise((resolve) => setTimeout(resolve, 200 * (attempt + 1)))
+    }
+  }
 }
 
 // Resolves every section concurrently, and every image/logo within a section
@@ -115,7 +126,7 @@ async function enrichSections(sections) {
               try {
                 return { url: await fetchMediaUrl(img.screenshot) }
               } catch (err) {
-                console.error('Error fetching screenshot:', err)
+                console.warn('Error fetching screenshot (skipped):', err)
                 return null
               }
             })
@@ -132,7 +143,7 @@ async function enrichSections(sections) {
             try {
               imageUrl = await fetchMediaUrl(section.images)
             } catch (err) {
-              console.error('Error fetching testimonial image:', err)
+              console.warn('Error fetching testimonial image (skipped):', err)
             }
           }
 
@@ -146,7 +157,7 @@ async function enrichSections(sections) {
               try {
                 return { url: await fetchMediaUrl(logo.image) }
               } catch (err) {
-                console.error('Error fetching client logo:', err)
+                console.warn('Error fetching client logo (skipped):', err)
                 return null
               }
             })
@@ -165,7 +176,7 @@ async function enrichSections(sections) {
             try {
               heroImageDark = await fetchMediaUrl(heroImageDark)
             } catch (err) {
-              console.error('Error fetching hero dark image:', err)
+              console.warn('Error fetching hero dark image (skipped):', err)
               heroImageDark = null
             }
           }

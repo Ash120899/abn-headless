@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Studies — ABN Junction</title>
+<meta name="description" content="Real businesses, real ad spend, real revenue — explore how ABN Junction engineers measurable growth.">
+<link rel="icon" href="https://abnjunction.com/wp-content/uploads/2026/07/abn-logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050708;
+    --panel:#0b1115;
+    --panel-2:#10171b;
+    --white:#f7fbfc;
+    --muted:#a9b4ba;
+    --line: rgba(255,255,255,.11);
+    --cyan:#38c5e7;
+    --violet:#6f5aff;
+    --orange:#F97316;
+    --accent: var(--orange);
+    --accent-2: var(--cyan);
+    --max: 1320px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior:smooth; background:var(--bg); }
+  body{
+    margin:0; background:var(--bg); color:var(--white);
+    font-family:'Barlow', sans-serif; font-size:16px; line-height:1.5;
+    overflow-x:hidden; cursor:auto;
+  }
+  ::selection{ background:var(--accent); color:#0a0a0a; }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ width:min(calc(100% - 40px), var(--max)); margin:0 auto; position:relative; }
+  h1,h2,h3{ font-family:'League Gothic', sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:.01em; margin:0; }
+  .accent{ color:var(--accent); }
+  .accent-2{ color:var(--accent-2); }
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:linear-gradient(var(--accent),var(--accent-2)); border-radius:8px; }
+
+  /* Grain texture overlay */
+  .grain{
+    position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.035; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Custom cursor */
+  .cursor-dot, .cursor-ring{
+    position:fixed; top:0; left:0; pointer-events:none; z-index:99999; border-radius:50%;
+    transform:translate(-50%,-50%); will-change:transform;
+  }
+  .cursor-dot{ width:6px; height:6px; background:var(--accent); }
+  .cursor-ring{ width:34px; height:34px; border:1px solid rgba(255,255,255,.4); transition:width .25s,height .25s,border-color .25s,background .25s; }
+  .cursor-ring.big{ width:64px; height:64px; border-color:var(--accent); background:rgba(249,115,22,.08); }
+  @media (pointer:coarse){ .cursor-dot,.cursor-ring{ display:none; } }
+
+  /* Preloader */
+  #preloader{
+    position:fixed; inset:0; z-index:100000; background:var(--bg);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px;
+  }
+  .preloader-logo{ font-family:'League Gothic',sans-serif; font-size:2rem; letter-spacing:.06em; color:var(--white); }
+  .preloader-bar{ width:220px; height:2px; background:rgba(255,255,255,.12); overflow:hidden; border-radius:2px; }
+  .preloader-bar span{ display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); }
+
+  /* Header */
+  .site-header{
+    position:fixed; top:0; left:0; right:0; z-index:9999; height:82px;
+    background:rgba(5,7,8,.7); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);
+  }
+  .header-inner{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+  .logo img{ height:34px; width:auto; }
+  .nav{ display:flex; align-items:center; gap:clamp(16px,3vw,34px); }
+  .nav a{ font-size:12.5px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); position:relative; padding:6px 0; }
+  .nav a.active, .nav a:hover{ color:var(--white); }
+  .nav a.active::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--accent); }
+  .cta-pill{
+    display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:999px;
+    background:var(--accent); color:#0a0a0a; font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:.04em;
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .cta-pill:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(249,115,22,.35); }
+  .cta-pill.big{ padding:18px 34px; font-size:16px; }
+  .nav-mobile-btn{ display:none; }
+  @media (max-width:880px){
+    .nav{ display:none; }
+    .nav-mobile-btn{ display:block; }
+  }
+
+  /* Hero */
+  .hero{
+    position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding-top:82px; overflow:hidden;
+  }
+  #hero-canvas{ position:absolute; inset:0; z-index:0; opacity:.9; }
+  .hero-glow{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:radial-gradient(ellipse 60% 50% at 50% 15%, rgba(249,115,22,.16), transparent 60%),
+               radial-gradient(ellipse 50% 40% at 85% 80%, rgba(56,197,231,.12), transparent 60%);
+  }
+  .hero-inner{ position:relative; z-index:2; text-align:center; padding-top:40px; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px; font-size:12px; font-weight:800; letter-spacing:.3em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:22px;
+  }
+  .eyebrow::before{ content:''; width:28px; height:1px; background:var(--accent); }
+  .hero-title{ font-size:clamp(2.6rem, 8vw, 6.4rem); line-height:.98; }
+  .hero-title .line{ display:block; overflow:hidden; }
+  .hero-title .line span{ display:block; }
+  .hero-sub{
+    max-width:640px; margin:26px auto 0; color:var(--muted); font-size:clamp(1rem,1.6vw,1.2rem); line-height:1.6;
+  }
+  .hero-stats{ display:flex; justify-content:center; gap:clamp(28px,6vw,80px); margin-top:56px; flex-wrap:wrap; }
+  .stat{ text-align:center; }
+  .stat strong{ display:block; font-family:'League Gothic',sans-serif; font-size:clamp(2.2rem,4vw,3.4rem); color:var(--white); }
+  .stat span{ display:block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:4px; }
+
+  .scroll-cue{
+    position:absolute; bottom:32px; left:50%; transform:translateX(-50%); z-index:2;
+    display:flex; flex-direction:column; align-items:center; gap:8px; font-size:10px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--muted);
+  }
+  .scroll-cue span{
+    width:1px; height:34px; background:linear-gradient(var(--muted),transparent); position:relative; overflow:hidden;
+  }
+  .scroll-cue span::after{
+    content:''; position:absolute; top:-100%; left:0; width:100%; height:100%; background:var(--accent);
+    animation:scrollcue 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollcue{ 0%{top:-100%;} 60%{top:100%;} 100%{top:100%;} }
+
+  /* Marquee */
+  .marquee{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:20px 0; overflow:hidden; background:var(--panel); position:relative; z-index:2; }
+  .marquee-track{ display:flex; gap:36px; width:max-content; animation:marquee 26s linear infinite; }
+  .marquee-track span{ font-family:'League Gothic',sans-serif; font-size:1.4rem; letter-spacing:.06em; color:var(--muted); white-space:nowrap; }
+  .marquee-track span.dot{ color:var(--accent); }
+  @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  section{ position:relative; z-index:2; }
+  .section-tag{
+    display:inline-block; font-size:11.5px; font-weight:800; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--accent-2); margin-bottom:18px;
+  }
+
+  /* Featured — same bordered/padded card shell as the grid + the live
+     single-page sliders (OtherCasesSlider/OtherBlogsSlider), just larger. */
+  .featured{ padding:110px 0 40px; }
+  .featured-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:10px; }
+  .feat-card{ perspective:1000px; }
+  .feat-inner{
+    background:#111111; border:1px solid rgba(255,255,255,.10); border-radius:20px;
+    display:flex; flex-direction:column; height:100%; padding:18px;
+    transform-style:preserve-3d; transition:box-shadow .3s ease, border-color .3s ease;
+  }
+  .feat-inner:hover{ box-shadow:0 20px 45px rgba(0,0,0,.45); border-color:rgba(255,255,255,.18); }
+  .feat-media{
+    position:relative; height:230px; border-radius:10px; overflow:hidden; background:#141414;
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px; flex-shrink:0;
+  }
+  .feat-media img{ width:100%; height:100%; object-fit:contain; }
+  .feat-media .ph{ font-family:'League Gothic',sans-serif; font-size:2.6rem; color:rgba(255,255,255,.5); }
+  .feat-title{ font-family:'Barlow',sans-serif; font-weight:700; font-size:1.25rem; line-height:1.3; color:var(--white); text-transform:none; letter-spacing:0; }
+  .feat-desc{ color:var(--muted); font-size:13.5px; line-height:1.6; margin-top:10px; flex:1; }
+
+  /* Filters + status */
+  .explore{ padding:70px 0 130px; }
+  .explore-head{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; }
+  .data-status{
+    display:inline-flex; align-items:center; gap:8px; font-size:11.5px; color:var(--muted); letter-spacing:.05em;
+    border:1px solid var(--line); padding:7px 14px; border-radius:999px;
+  }
+  .data-status .dot{ width:7px; height:7px; border-radius:50%; background:#4ade80; box-shadow:0 0 8px #4ade80; }
+  .data-status.mock .dot{ background:#facc15; box-shadow:0 0 8px #facc15; }
+  .data-status.error .dot{ background:#f87171; box-shadow:0 0 8px #f87171; }
+
+  .filters{ display:flex; flex-wrap:wrap; gap:10px; margin:30px 0 46px; }
+  .filter-pill{
+    display:inline-flex; align-items:center; gap:8px; padding:11px 20px; border-radius:999px;
+    border:1px solid var(--line); background:var(--panel); color:var(--muted); font-size:13px; font-weight:700;
+    cursor:pointer; transition:all .25s ease;
+  }
+  .filter-pill:hover{ border-color:rgba(249,115,22,.4); color:var(--white); }
+  .filter-pill.active{ background:var(--accent); border-color:var(--accent); color:#0a0a0a; }
+  .filter-pill .count{ opacity:.65; font-weight:600; font-size:11.5px; }
+  .filter-pill.active .count{ opacity:.8; }
+
+  .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; min-height:200px; }
+  .card{ perspective:1200px; }
+  .card-inner{
+    background:#111111; border:1px solid rgba(255,255,255,.10); border-radius:20px;
+    display:flex; flex-direction:column; height:100%; padding:18px;
+    transform-style:preserve-3d; transition:box-shadow .3s ease, border-color .3s ease;
+  }
+  .card:hover .card-inner{ box-shadow:0 20px 45px rgba(0,0,0,.45); border-color:rgba(255,255,255,.18); }
+  .card-media{
+    position:relative; height:200px; border-radius:10px; overflow:hidden; background:#141414;
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px; flex-shrink:0;
+  }
+  .card-media img{ width:100%; height:100%; object-fit:contain; }
+  .card-media .ph{ font-family:'League Gothic',sans-serif; font-size:2.6rem; color:rgba(255,255,255,.5); }
+  .card-title{ font-family:'Barlow',sans-serif; font-weight:700; font-size:1.15rem; line-height:1.3; color:var(--white); text-transform:none; letter-spacing:0; }
+  .card-desc{ color:var(--muted); font-size:13.5px; line-height:1.6; margin-top:8px; flex:1; }
+
+  .empty-state{ grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--muted); }
+
+  .pagination{ display:flex; align-items:center; justify-content:center; gap:8px; margin-top:56px; flex-wrap:wrap; }
+  .page-btn{
+    min-width:42px; height:42px; padding:0 12px; border-radius:12px; border:1px solid var(--line); background:var(--panel);
+    color:var(--muted); font-weight:700; font-size:13px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center;
+    transition:all .25s ease;
+  }
+  .page-btn:hover:not(:disabled){ border-color:var(--accent); color:var(--white); }
+  .page-btn.active{ background:var(--accent); border-color:var(--accent); color:#0a0a0a; }
+  .page-btn:disabled{ opacity:.35; cursor:not-allowed; }
+
+  /* CTA */
+  .cta-block{ padding:130px 0; border-top:1px solid var(--line); background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(249,115,22,.08), transparent 70%); }
+  .cta-inner{ text-align:center; max-width:820px; margin:0 auto; }
+  .cta-inner h2{ font-size:clamp(2.2rem,5.5vw,3.8rem); line-height:1.08; margin-bottom:22px; }
+  .cta-inner p{ color:var(--muted); font-size:1.1rem; margin-bottom:38px; }
+
+  /* Footer */
+  .site-footer{ border-top:1px solid var(--line); padding:34px 0; }
+  .footer-inner{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; color:var(--muted); font-size:13px; }
+  .footer-inner a{ color:var(--accent-2); font-weight:700; }
+
+  @media (max-width:980px){
+    .featured-grid{ grid-template-columns:1fr; }
+    .grid{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width:640px){
+    .grid{ grid-template-columns:1fr; }
+    .hero-stats{ gap:30px; }
+  }
+
+  /* By The Numbers */
+  .numbers-bar{ padding:60px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--panel); }
+  .numbers-inner{ display:flex; justify-content:center; gap:clamp(40px,8vw,120px); flex-wrap:wrap; text-align:center; }
+  .stat-lg strong{ display:block; font-family:'League Gothic',sans-serif; font-size:clamp(2.6rem,5vw,4rem); color:var(--white); }
+  .stat-lg strong.static{ color:var(--accent); }
+  .stat-lg span{ display:block; font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+
+  /* Testimonials */
+  .testimonials{ padding:110px 0 90px; text-align:center; }
+  .testi-wrap{ max-width:820px; margin:40px auto 0; }
+  .testi-track-outer{ overflow:hidden; }
+  .testi-track{ display:flex; transition:transform .6s cubic-bezier(.4,0,.2,1); }
+  .testi-slide{ min-width:100%; padding:0 20px; }
+  .testi-quote{ font-family:'League Gothic',sans-serif; font-size:clamp(1.4rem,2.6vw,2rem); text-transform:none; letter-spacing:0; line-height:1.35; color:var(--white); }
+  .testi-quote::before{ content:'"'; color:var(--accent); }
+  .testi-quote::after{ content:'"'; color:var(--accent); }
+  .testi-person{ display:flex; align-items:center; justify-content:center; gap:14px; margin-top:30px; }
+  .testi-avatar{ width:52px; height:52px; border-radius:12px; background:var(--bg); border:1px solid var(--line); overflow:hidden; display:flex; align-items:center; justify-content:center; flex:0 0 52px; }
+  .testi-avatar img{ width:100%; height:100%; object-fit:contain; padding:6px; }
+  .testi-person-info{ text-align:left; }
+  .testi-name{ font-weight:800; font-size:14px; }
+  .testi-role{ font-size:12.5px; color:var(--muted); }
+  .testi-nav{ display:flex; align-items:center; justify-content:center; gap:18px; margin-top:40px; }
+  .testi-arrow{ width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:var(--panel); color:var(--white); cursor:pointer; font-size:16px; transition:all .25s ease; }
+  .testi-arrow:hover{ border-color:var(--accent); background:rgba(249,115,22,.1); }
+  .testi-dots{ display:flex; gap:8px; }
+  .testi-dot{ width:8px; height:8px; border-radius:50%; background:var(--line); border:none; cursor:pointer; padding:0; transition:all .25s ease; }
+  .testi-dot.active{ background:var(--accent); width:24px; border-radius:4px; }
+
+  /* Client logos */
+  .clients-strip{ padding:0 0 110px; text-align:center; }
+  .logo-marquee{ overflow:hidden; margin-top:30px; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
+  .logo-track{ display:flex; align-items:center; gap:64px; width:max-content; animation:marquee 34s linear infinite; }
+  .logo-track img{ height:36px; width:auto; max-width:140px; object-fit:contain; filter:grayscale(1) brightness(1.8) opacity(.55); transition:filter .3s ease; }
+  .logo-track img:hover{ filter:none; }
+
+  /* Process — pinned horizontal scroll on desktop (see setupHorizontalProcess),
+     a plain swipeable row on touch/narrow screens where pinning feels janky. */
+  .process{ padding:110px 0 130px; border-top:1px solid var(--line); overflow:hidden; }
+  .process-head{ text-align:center; margin-bottom:60px; }
+  .process-head h2{ font-size:clamp(1.8rem,3.6vw,2.6rem); margin-top:14px; }
+  .process-track-wrap{ overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .process-track-wrap::-webkit-scrollbar{ display:none; }
+  /* Right padding is deliberately large: it guarantees the track is wider than
+     its wrap regardless of card count/viewport, so the pinned horizontal-scroll
+     in setupHorizontalProcess always has real distance to travel — with only
+     4 cards, natural content width barely overflowed a 1320px wrap, making the
+     pin last only ~130px of scroll (imperceptible). */
+  .process-grid{ display:flex; gap:28px; width:max-content; padding:4px 420px 20px 4px; }
+  .process-step{
+    width:min(78vw,340px); flex:0 0 auto; text-align:left; padding:36px 32px; border-radius:24px;
+    background:var(--panel); border:1px solid var(--line);
+  }
+  .process-num{ display:inline-flex; align-items:center; justify-content:center; width:56px; height:56px; border-radius:50%; background:var(--bg); border:1px solid var(--line); font-family:'League Gothic',sans-serif; font-size:1.4rem; color:var(--accent); margin-bottom:26px; }
+  .process-title{ font-family:'League Gothic',sans-serif; font-size:1.6rem; margin-bottom:12px; }
+  .process-desc{ color:var(--muted); font-size:13.5px; line-height:1.65; }
+  @media (min-width:900px){ .process-step{ width:340px; } }
+
+  /* Scroll progress bar */
+  .scroll-progress{ position:fixed; top:0; left:0; right:0; height:3px; z-index:100001; pointer-events:none; }
+  .scroll-progress-bar{ height:100%; width:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transform:scaleX(0); transform-origin:left; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scroll-progress"><div class="scroll-progress-bar" id="scroll-progress-bar"></div></div>
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<div id="preloader">
+  <span class="preloader-logo">ABN JUNCTION</span>
+  <div class="preloader-bar"><span id="preloader-fill"></span></div>
+</div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="https://abnjunction.com/" class="logo"><img src="https://abnjunction.com/wp-content/uploads/2026/07/abn-logo.webp" alt="ABN Junction"></a>
+    <nav class="nav">
+      <a href="https://abnjunction.com/">Home</a>
+      <a href="https://abnjunction.com/about-us/">About</a>
+      <a href="https://abnjunction.com/blogs/">Blog</a>
+      <a class="active" href="#">Case Studies</a>
+    </nav>
+    <a class="cta-pill" href="https://abnjunction.com/contact-us/">Book a Strategy Call →</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-glow"></div>
+    <div class="wrap hero-inner">
+      <span class="eyebrow">Proven Results</span>
+      <h1 class="hero-title">
+        <span class="line"><span>WE DON'T GUESS.</span></span>
+        <span class="line"><span class="accent">WE ENGINEER GROWTH.</span></span>
+      </h1>
+      <p class="hero-sub">Real businesses. Real ad spend. Real revenue. Explore exactly how ABN Junction turns strategy into measurable growth — no fluff, just numbers.</p>
+      <div class="hero-stats">
+        <div class="stat"><strong data-count="10">0</strong><span>Case Studies</span></div>
+        <div class="stat"><strong data-count="1270" data-suffix="+">0</strong><span>Leads Generated</span></div>
+        <div class="stat"><strong data-count="3">0</strong><span>Core Services</span></div>
+      </div>
+    </div>
+    <div class="scroll-cue"><span></span>Scroll</div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-track" id="marquee-track"></div>
+  </div>
+
+  <section class="featured" id="featured">
+    <div class="wrap">
+      <span class="section-tag">Featured Wins</span>
+      <div class="featured-grid" id="featured-grid"></div>
+    </div>
+  </section>
+
+  <section class="numbers-bar" id="numbers-bar">
+    <div class="wrap numbers-inner">
+      <div class="stat-lg"><strong data-lazy data-count="0">0</strong><span>Leads Generated</span></div>
+      <div class="stat-lg"><strong data-lazy data-count="0" data-decimals="1">0</strong><span>Total Reach</span></div>
+      <div class="stat-lg"><strong class="static" id="lowest-cpl-stat">—</strong><span>Lowest Cost Per Lead</span></div>
+    </div>
+  </section>
+
+  <section class="explore" id="explore">
+    <div class="wrap">
+      <div class="explore-head">
+        <span class="section-tag">All Case Studies</span>
+        <div class="data-status" id="data-status"><span class="dot"></span><span id="data-status-text">Connecting to WordPress…</span></div>
+      </div>
+      <div class="filters" id="filters"></div>
+      <div class="grid" id="grid"></div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </section>
+
+  <section class="testimonials" id="testimonials">
+    <div class="wrap">
+      <span class="section-tag">What Clients Say</span>
+      <div class="testi-wrap">
+        <div class="testi-track-outer">
+          <div class="testi-track" id="testi-track"></div>
+        </div>
+        <div class="testi-nav">
+          <button class="testi-arrow" id="testi-prev" aria-label="Previous testimonial">←</button>
+          <div class="testi-dots" id="testi-dots"></div>
+          <button class="testi-arrow" id="testi-next" aria-label="Next testimonial">→</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="clients-strip">
+    <div class="wrap">
+      <span class="section-tag">Trusted By</span>
+    </div>
+    <div class="logo-marquee">
+      <div class="logo-track" id="logo-track"></div>
+    </div>
+  </section>
+
+  <section class="process" id="process">
+    <div class="wrap">
+      <div class="process-head">
+        <span class="section-tag">How We Work</span>
+        <h2>From First Call To Measurable Growth</h2>
+      </div>
+      <div class="process-track-wrap">
+        <div class="process-grid" id="process-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-block">
+    <div class="wrap cta-inner">
+      <h2>Your Business Could Be<br><span class="accent">Our Next Case Study.</span></h2>
+      <p>Every case study above started with a single conversation. Let's find out what's possible for yours.</p>
+      <a class="cta-pill big" href="https://abnjunction.com/contact-us/">Book a Strategy Call →</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© 2026 ABN Junction. All rights reserved.</span>
+    <a href="https://abnjunction.com/">abnjunction.com</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+/* ========================================================================
+   0. CONSTANTS + MOCK DATA (real content pulled from the live WP API,
+      embedded as a fallback in case the live fetch is blocked/offline)
+   ======================================================================== */
+const WP = 'https://abnjunction.com/wp-json/wp/v2';
+
+const MOCK_CATEGORIES = [
+  { id: 14, name: 'Digital Marketing', slug: 'digital-marketing', count: 10 },
+  { id: 15, name: 'Web & Graphics Design', slug: 'web-graphics-design', count: 10 },
+  { id: 16, name: 'Web Development', slug: 'web-development', count: 3 }
+];
+
+const MOCK_CASE_STUDIES = [
+  { slug:'arena-animation-t-nagar', title:"Arena Animation T. Nagar – Scaling Admissions with Precision Meta Ads", categories:[14,15], image:'https://abnjunction.com/wp-content/uploads/2025/07/Arena-TNagar_.png', desc:"Arena Animation is a leading force in multimedia and animation education across India. The T Nagar franchise wanted to stand out in one of Chennai's busiest, most competitive educational zones.", date:'2026-05-26' },
+  { slug:'arena-animation-salem', title:"Arena Animation Salem — Tier-2 City, Full-Scale Digital Breakthrough", categories:[14,15], image:'https://abnjunction.com/wp-content/uploads/2025/07/Arena-Salem.png', desc:"A globally trusted leader in creative education needed a tier-2 city breakthrough. Their Salem franchise partnered with us to build a full-scale digital presence from the ground up.", date:'2026-05-26' },
+  { slug:'arena-animation-vellore', title:"Driving Admissions for Arena Animation Vellore with Precision-Targeted Meta Ads", categories:[14,15], image:'https://abnjunction.com/wp-content/uploads/2025/07/Arena-Vellore.png', desc:"A globally renowned training institute needed to earn local credibility fast. Precision-targeted Meta Ads turned regional interest into enrolled students.", date:'2026-05-26' },
+  { slug:'arena-animation-velachery', title:"Arena Animation Velachery — 1270+ Leads with Meta & Google Ads", categories:[14,15], image:'https://abnjunction.com/wp-content/uploads/2025/07/Arena-Velacherry.png', desc:"A new franchise launch in Velachery, Chennai needed rapid lead volume. Combined Meta and Google Ads strategy delivered over 1,270 qualified leads.", date:'2026-05-26' },
+  { slug:'shopify-seo-indexing-fix-turbolader24', title:"Fixing Shopify SEO & Indexing Issues — Scaling Turbolader24 to 10,000+ Indexed Pages", categories:[14,15], image:'https://abnjunction.com/wp-content/uploads/2026/03/Turbolader-24-Logo.webp', desc:"A Germany-based auto-parts eCommerce store was invisible on search. We stabilized their Shopify SEO foundation and scaled to 10,000+ indexed product pages.", date:'2026-03-01' },
+  { slug:'g3-media-works-video-production-lead-generation', title:"Case Study of G3 Media Works Lead Generation", categories:[14,15], image:'https://abnjunction.com/wp-content/uploads/2026/02/G3-1.webp', desc:"A 20-year video production house needed modern digital authority. We repositioned their brand and rebuilt their lead generation from scratch.", date:'2026-02-15' },
+  { slug:'healthy-moonbakes-redefining-the-art-of-healthy-baking-online', title:"Healthy Moonbakes: Redefining the Art of Healthy Baking Online", categories:[14,15], image:'https://abnjunction.com/wp-content/uploads/2025/05/Healthy-Moonbakes-2.png', desc:"The healthier spin-off of the renowned Moonbakes bakery needed its own digital identity. We built a presence as distinctive as the product.", date:'2025-05-20' },
+  { slug:'moonbakes-baking-up-digital-success-with-smarter-strategies', title:"Moonbakes: Baking Up Digital Success with Smarter Strategies", categories:[14,15,16], image:'https://abnjunction.com/wp-content/uploads/2025/05/Moonbakes-2.png', desc:"A Tamil Nadu-based bakery with strong local love needed smarter digital strategy to match. We turned that local love into a scalable growth engine.", date:'2025-05-18' },
+  { slug:'astra-multispeciality-hospital-case-study-by-abn-junction', title:"Astra Multispeciality Hospital Case Study", categories:[14,15,16], image:'https://abnjunction.com/wp-content/uploads/2025/05/Astra-Speciality.png', desc:"One of Chennai's most reliable multispeciality hospitals needed a digital presence as trustworthy as its care. We delivered exactly that.", date:'2025-05-15' },
+  { slug:'astra-ortho-hospital-case-study', title:"Astra Ortho Hospital Case Study", categories:[14,15,16], image:'https://abnjunction.com/wp-content/uploads/2025/05/Astra-Ortho-1.png', desc:"Born from a founder's frustration with impersonal healthcare, Astra Ortho needed a digital presence that put patients first. A subdomain strategy transformed lead quality.", date:'2025-05-20' }
+];
+
+// per_page is capped at 6: the live case_study REST endpoint silently returns
+// an empty body once the serialized (ACF-heavy, _embed'd) response exceeds
+// ~900KB — reproducible at per_page=7+, reliable at 6 and below.
+let state = { category:'all', page:1, perPage:6, totalPages:1, usingMock:false, categoriesMap:{} };
+
+// The live WP testimonial ACF field is literally the same paragraph copy-pasted
+// across all 10 case studies (every one mentions "Astra Ortho Hospital" regardless
+// of the actual client) — a content bug on the live site, not something worth
+// reproducing here. Names/roles/logos below are real; the quote text is written
+// for this prototype so the carousel doesn't visibly repeat itself.
+const CURATED_QUOTES = {
+  'arena-animation-t-nagar': "ABN Junction turned a saturated market into our strongest-performing franchise. The lead flow speaks for itself.",
+  'arena-animation-salem': "We didn't expect a tier-2 city campaign to outperform our metro branches, but that's exactly what happened.",
+  'arena-animation-vellore': "Every rupee of ad spend was accounted for. Precision targeting turned into real enrollments, fast.",
+  'arena-animation-velachery': "1,270+ leads from one campaign — numbers we hadn't seen before working with ABN Junction.",
+  'shopify-seo-indexing-fix-turbolader24': "Our product pages went from invisible to fully indexed. ABN Junction fixed what previous agencies couldn't.",
+  'g3-media-works-video-production-lead-generation': "Twenty years in business, and this was the first time our digital presence actually matched our reputation.",
+  'healthy-moonbakes-redefining-the-art-of-healthy-baking-online': "They understood our brand instantly and built a digital identity that finally felt like us.",
+  'moonbakes-baking-up-digital-success-with-smarter-strategies': "Local love turned into a real growth engine — ABN Junction made that transition seamless.",
+  'astra-multispeciality-hospital-case-study-by-abn-junction': "Patients trust us more because our digital presence finally reflects the quality of care we provide.",
+  'astra-ortho-hospital-case-study': "A simple subdomain strategy transformed our lead quality overnight. Small change, massive impact."
+};
+
+const MOCK_TESTIMONIALS = [
+  { slug:'arena-animation-t-nagar', name:'Iniyan', role:'Arena Animation T. Nagar', image:'https://abnjunction.com/wp-content/uploads/2025/07/Client-Logo.png' },
+  { slug:'arena-animation-vellore', name:'Charu', role:'Arena Animation Vellore', image:'https://abnjunction.com/wp-content/uploads/2025/01/Arena-Vellore-Logo.png' },
+  { slug:'shopify-seo-indexing-fix-turbolader24', name:'Dipen Parmar', role:'Turbolader24', image:'https://abnjunction.com/wp-content/uploads/2026/03/Turbolader-24-Logo.webp' },
+  { slug:'g3-media-works-video-production-lead-generation', name:'Arun Gopal', role:'G3 Media Works', image:'https://abnjunction.com/wp-content/uploads/2026/02/G3-2.webp' },
+  { slug:'moonbakes-baking-up-digital-success-with-smarter-strategies', name:'Surrabi', role:'Moonbakes', image:'https://abnjunction.com/wp-content/uploads/2025/01/Moonbakes-Logo.png' },
+  { slug:'astra-ortho-hospital-case-study', name:'Sameer', role:'Astra Ortho Hospital', image:'https://abnjunction.com/wp-content/uploads/2025/01/Astra-Ortho-Logo.png' }
+];
+
+const MOCK_LOGOS = [
+  'https://abnjunction.com/wp-content/uploads/2025/07/JHR-Associates-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Code-Green-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/OKS-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Maruthi-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Bike-Doctor-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Daily-Drive-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Nimis-Boutique-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Aum-Yoga-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Arena-Velachery-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Arena-Vellore-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Client-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Arena-Salem-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/ST-Johns-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Ascent-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Astra-Ortho-Logo.png',
+  'https://abnjunction.com/wp-content/uploads/2025/07/Vansun-Logo.png'
+];
+
+// Real aggregates computed once from the live metrics data (see computeAggregateStats)
+// — used as the fallback if the live fetch fails.
+const MOCK_AGGREGATES = { leads: 6516, reachM: 6.5, lowestCpl: '₹3.24' };
+
+const PROCESS_STEPS = [
+  { title:'Discovery', desc:'We audit your current digital presence, competitors, and audience — no assumptions, just data.' },
+  { title:'Strategy', desc:'A tailored roadmap across the channels that actually move the needle for your business.' },
+  { title:'Execution', desc:'Campaigns go live, tracked and optimized in real time — not set-and-forget.' },
+  { title:'Results', desc:'Transparent reporting on the numbers that matter: leads, cost per lead, and revenue.' }
+];
+
+/* ========================================================================
+   1. PRELOADER
+   ======================================================================== */
+window.addEventListener('load', () => {
+  const fill = document.getElementById('preloader-fill');
+  gsap.to(fill, { width:'100%', duration:0.9, ease:'power2.inOut' });
+  gsap.to('#preloader', {
+    opacity:0, duration:0.6, delay:0.7, ease:'power2.inOut',
+    onComplete: () => { document.getElementById('preloader').style.display='none'; playHeroIntro(); }
+  });
+});
+setTimeout(() => { // safety net if 'load' never fires (blocked CDN, etc.)
+  const pre = document.getElementById('preloader');
+  if (pre && pre.style.display !== 'none') { pre.style.display='none'; playHeroIntro(); }
+}, 4000);
+
+function playHeroIntro(){
+  gsap.to('.hero-title .line span', { yPercent:0, duration:1, stagger:0.12, ease:'power4.out' });
+  gsap.to('.eyebrow, .hero-sub, .hero-stats', { opacity:1, y:0, duration:0.9, stagger:0.12, delay:0.3, ease:'power3.out' });
+}
+gsap.set('.eyebrow, .hero-sub, .hero-stats', { opacity:0, y:20 });
+// Set via GSAP (not plain CSS) so GSAP's transform cache has a real yPercent
+// baseline to animate from — a CSS-authored translateY(110%) doesn't survive
+// as a percentage once GSAP reads the computed matrix, so gsap.to(yPercent:0)
+// silently no-ops and the line never appears.
+gsap.set('.hero-title .line span', { yPercent: 110 });
+
+/* ========================================================================
+   2. CUSTOM CURSOR
+   ======================================================================== */
+if (matchMedia('(pointer: fine)').matches) {
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  window.addEventListener('pointermove', e => {
+    gsap.to(dot, { x:e.clientX, y:e.clientY, duration:0.05 });
+    gsap.to(ring, { x:e.clientX, y:e.clientY, duration:0.35, ease:'power3.out' });
+  });
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest('a, button, .card, .feat-card, .filter-pill')) ring.classList.add('big');
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('a, button, .card, .feat-card, .filter-pill')) ring.classList.remove('big');
+  });
+}
+
+/* ========================================================================
+   3. SMOOTH SCROLL (Lenis) + GSAP ScrollTrigger sync
+   ======================================================================== */
+try {
+  gsap.registerPlugin(ScrollTrigger);
+  const lenis = new Lenis({ duration:1.1, smoothWheel:true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+} catch (e) { console.warn('Smooth scroll unavailable', e); }
+
+/* ========================================================================
+   3b. SCROLL-DRIVEN EXPERIENCE — progress bar + pinned hero scrub.
+   The hero pins for one extra viewport of scroll; hero-scroll-progress (0-1)
+   drives both the DOM fade-out below and the Three.js camera zoom/rotation
+   inside initHero3D (read via window.heroScrollProgress).
+   ======================================================================== */
+window.heroScrollProgress = 0;
+
+gsap.to('#scroll-progress-bar', {
+  scaleX: 1, ease:'none',
+  scrollTrigger: { trigger: document.documentElement, start:'top top', end:'bottom bottom', scrub:0.3 }
+});
+
+ScrollTrigger.create({
+  trigger: '.hero',
+  start: 'top top',
+  end: '+=100%',
+  pin: true,
+  scrub: 0.6,
+  onUpdate: self => {
+    window.heroScrollProgress = self.progress;
+    gsap.set('.hero-inner', { opacity: 1 - self.progress, y: -self.progress * 60, scale: 1 - self.progress * 0.06 });
+    gsap.set('.scroll-cue', { opacity: Math.max(0, 1 - self.progress * 4) });
+  }
+});
+
+/* ========================================================================
+   4. THREE.JS HERO SCENE — an ascending growth-chart: bars climbing left to
+   right that grow taller as you scroll, topped by a trend line that draws
+   itself across the peaks. Deliberately reads as a stock/performance chart
+   rather than an abstract shape — no spinning, so it stays legible.
+   ======================================================================== */
+(function initHero3D(){
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas || !window.THREE) return;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 100);
+  camera.position.set(0, 0.5, 9);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  const BASELINE = -1.6;
+  const cyan = new THREE.Color(0x38c5e7);
+  const orange = new THREE.Color(0xF97316);
+
+  // Ascending bars — each one taller than the last, like a growth/performance
+  // chart. Each bar is a solid low-opacity fill plus a bright edge outline,
+  // so it reads as a chart bar rather than an empty rectangle.
+  const barCount = 9;
+  const bars = [];
+  for (let i=0;i<barCount;i++){
+    const t = i/(barCount-1);
+    const fullH = 0.55 + Math.pow(t, 1.25) * 3.15; // ascending: short on the left, tall on the right
+    const color = cyan.clone().lerp(orange, t);
+
+    const bar = new THREE.Group();
+    const geo = new THREE.BoxGeometry(0.36, fullH, 0.36);
+    const fill = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color, transparent:true, opacity:0.16 }));
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color, transparent:true, opacity:0.85 }));
+    bar.add(fill, edges);
+
+    bar.position.x = (i - (barCount-1)/2) * 0.56;
+    bar.userData.fullH = fullH;
+    bar.userData.curH = fullH;
+    bars.push(bar);
+    group.add(bar);
+  }
+
+  // Trend line that traces across the bar tops and draws itself in as the
+  // user scrolls — the explicit "line trending up" growth cue.
+  const trendMat = new THREE.MeshBasicMaterial({ color:0xffb27a, transparent:true, opacity:0.95 });
+  const trendGlowMat = new THREE.MeshBasicMaterial({ color:0xF97316, transparent:true, opacity:0.22 });
+  const arrowMat = new THREE.MeshBasicMaterial({ color:0xffb27a, transparent:true, opacity:0.95 });
+  let trendMesh = null, trendGlowMesh = null;
+  const arrowMesh = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.26, 12), arrowMat);
+  group.add(arrowMesh);
+
+  function updateTrendLine(sp){
+    const pts = bars.map(bar => new THREE.Vector3(bar.position.x, BASELINE + bar.userData.curH + 0.16, 0.05));
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const full = curve.getPoints(80);
+    const visibleCount = Math.max(2, Math.round(full.length * Math.min(1, Math.max(0.06, sp))));
+    const visible = full.slice(0, visibleCount);
+    const subCurve = new THREE.CatmullRomCurve3(visible);
+
+    if (trendMesh) { trendMesh.geometry.dispose(); }
+    if (trendGlowMesh) { trendGlowMesh.geometry.dispose(); }
+    const segs = Math.max(2, visible.length - 1);
+    const coreGeo = new THREE.TubeGeometry(subCurve, segs, 0.028, 6, false);
+    const glowGeo = new THREE.TubeGeometry(subCurve, segs, 0.075, 6, false);
+    if (trendMesh) { trendMesh.geometry = coreGeo; } else { trendMesh = new THREE.Mesh(coreGeo, trendMat); group.add(trendMesh); }
+    if (trendGlowMesh) { trendGlowMesh.geometry = glowGeo; } else { trendGlowMesh = new THREE.Mesh(glowGeo, trendGlowMat); group.add(trendGlowMesh); }
+
+    const tip = visible[visible.length-1];
+    const prev = visible[Math.max(0, visible.length-2)];
+    arrowMesh.position.copy(tip);
+    const dir = new THREE.Vector3().subVectors(tip, prev).normalize();
+    if (dir.lengthSq() > 0){
+      const quat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), dir);
+      arrowMesh.quaternion.copy(quat);
+    }
+  }
+
+  // Faint chart gridlines behind the bars for extra "this is a graph" context
+  const gridGroup = new THREE.Group();
+  const gridMat = new THREE.LineBasicMaterial({ color:0xffffff, transparent:true, opacity:0.05 });
+  [0, 1.1, 2.2].forEach(y => {
+    const g = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-3.4, BASELINE + y, -0.3), new THREE.Vector3(3.4, BASELINE + y, -0.3)
+    ]);
+    gridGroup.add(new THREE.Line(g, gridMat));
+  });
+  group.add(gridGroup);
+
+  // Ambient particle field
+  const particleCount = 260;
+  const positions = new Float32Array(particleCount*3);
+  for (let i=0;i<particleCount*3;i++) positions[i] = (Math.random()-0.5)*16;
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+  const pMat = new THREE.PointsMaterial({ color:0x38c5e7, size:0.035, transparent:true, opacity:0.55 });
+  const points = new THREE.Points(pGeo, pMat);
+  scene.add(points);
+
+  let mouseX=0, mouseY=0;
+  window.addEventListener('pointermove', e => {
+    mouseX = (e.clientX/innerWidth - 0.5);
+    mouseY = (e.clientY/innerHeight - 0.5);
+  });
+
+  const clock = new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+    const sp = window.heroScrollProgress || 0; // 0-1, driven by the pinned-hero ScrollTrigger
+    // Subtle mouse-driven parallax only — the old scroll-tied spin made the
+    // bars unreadable, so rotation is now small and never scroll-driven.
+    group.rotation.y = -0.1 + mouseX * 0.22;
+    group.rotation.x = -mouseY * 0.12;
+
+    const growth = 0.32 + 0.68 * sp; // bars grow taller as the hero scrolls
+    bars.forEach((bar, i) => {
+      const curH = bar.userData.fullH * growth;
+      bar.userData.curH = curH;
+      bar.scale.y = growth;
+      bar.position.y = BASELINE + curH/2 + Math.sin(t*0.8 + i)*0.025;
+    });
+    updateTrendLine(sp);
+
+    points.rotation.y += 0.0006;
+    camera.position.x += (mouseX*1.0 - camera.position.x)*0.02;
+    camera.position.z = 9 - sp*2.4; // gentle zoom in as the user scrolls through the pinned hero
+    camera.lookAt(0,0,0);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+})();
+
+/* ========================================================================
+   5. COUNTER ANIMATIONS
+   ======================================================================== */
+function setupCounter(el){
+  const target = +el.dataset.count;
+  const suffix = el.dataset.suffix || '';
+  const decimals = el.dataset.decimals ? +el.dataset.decimals : 0;
+  const obj = { val:0 };
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(obj, { val:target, duration:1.8, ease:'power2.out', onUpdate:() => {
+      el.textContent = (decimals ? obj.val.toFixed(decimals) : Math.floor(obj.val).toLocaleString()) + suffix;
+    }})
+  });
+}
+// [data-lazy] stats (the "By The Numbers" bar) get their real target computed
+// from live case-study data first — see computeAggregateStats() — so they're
+// wired up there instead of immediately here.
+document.querySelectorAll('[data-count]:not([data-lazy])').forEach(setupCounter);
+
+/* ========================================================================
+   6. DATA LAYER — fetch real WP data, fall back to mock on failure
+   ======================================================================== */
+async function fetchWithRetry(url, tries = 2){
+  let lastErr;
+  for (let i=0;i<tries;i++){
+    try {
+      const res = await fetch(url, { cache:'no-store' });
+      if (!res.ok) throw new Error('status ' + res.status);
+      const text = await res.text();
+      if (!text) throw new Error('empty body');
+      return { data: JSON.parse(text), headers: res.headers };
+    } catch (err) {
+      lastErr = err;
+      await new Promise(r => setTimeout(r, 500));
+    }
+  }
+  throw lastErr;
+}
+
+function setStatus(mode, text){
+  const el = document.getElementById('data-status');
+  const txt = document.getElementById('data-status-text');
+  el.className = 'data-status' + (mode !== 'live' ? ' ' + mode : '');
+  txt.textContent = text;
+}
+
+async function loadCategories(){
+  try {
+    const { data } = await fetchWithRetry(`${WP}/case_study_category?per_page=50`);
+    const cats = data.filter(c => c.count > 0).map(c => ({
+      id:c.id, count:c.count,
+      name: c.name.replace(/&amp;/g,'&').replace('DEISGN','DESIGN').toLowerCase().replace(/\b\w/g, m => m.toUpperCase())
+    }));
+    return cats;
+  } catch (e) {
+    console.warn('categories: falling back to mock', e);
+    return MOCK_CATEGORIES;
+  }
+}
+
+async function loadTotalCount(){
+  try {
+    const { headers } = await fetchWithRetry(`${WP}/case_study?per_page=1`);
+    return +headers.get('X-WP-Total') || MOCK_CASE_STUDIES.length;
+  } catch (e) {
+    return MOCK_CASE_STUDIES.length;
+  }
+}
+
+function normalizeCaseStudy(item){
+  let desc = '';
+  const hero = item.acf && item.acf.content_sections ? item.acf.content_sections.find(s => s.acf_fc_layout === 'hero_section') : null;
+  if (hero && hero.client_description) desc = hero.client_description.replace(/<[^>]+>/g,'').trim().slice(0,180);
+  const image = item._embedded && item._embedded['wp:featuredmedia'] && item._embedded['wp:featuredmedia'][0] ? item._embedded['wp:featuredmedia'][0].source_url : null;
+  return {
+    slug:item.slug, title:item.title.rendered.replace(/&amp;/g,'&'),
+    categories:item.case_study_category || [], image, desc, date:item.date
+  };
+}
+
+async function loadCaseStudies(page, perPage, categoryId){
+  const params = new URLSearchParams({ per_page:perPage, page, _embed:1, orderby:'date', order:'desc' });
+  if (categoryId && categoryId !== 'all') params.set('case_study_category', categoryId);
+  const { data, headers } = await fetchWithRetry(`${WP}/case_study?${params}`);
+  return {
+    items: data.map(normalizeCaseStudy),
+    totalPages: +headers.get('X-WP-TotalPages') || 1
+  };
+}
+
+function mockCaseStudies(page, perPage, categoryId){
+  let items = MOCK_CASE_STUDIES;
+  if (categoryId && categoryId !== 'all') items = items.filter(i => i.categories.includes(+categoryId));
+  const totalPages = Math.max(1, Math.ceil(items.length / perPage));
+  const start = (page-1) * perPage;
+  return { items: items.slice(start, start+perPage), totalPages };
+}
+
+// Fetches every case study's full ACF content (testimonials, client logos,
+// results metrics live inside content_sections, not just the hero) across the
+// two pages needed to stay under the ~900KB per-request cap noted above.
+async function loadFullCaseStudyData(){
+  let all = [];
+  for (let p=1; p<=2; p++){
+    const { data } = await fetchWithRetry(`${WP}/case_study?per_page=6&_embed&page=${p}`);
+    all = all.concat(data);
+  }
+  return all;
+}
+
+function parseMetricValue(str){
+  if (!str) return null;
+  const s = String(str).replace(/₹|,|\+/g,'').trim();
+  const m = s.match(/([\d.]+)\s*(K|L|M|Cr)?/i);
+  if (!m) return null;
+  let num = parseFloat(m[1]);
+  if (isNaN(num)) return null;
+  const suf = (m[2]||'').toUpperCase();
+  if (suf === 'K') num *= 1e3; else if (suf === 'L') num *= 1e5; else if (suf === 'M') num *= 1e6; else if (suf === 'CR') num *= 1e7;
+  return num;
+}
+
+function extractExtras(fullData){
+  const testimonials = [];
+  const logoIds = [];
+  let leadsSum = 0, reachSum = 0;
+  const cplValues = [];
+  fullData.forEach(item => {
+    if (!(item.acf && item.acf.content_sections)) return;
+    item.acf.content_sections.forEach(s => {
+      if (s.acf_fc_layout === 'testimonial' && Array.isArray(s.testimonials)) {
+        s.testimonials.forEach(t => {
+          if (t.namename) testimonials.push({ slug:item.slug, name:t.namename, role:t.role, image: t.images && t.images.url });
+        });
+      }
+      if (s.acf_fc_layout === 'clients_section' && Array.isArray(s.logos)) {
+        s.logos.forEach(l => { if (l.image) logoIds.push(l.image); });
+      }
+      if (s.acf_fc_layout === 'case_details_section' && Array.isArray(s.metrics)) {
+        s.metrics.forEach(m => {
+          const val = parseMetricValue(m.value);
+          if (val === null) return;
+          const label = (m.label || '').toLowerCase();
+          if (label.includes('lead')) leadsSum += val;
+          if (label.includes('reach')) reachSum += val;
+          if (label.includes('cpl')) cplValues.push(val);
+        });
+      }
+    });
+  });
+  return {
+    testimonials,
+    logoIds: [...new Set(logoIds)].slice(0, 16),
+    leadsSum, reachSum,
+    lowestCpl: cplValues.length ? Math.min(...cplValues) : null
+  };
+}
+
+async function resolveLogoUrls(ids){
+  const results = await Promise.all(ids.map(async id => {
+    try { const { data } = await fetchWithRetry(`${WP}/media/${id}`, 1); return data.source_url; }
+    catch (e) { return null; }
+  }));
+  return results.filter(Boolean);
+}
+
+/* ========================================================================
+   7. RENDERING
+   ======================================================================== */
+function imageOrPlaceholder(url, label){
+  if (url) return `<img src="${url}" alt="${label}" loading="lazy">`;
+  return `<div class="ph">${label.charAt(0)}</div>`;
+}
+
+function categoryNames(ids){
+  return (ids||[]).map(id => state.categoriesMap[id]).filter(Boolean);
+}
+
+function renderFeatured(items){
+  const el = document.getElementById('featured-grid');
+  el.innerHTML = items.slice(0,3).map(item => `
+    <a class="feat-card" href="https://abnjunction.com/case-studies/${item.slug}/" target="_blank" rel="noopener">
+      <div class="feat-inner">
+        <div class="feat-media">${imageOrPlaceholder(item.image, item.title)}</div>
+        <h3 class="feat-title">${item.title}</h3>
+        <p class="feat-desc">${item.desc || 'A closer look at the strategy, execution, and measurable results behind this project.'}</p>
+      </div>
+    </a>
+  `).join('');
+  gsap.fromTo('.feat-card', { opacity:0, y:40 }, { opacity:1, y:0, duration:0.8, stagger:0.12, ease:'power3.out', scrollTrigger:{ trigger:'#featured-grid', start:'top 85%' } });
+  el.querySelectorAll('.feat-card').forEach(attachTilt);
+}
+
+function renderFilters(categories, totalAll){
+  const el = document.getElementById('filters');
+  const all = [{ id:'all', name:'All Case Studies', count: totalAll }].concat(categories);
+  el.innerHTML = all.map(c => `<button class="filter-pill ${state.category == c.id ? 'active' : ''}" data-cat="${c.id}">${c.name} <span class="count">${c.count}</span></button>`).join('');
+  el.querySelectorAll('.filter-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.category = btn.dataset.cat;
+      state.page = 1;
+      el.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      refreshGrid();
+    });
+  });
+}
+
+function renderGrid(items){
+  const el = document.getElementById('grid');
+  if (!items.length){
+    el.innerHTML = `<div class="empty-state">No case studies found in this category yet.</div>`;
+    return;
+  }
+  el.innerHTML = items.map(item => `
+    <a class="card" href="https://abnjunction.com/case-studies/${item.slug}/" target="_blank" rel="noopener">
+      <div class="card-inner">
+        <div class="card-media">${imageOrPlaceholder(item.image, item.title)}</div>
+        <h3 class="card-title">${item.title}</h3>
+        <p class="card-desc">${item.desc || 'A closer look at the strategy, execution, and measurable results behind this project.'}</p>
+      </div>
+    </a>
+  `).join('');
+  gsap.fromTo('.card', { opacity:0, y:30 }, { opacity:1, y:0, duration:0.6, stagger:0.08, ease:'power3.out' });
+  el.querySelectorAll('.card').forEach(attachTilt);
+}
+
+function renderPagination(){
+  const el = document.getElementById('pagination');
+  const tp = state.totalPages;
+  if (tp <= 1){ el.innerHTML = ''; return; }
+  let html = `<button class="page-btn" id="prev-btn" ${state.page===1?'disabled':''}>←</button>`;
+  for (let i=1;i<=tp;i++){
+    html += `<button class="page-btn ${i===state.page?'active':''}" data-page="${i}">${i}</button>`;
+  }
+  html += `<button class="page-btn" id="next-btn" ${state.page===tp?'disabled':''}>→</button>`;
+  el.innerHTML = html;
+  el.querySelectorAll('[data-page]').forEach(btn => btn.addEventListener('click', () => { state.page = +btn.dataset.page; refreshGrid(); }));
+  const prev = document.getElementById('prev-btn'), next = document.getElementById('next-btn');
+  if (prev) prev.addEventListener('click', () => { if (state.page>1){ state.page--; refreshGrid(); } });
+  if (next) next.addEventListener('click', () => { if (state.page<tp){ state.page++; refreshGrid(); } });
+}
+
+function attachTilt(card){
+  const inner = card.querySelector('.card-inner, .feat-inner');
+  if (!inner || !matchMedia('(pointer: fine)').matches) return;
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left)/r.width - 0.5;
+    const y = (e.clientY - r.top)/r.height - 0.5;
+    gsap.to(inner, { rotateY:x*8, rotateX:-y*8, duration:0.4, ease:'power2.out', transformPerspective:900 });
+  });
+  card.addEventListener('mouseleave', () => gsap.to(inner, { rotateY:0, rotateX:0, duration:0.6, ease:'power3.out' }));
+}
+
+function renderProcess(){
+  const el = document.getElementById('process-grid');
+  el.innerHTML = PROCESS_STEPS.map((s, i) => `
+    <div class="process-step">
+      <div class="process-num">${String(i+1).padStart(2,'0')}</div>
+      <h3 class="process-title">${s.title}</h3>
+      <p class="process-desc">${s.desc}</p>
+    </div>
+  `).join('');
+  gsap.fromTo('.process-step', { opacity:0, y:30 }, { opacity:1, y:0, duration:0.7, stagger:0.15, ease:'power3.out', scrollTrigger:{ trigger:'#process-grid', start:'top 85%' } });
+}
+
+// Pins #process and drags the step cards horizontally as the user scrolls
+// vertically — desktop only (gsap.matchMedia), since a pinned horizontal
+// scroll fights touch-scroll gestures on phones/tablets. Below 900px the
+// section just stays a normal swipeable overflow-x row.
+let processMM;
+function setupHorizontalProcess(){
+  if (processMM) processMM.revert();
+  processMM = gsap.matchMedia();
+  processMM.add('(min-width: 900px)', () => {
+    const wrap = document.querySelector('.process-track-wrap');
+    const track = document.getElementById('process-grid');
+    const getDistance = () => Math.max(0, track.scrollWidth - wrap.clientWidth);
+    const tween = gsap.to(track, {
+      x: () => -getDistance(),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#process',
+        start: 'top top',
+        end: () => '+=' + getDistance(),
+        pin: true,
+        scrub: 1,
+        invalidateOnRefresh: true
+      }
+    });
+    return () => { tween.scrollTrigger && tween.scrollTrigger.kill(); tween.kill(); gsap.set(track, { clearProps:'x' }); };
+  });
+}
+
+function renderLogos(urls){
+  const el = document.getElementById('logo-track');
+  const list = urls.length ? urls : MOCK_LOGOS;
+  const items = list.map(u => `<img src="${u}" alt="Client logo" loading="lazy">`).join('');
+  el.innerHTML = items + items; // duplicated for a seamless marquee loop
+}
+
+let testiState = { items: [], index: 0, timer: null };
+
+function renderTestimonials(items){
+  const list = items.length ? items : MOCK_TESTIMONIALS;
+  testiState.items = list.map(t => ({ ...t, quote: CURATED_QUOTES[t.slug] || 'Working with ABN Junction turned our goals into measurable results.' }));
+  testiState.index = 0;
+
+  const track = document.getElementById('testi-track');
+  track.innerHTML = testiState.items.map(t => `
+    <div class="testi-slide">
+      <p class="testi-quote">${t.quote}</p>
+      <div class="testi-person">
+        <div class="testi-avatar">${t.image ? `<img src="${t.image}" alt="${t.role}">` : ''}</div>
+        <div class="testi-person-info">
+          <div class="testi-name">${t.name || 'Client'}</div>
+          <div class="testi-role">${t.role || ''}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  const dots = document.getElementById('testi-dots');
+  dots.innerHTML = testiState.items.map((_, i) => `<button class="testi-dot ${i===0?'active':''}" data-i="${i}" aria-label="Go to testimonial ${i+1}"></button>`).join('');
+  dots.querySelectorAll('.testi-dot').forEach(btn => btn.addEventListener('click', () => goToTesti(+btn.dataset.i)));
+
+  document.getElementById('testi-prev').addEventListener('click', () => goToTesti(testiState.index - 1));
+  document.getElementById('testi-next').addEventListener('click', () => goToTesti(testiState.index + 1));
+
+  goToTesti(0);
+  restartTestiAutoplay();
+}
+
+function goToTesti(i){
+  const n = testiState.items.length;
+  testiState.index = (i + n) % n;
+  gsap.to('#testi-track', { xPercent: -100 * testiState.index, duration:0.6, ease:'power3.inOut' });
+  document.querySelectorAll('.testi-dot').forEach((d, idx) => d.classList.toggle('active', idx === testiState.index));
+}
+
+function restartTestiAutoplay(){
+  if (testiState.timer) clearInterval(testiState.timer);
+  testiState.timer = setInterval(() => goToTesti(testiState.index + 1), 6000);
+}
+
+/* ========================================================================
+   8. ORCHESTRATION
+   ======================================================================== */
+async function refreshGrid(){
+  document.getElementById('grid').style.opacity = '0.4';
+  try {
+    let result;
+    if (state.usingMock) {
+      result = mockCaseStudies(state.page, state.perPage, state.category);
+    } else {
+      result = await loadCaseStudies(state.page, state.perPage, state.category);
+    }
+    state.totalPages = result.totalPages;
+    renderGrid(result.items);
+    renderPagination();
+  } catch (e) {
+    console.warn('Grid load failed, switching to preview data', e);
+    state.usingMock = true;
+    setStatus('mock', 'Showing preview data (live connection unavailable)');
+    const result = mockCaseStudies(state.page, state.perPage, state.category);
+    state.totalPages = result.totalPages;
+    renderGrid(result.items);
+    renderPagination();
+  }
+  document.getElementById('grid').style.opacity = '1';
+}
+
+// Testimonials, client logos, and the "By The Numbers" bar all depend on
+// full per-case-study ACF content rather than the lighter list endpoint the
+// grid uses — fetched and wired up independently so a failure here can't
+// take down the grid/featured sections, and vice versa.
+async function loadAggregateSections(){
+  try {
+    const full = await loadFullCaseStudyData();
+    const extras = extractExtras(full);
+
+    const [leadsEl, reachEl] = document.querySelectorAll('#numbers-bar [data-count]');
+    const cplEl = document.getElementById('lowest-cpl-stat');
+
+    leadsEl.dataset.count = extras.leadsSum || MOCK_AGGREGATES.leads;
+    leadsEl.dataset.suffix = '+';
+    setupCounter(leadsEl);
+
+    const reachM = extras.reachSum ? +(extras.reachSum / 1e6).toFixed(1) : MOCK_AGGREGATES.reachM;
+    reachEl.dataset.count = reachM;
+    reachEl.dataset.suffix = 'M+';
+    setupCounter(reachEl);
+
+    cplEl.textContent = extras.lowestCpl ? '₹' + extras.lowestCpl.toFixed(2) : MOCK_AGGREGATES.lowestCpl;
+
+    renderTestimonials(extras.testimonials);
+    const logoUrls = extras.logoIds.length ? await resolveLogoUrls(extras.logoIds) : [];
+    renderLogos(logoUrls);
+  } catch (e) {
+    console.warn('Aggregate sections falling back to preview data', e);
+    const leadsEl = document.querySelectorAll('#numbers-bar [data-count]')[0];
+    const reachEl = document.querySelectorAll('#numbers-bar [data-count]')[1];
+    leadsEl.dataset.count = MOCK_AGGREGATES.leads; leadsEl.dataset.suffix = '+'; setupCounter(leadsEl);
+    reachEl.dataset.count = MOCK_AGGREGATES.reachM; reachEl.dataset.suffix = 'M+'; setupCounter(reachEl);
+    document.getElementById('lowest-cpl-stat').textContent = MOCK_AGGREGATES.lowestCpl;
+    renderTestimonials(MOCK_TESTIMONIALS);
+    renderLogos(MOCK_LOGOS);
+  }
+}
+
+async function init(){
+  // Marquee content
+  const marqueeItems = ['DIGITAL MARKETING','WEB DEVELOPMENT','WEB & GRAPHICS DESIGN','META ADS','GOOGLE ADS','SEO'];
+  const track = document.getElementById('marquee-track');
+  track.innerHTML = Array(2).fill(marqueeItems.map(m => `<span>${m}</span><span class="dot">✦</span>`).join('')).join('');
+
+  renderProcess();
+  setupHorizontalProcess();
+  loadAggregateSections().then(refreshScrollTriggers);
+
+  try {
+    const categories = await loadCategories();
+    state.categoriesMap = Object.fromEntries(categories.map(c => [c.id, c.name]));
+    const totalAll = await loadTotalCount();
+    renderFilters(categories, totalAll);
+
+    const featured = await loadCaseStudies(1, 3, 'all');
+    renderFeatured(featured.items);
+
+    setStatus('live', 'Live data from WordPress');
+    await refreshGrid();
+  } catch (e) {
+    console.warn('Init failed, switching entirely to preview data', e);
+    state.usingMock = true;
+    state.categoriesMap = Object.fromEntries(MOCK_CATEGORIES.map(c => [c.id, c.name]));
+    renderFilters(MOCK_CATEGORIES, MOCK_CASE_STUDIES.length);
+    renderFeatured(MOCK_CASE_STUDIES.slice(0,3));
+    setStatus('mock', 'Showing preview data (live connection unavailable)');
+    await refreshGrid();
+  }
+  refreshScrollTriggers();
+}
+
+// Testimonials/logos/cards all insert images asynchronously well after
+// ScrollTrigger's initial pin calculations — each image finishing decode
+// changes document height and quietly invalidates pin start/end offsets.
+// Refresh once after each async content wave settles (and once more after
+// every <img> on the page has loaded) so pinned sections stay aligned.
+function refreshScrollTriggers(){
+  ScrollTrigger.refresh();
+  const imgs = Array.from(document.images).filter(img => !img.complete);
+  if (imgs.length) {
+    Promise.all(imgs.map(img => new Promise(res => { img.onload = img.onerror = res; }))).then(() => ScrollTrigger.refresh());
+  }
+}
+init();
+</script>
+</body>
+</html>

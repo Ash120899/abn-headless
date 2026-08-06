@@ -4,8 +4,18 @@ export default function Clients({ data }) {
 
   const logos = data?.logos || []
 
+  if (logos.length === 0) return null
+
   // duplicate items
   const duplicated = [...logos, ...logos]
+
+  // The track scrolls exactly one full (unique) set width per animation
+  // cycle, so a fixed duration makes the scroll speed scale with however
+  // many logos the CMS happens to have — more logos, same 30s, much faster
+  // apparent motion. Scale duration with the logo count instead so the
+  // px/s speed (and thus how "fast" it looks) stays roughly constant —
+  // tuned for a slow, readable pace rather than a flashy scroll.
+  const marqueeDuration = Math.max(25, logos.length * 7)
 
   return (
     <section className="relative bg-surface text-foreground py-24 overflow-hidden">
@@ -45,7 +55,10 @@ export default function Clients({ data }) {
           ></div>
 
           {/* TRACK */}
-          <div className="flex w-max animate-marquee">
+          <div
+            className="flex w-max animate-marquee"
+            style={{ animationDuration: `${marqueeDuration}s` }}
+          >
 
             {duplicated.map((logo, i) => (
 

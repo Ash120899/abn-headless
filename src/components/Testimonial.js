@@ -100,14 +100,15 @@ export default function Testimonial({ data }) {
             modules={[Pagination, Autoplay]}
             slidesPerView={1}
             centeredSlides={true}
-            loop={true}
+            loop={testimonials.length > 1}
             speed={1000}
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-            }}
+            autoplay={
+              testimonials.length > 1
+                ? { delay: 4000, disableOnInteraction: false }
+                : false
+            }
             pagination={{
-              clickable: true,
+              clickable: testimonials.length > 1,
             }}
             spaceBetween={10}
             breakpoints={{

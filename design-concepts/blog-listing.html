@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — ABN Junction</title>
+<meta name="description" content="Deep dives on SEO, performance marketing, brand strategy, and everything else the ABN Junction team obsesses over.">
+<link rel="icon" href="https://abnjunction.com/wp-content/uploads/2026/07/abn-logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050708;
+    --panel:#0b1115;
+    --panel-2:#10171b;
+    --white:#f7fbfc;
+    --muted:#a9b4ba;
+    --line: rgba(255,255,255,.11);
+    --cyan:#38c5e7;
+    --violet:#6f5aff;
+    --orange:#F97316;
+    --accent: var(--cyan);
+    --accent-2: var(--violet);
+    --max: 1320px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior:smooth; background:var(--bg); }
+  body{
+    margin:0; background:var(--bg); color:var(--white);
+    font-family:'Barlow', sans-serif; font-size:16px; line-height:1.5;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--accent); color:#0a0a0a; }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ width:min(calc(100% - 40px), var(--max)); margin:0 auto; position:relative; }
+  h1,h2,h3{ font-family:'League Gothic', sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:.01em; margin:0; }
+  .accent{ color:var(--accent); }
+  .accent-2{ color:var(--accent-2); }
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:linear-gradient(var(--accent),var(--accent-2)); border-radius:8px; }
+
+  .grain{
+    position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.035; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .cursor-dot, .cursor-ring{
+    position:fixed; top:0; left:0; pointer-events:none; z-index:99999; border-radius:50%;
+    transform:translate(-50%,-50%); will-change:transform;
+  }
+  .cursor-dot{ width:6px; height:6px; background:var(--accent); }
+  .cursor-ring{ width:34px; height:34px; border:1px solid rgba(255,255,255,.4); transition:width .25s,height .25s,border-color .25s,background .25s; }
+  .cursor-ring.big{ width:64px; height:64px; border-color:var(--accent); background:rgba(56,197,231,.08); }
+  @media (pointer:coarse){ .cursor-dot,.cursor-ring{ display:none; } }
+
+  #preloader{
+    position:fixed; inset:0; z-index:100000; background:var(--bg);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px;
+  }
+  .preloader-logo{ font-family:'League Gothic',sans-serif; font-size:2rem; letter-spacing:.06em; color:var(--white); }
+  .preloader-bar{ width:220px; height:2px; background:rgba(255,255,255,.12); overflow:hidden; border-radius:2px; }
+  .preloader-bar span{ display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); }
+
+  .site-header{
+    position:fixed; top:0; left:0; right:0; z-index:9999; height:82px;
+    background:rgba(5,7,8,.7); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);
+  }
+  .header-inner{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+  .logo img{ height:34px; width:auto; }
+  .nav{ display:flex; align-items:center; gap:clamp(16px,3vw,34px); }
+  .nav a{ font-size:12.5px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); position:relative; padding:6px 0; }
+  .nav a.active, .nav a:hover{ color:var(--white); }
+  .nav a.active::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--accent); }
+  .cta-pill{
+    display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:999px;
+    background:var(--accent); color:#0a0a0a; font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:.04em;
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .cta-pill:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(56,197,231,.35); }
+  .cta-pill.big{ padding:18px 34px; font-size:16px; }
+  @media (max-width:880px){ .nav{ display:none; } }
+
+  .hero{
+    position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding-top:82px; overflow:hidden;
+  }
+  #hero-canvas{ position:absolute; inset:0; z-index:0; opacity:.9; }
+  .hero-glow{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:radial-gradient(ellipse 60% 50% at 50% 15%, rgba(56,197,231,.15), transparent 60%),
+               radial-gradient(ellipse 50% 40% at 85% 80%, rgba(111,90,255,.15), transparent 60%);
+  }
+  .hero-inner{ position:relative; z-index:2; text-align:center; padding-top:40px; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px; font-size:12px; font-weight:800; letter-spacing:.3em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:22px;
+  }
+  .eyebrow::before{ content:''; width:28px; height:1px; background:var(--accent); }
+  .hero-title{ font-size:clamp(2.5rem, 7.6vw, 6.1rem); line-height:.98; }
+  .hero-title .line{ display:block; overflow:hidden; }
+  .hero-title .line span{ display:block; }
+  .hero-sub{ max-width:640px; margin:26px auto 0; color:var(--muted); font-size:clamp(1rem,1.6vw,1.2rem); line-height:1.6; }
+  .hero-stats{ display:flex; justify-content:center; gap:clamp(28px,6vw,80px); margin-top:56px; flex-wrap:wrap; }
+  .stat{ text-align:center; }
+  .stat strong{ display:block; font-family:'League Gothic',sans-serif; font-size:clamp(2.2rem,4vw,3.4rem); color:var(--white); }
+  .stat span{ display:block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:4px; }
+
+  .scroll-cue{
+    position:absolute; bottom:32px; left:50%; transform:translateX(-50%); z-index:2;
+    display:flex; flex-direction:column; align-items:center; gap:8px; font-size:10px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--muted);
+  }
+  .scroll-cue span{ width:1px; height:34px; background:linear-gradient(var(--muted),transparent); position:relative; overflow:hidden; }
+  .scroll-cue span::after{ content:''; position:absolute; top:-100%; left:0; width:100%; height:100%; background:var(--accent); animation:scrollcue 1.8s ease-in-out infinite; }
+  @keyframes scrollcue{ 0%{top:-100%;} 60%{top:100%;} 100%{top:100%;} }
+
+  .marquee{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:20px 0; overflow:hidden; background:var(--panel); position:relative; z-index:2; }
+  .marquee-track{ display:flex; gap:36px; width:max-content; animation:marquee 30s linear infinite; }
+  .marquee-track span{ font-family:'League Gothic',sans-serif; font-size:1.4rem; letter-spacing:.06em; color:var(--muted); white-space:nowrap; }
+  .marquee-track span.dot{ color:var(--accent); }
+  @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  section{ position:relative; z-index:2; }
+  .section-tag{ display:inline-block; font-size:11.5px; font-weight:800; letter-spacing:.24em; text-transform:uppercase; color:var(--accent-2); margin-bottom:18px; }
+
+  .featured{ padding:110px 0 40px; }
+  .featured-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:10px; }
+  .feat-card{ perspective:1000px; }
+  .feat-inner{
+    background:#111111; border:1px solid rgba(255,255,255,.10); border-radius:20px;
+    display:flex; flex-direction:column; height:100%; padding:18px;
+    transform-style:preserve-3d; transition:box-shadow .3s ease, border-color .3s ease;
+  }
+  .feat-inner:hover{ box-shadow:0 20px 45px rgba(0,0,0,.45); border-color:rgba(255,255,255,.18); }
+  .feat-media{
+    position:relative; height:210px; border-radius:10px; overflow:hidden; background:#141414;
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px; flex-shrink:0;
+  }
+  .feat-media img{ width:100%; height:100%; object-fit:contain; }
+  .feat-media .ph{ font-family:'League Gothic',sans-serif; font-size:2.6rem; color:rgba(255,255,255,.5); }
+  .feat-date{ font-size:11.5px; color:var(--muted); margin-bottom:6px; display:block; }
+  .feat-title{ font-family:'Barlow',sans-serif; font-weight:700; font-size:1.2rem; line-height:1.3; color:var(--white); text-transform:none; letter-spacing:0; }
+  .feat-desc{ color:var(--muted); font-size:13.5px; line-height:1.6; margin-top:8px; flex:1; }
+
+  .explore{ padding:70px 0 130px; }
+  .explore-head{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; }
+  .data-status{ display:inline-flex; align-items:center; gap:8px; font-size:11.5px; color:var(--muted); letter-spacing:.05em; border:1px solid var(--line); padding:7px 14px; border-radius:999px; }
+  .data-status .dot{ width:7px; height:7px; border-radius:50%; background:#4ade80; box-shadow:0 0 8px #4ade80; }
+  .data-status.mock .dot{ background:#facc15; box-shadow:0 0 8px #facc15; }
+  .data-status.error .dot{ background:#f87171; box-shadow:0 0 8px #f87171; }
+
+  .filter-search-row{ display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-top:30px; }
+  .filters{ display:flex; flex-wrap:wrap; gap:10px; margin:0 0 46px; }
+  .filter-pill{ display:inline-flex; align-items:center; gap:8px; padding:11px 20px; border-radius:999px; border:1px solid var(--line); background:var(--panel); color:var(--muted); font-size:13px; font-weight:700; cursor:pointer; transition:all .25s ease; }
+  .filter-pill:hover{ border-color:rgba(56,197,231,.4); color:var(--white); }
+  .filter-pill.active{ background:var(--accent); border-color:var(--accent); color:#0a0a0a; }
+  .filter-pill .count{ opacity:.65; font-weight:600; font-size:11.5px; }
+  .filter-pill.active .count{ opacity:.8; }
+
+  .blog-layout{ display:grid; grid-template-columns:1fr 320px; gap:48px; align-items:start; }
+  .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:26px; min-height:200px; }
+  .card{ perspective:1200px; }
+  .card-inner{
+    background:#111111; border:1px solid rgba(255,255,255,.10); border-radius:20px;
+    display:flex; flex-direction:column; height:100%; padding:18px;
+    transform-style:preserve-3d; transition:box-shadow .3s ease, border-color .3s ease;
+  }
+  .card:hover .card-inner{ box-shadow:0 20px 45px rgba(0,0,0,.45); border-color:rgba(255,255,255,.18); }
+  .card-media{
+    position:relative; height:190px; border-radius:10px; overflow:hidden; background:#141414;
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px; flex-shrink:0;
+  }
+  .card-media img{ width:100%; height:100%; object-fit:contain; }
+  .card-media .ph{ font-family:'League Gothic',sans-serif; font-size:2.4rem; color:rgba(255,255,255,.5); }
+  .card-date{ font-size:11.5px; color:var(--muted); display:block; margin-bottom:6px; }
+  .card-title{ font-family:'Barlow',sans-serif; font-weight:700; font-size:1.1rem; line-height:1.3; color:var(--white); text-transform:none; letter-spacing:0; }
+  .card-desc{ color:var(--muted); font-size:13.5px; line-height:1.6; margin-top:8px; flex:1; }
+
+  .empty-state{ grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--muted); }
+
+  .pagination{ display:flex; align-items:center; justify-content:center; gap:8px; margin-top:56px; flex-wrap:wrap; }
+  .page-btn{ min-width:42px; height:42px; padding:0 12px; border-radius:12px; border:1px solid var(--line); background:var(--panel); color:var(--muted); font-weight:700; font-size:13px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; transition:all .25s ease; }
+  .page-btn:hover:not(:disabled){ border-color:var(--accent); color:var(--white); }
+  .page-btn.active{ background:var(--accent); border-color:var(--accent); color:#0a0a0a; }
+  .page-btn:disabled{ opacity:.35; cursor:not-allowed; }
+
+  /* Sidebar */
+  .sidebar{ display:flex; flex-direction:column; gap:28px; position:sticky; top:110px; }
+  .widget{ background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:26px; }
+  .widget h4{ font-family:'League Gothic',sans-serif; font-size:1.15rem; text-transform:uppercase; letter-spacing:.08em; color:var(--white); margin-bottom:18px; }
+  .recent-item{ display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .recent-item:last-child{ border-bottom:none; }
+  .recent-thumb{ width:56px; height:56px; border-radius:10px; overflow:hidden; flex:0 0 56px; background:linear-gradient(135deg, rgba(56,197,231,.25), rgba(111,90,255,.2)); }
+  .recent-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .recent-info a{ font-size:13px; font-weight:700; line-height:1.35; color:var(--white); display:block; }
+  .recent-info a:hover{ color:var(--accent); }
+  .recent-info span{ font-size:11px; color:var(--muted); margin-top:4px; display:block; }
+  .cat-list{ display:flex; flex-direction:column; gap:4px; }
+  .cat-list button{ all:unset; display:flex; justify-content:space-between; align-items:center; padding:10px 6px; border-radius:8px; cursor:pointer; color:var(--muted); font-size:13.5px; font-weight:600; }
+  .cat-list button:hover{ background:rgba(255,255,255,.04); color:var(--white); }
+  .cat-list button.active{ color:var(--accent); }
+  .cat-list button span{ font-size:11px; color:var(--muted); }
+
+  .cta-block{ padding:130px 0; border-top:1px solid var(--line); background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(56,197,231,.08), transparent 70%); }
+  .cta-inner{ text-align:center; max-width:820px; margin:0 auto; }
+  .cta-inner h2{ font-size:clamp(2.2rem,5.5vw,3.8rem); line-height:1.08; margin-bottom:22px; }
+  .cta-inner p{ color:var(--muted); font-size:1.1rem; margin-bottom:38px; }
+
+  .site-footer{ border-top:1px solid var(--line); padding:34px 0; }
+  .footer-inner{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; color:var(--muted); font-size:13px; }
+  .footer-inner a{ color:var(--accent); font-weight:700; }
+
+  @media (max-width:1080px){
+    .blog-layout{ grid-template-columns:1fr; }
+    .sidebar{ position:static; flex-direction:row; flex-wrap:wrap; }
+    .widget{ flex:1; min-width:260px; }
+  }
+  @media (max-width:980px){
+    .featured-grid{ grid-template-columns:1fr; }
+    .grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width:640px){
+    .hero-stats{ gap:30px; }
+    .sidebar{ flex-direction:column; }
+  }
+
+  /* Why ABN Junction — pinned horizontal scroll on desktop (see setupHorizontalTeam),
+     a plain swipeable row on touch/narrow screens. */
+  .team-banner{ padding:70px 0 90px; border-top:1px solid var(--line); overflow:hidden; }
+  .team-head{ text-align:center; margin-bottom:50px; }
+  .team-head h2{ font-size:clamp(1.7rem,3.4vw,2.4rem); margin-top:14px; }
+  .team-track-wrap{ overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .team-track-wrap::-webkit-scrollbar{ display:none; }
+  /* Right padding is deliberately large: it guarantees the track is wider than
+     its wrap regardless of card count/viewport, so the pinned horizontal-scroll
+     in setupHorizontalTeam always has real distance to travel — with only 3
+     cards, natural content width didn't overflow a 1320px wrap at all, so the
+     track never moved. */
+  .team-grid{ display:flex; gap:28px; width:max-content; padding:4px 420px 20px 4px; }
+  .team-card{
+    width:min(80vw,360px); flex:0 0 auto; padding:34px 30px; border-radius:22px;
+    background:var(--panel); border:1px solid var(--line);
+  }
+  .team-card img{ height:34px; width:auto; margin-bottom:22px; }
+  .team-card strong{ display:block; color:var(--white); font-size:16px; margin-bottom:10px; }
+  .team-card span{ display:block; color:var(--muted); font-size:13.5px; line-height:1.6; }
+  @media (min-width:900px){ .team-card{ width:360px; } }
+
+  /* Search */
+  .search-box{ position:relative; width:min(320px, 100%); }
+  .search-box input{
+    width:100%; padding:12px 40px 12px 16px; border-radius:999px; border:1px solid var(--line);
+    background:var(--panel); color:var(--white); font-family:inherit; font-size:13.5px;
+  }
+  .search-box input::placeholder{ color:var(--muted); }
+  .search-box input:focus{ outline:none; border-color:var(--accent); }
+  .search-box .search-icon{ position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:14px; pointer-events:none; }
+  .search-box .search-clear{
+    position:absolute; right:10px; top:50%; transform:translateY(-50%); width:20px; height:20px; border-radius:50%;
+    border:none; background:var(--line); color:var(--white); font-size:11px; cursor:pointer; display:none; align-items:center; justify-content:center;
+  }
+  .search-box.has-query .search-icon{ display:none; }
+  .search-box.has-query .search-clear{ display:flex; }
+  .search-note{ display:none; font-size:12.5px; color:var(--muted); margin:-30px 0 30px; }
+  .search-note.show{ display:block; }
+  .search-note strong{ color:var(--white); }
+
+  /* Tag cloud widget */
+  .tag-cloud{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag-pill{
+    padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--bg);
+    color:var(--muted); font-size:12px; font-weight:700; cursor:pointer; transition:all .25s ease;
+  }
+  .tag-pill:hover{ border-color:var(--accent); color:var(--white); }
+  .tag-pill.active{ background:var(--accent); border-color:var(--accent); color:#0a0a0a; }
+
+  /* Newsletter */
+  .newsletter{ padding:0 0 130px; }
+  .newsletter-inner{
+    text-align:center; max-width:640px; margin:0 auto; padding:56px 32px; border-radius:24px;
+    background:var(--panel); border:1px solid var(--line);
+  }
+  .newsletter-inner h3{ font-size:clamp(1.6rem,3vw,2.2rem); margin-bottom:12px; }
+  .newsletter-inner p{ color:var(--muted); font-size:14.5px; margin-bottom:28px; }
+  .newsletter-form{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+  .newsletter-form input{
+    flex:1; min-width:220px; padding:14px 18px; border-radius:999px; border:1px solid var(--line);
+    background:var(--bg); color:var(--white); font-family:inherit; font-size:14px;
+  }
+  .newsletter-form input:focus{ outline:none; border-color:var(--accent); }
+  .newsletter-form button{
+    border:none; padding:14px 26px; border-radius:999px; background:var(--accent); color:#0a0a0a;
+    font-weight:800; font-size:13.5px; text-transform:uppercase; letter-spacing:.04em; cursor:pointer; transition:all .25s ease;
+  }
+  .newsletter-form button:hover{ transform:translateY(-2px); }
+  .newsletter-success{ display:none; align-items:center; justify-content:center; gap:10px; color:var(--accent); font-weight:700; }
+  .newsletter-success.show{ display:flex; }
+  .newsletter-form.hide{ display:none; }
+
+  /* Scroll progress bar */
+  .scroll-progress{ position:fixed; top:0; left:0; right:0; height:3px; z-index:100001; pointer-events:none; }
+  .scroll-progress-bar{ height:100%; width:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transform:scaleX(0); transform-origin:left; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scroll-progress"><div class="scroll-progress-bar" id="scroll-progress-bar"></div></div>
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<div id="preloader">
+  <span class="preloader-logo">ABN JUNCTION</span>
+  <div class="preloader-bar"><span id="preloader-fill"></span></div>
+</div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="https://abnjunction.com/" class="logo"><img src="https://abnjunction.com/wp-content/uploads/2026/07/abn-logo.webp" alt="ABN Junction"></a>
+    <nav class="nav">
+      <a href="https://abnjunction.com/">Home</a>
+      <a href="https://abnjunction.com/about-us/">About</a>
+      <a class="active" href="#">Blog</a>
+      <a href="https://abnjunction.com/case-studies/">Case Studies</a>
+    </nav>
+    <a class="cta-pill" href="https://abnjunction.com/contact-us/">Book a Strategy Call →</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-glow"></div>
+    <div class="wrap hero-inner">
+      <span class="eyebrow">Insights &amp; Ideas</span>
+      <h1 class="hero-title">
+        <span class="line"><span>IDEAS THAT MOVE</span></span>
+        <span class="line"><span class="accent">THE NEEDLE.</span></span>
+      </h1>
+      <p class="hero-sub">Deep dives on SEO, performance marketing, brand strategy, and everything else we obsess over — straight from the team behind the results.</p>
+      <div class="hero-stats">
+        <div class="stat"><strong data-count="57" data-suffix="+">0</strong><span>Articles Published</span></div>
+        <div class="stat"><strong data-count="10" data-suffix="+">0</strong><span>Topics Covered</span></div>
+        <div class="stat"><strong>Weekly</strong><span>New Insights</span></div>
+      </div>
+    </div>
+    <div class="scroll-cue"><span></span>Scroll</div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-track" id="marquee-track"></div>
+  </div>
+
+  <section class="featured" id="featured">
+    <div class="wrap">
+      <span class="section-tag">Latest Reads</span>
+      <div class="featured-grid" id="featured-grid"></div>
+    </div>
+  </section>
+
+  <section class="team-banner" id="team-banner">
+    <div class="wrap">
+      <div class="team-head">
+        <span class="section-tag">Why ABN Junction</span>
+        <h2>Written By The People Running The Campaigns</h2>
+      </div>
+      <div class="team-track-wrap">
+        <div class="team-grid" id="team-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="explore" id="explore">
+    <div class="wrap">
+      <div class="explore-head">
+        <span class="section-tag">All Articles</span>
+        <div class="data-status" id="data-status"><span class="dot"></span><span id="data-status-text">Connecting to WordPress…</span></div>
+      </div>
+      <div class="filter-search-row">
+        <div class="filters" id="filters"></div>
+        <div class="search-box" id="search-box">
+          <input type="text" id="search-input" placeholder="Search articles…" autocomplete="off">
+          <span class="search-icon">🔍</span>
+          <button class="search-clear" id="search-clear" aria-label="Clear search">✕</button>
+        </div>
+      </div>
+      <p class="search-note" id="search-note"></p>
+
+      <div class="blog-layout">
+        <div>
+          <div class="grid" id="grid"></div>
+          <div class="pagination" id="pagination"></div>
+        </div>
+        <aside class="sidebar">
+          <div class="widget">
+            <h4>Recent Posts</h4>
+            <div id="recent-posts"></div>
+          </div>
+          <div class="widget">
+            <h4>Categories</h4>
+            <div class="cat-list" id="cat-list"></div>
+          </div>
+          <div class="widget">
+            <h4>Popular Tags</h4>
+            <div class="tag-cloud" id="tag-cloud"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="newsletter">
+    <div class="wrap">
+      <div class="newsletter-inner">
+        <h3>Never Miss An Insight</h3>
+        <p>One email whenever we publish something worth your time. No spam, unsubscribe anytime.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" id="newsletter-email" placeholder="you@company.com" required>
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="newsletter-success" id="newsletter-success">✓ You're on the list — check your inbox.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-block">
+    <div class="wrap cta-inner">
+      <h2>Want Growth Strategies<br><span class="accent">Applied To Your Business?</span></h2>
+      <p>We don't just write about marketing — we run it. Let's talk about what could work for you.</p>
+      <a class="cta-pill big" href="https://abnjunction.com/contact-us/">Book a Strategy Call →</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© 2026 ABN Junction. All rights reserved.</span>
+    <a href="https://abnjunction.com/">abnjunction.com</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+/* ========================================================================
+   0. CONSTANTS + MOCK DATA (real content pulled from the live WP API,
+      embedded as a fallback in case the live fetch is blocked/offline)
+   ======================================================================== */
+const WP = 'https://abnjunction.com/wp-json/wp/v2';
+const EXCLUDED_CAT_SLUGS = ['uncategorized','public','casino'];
+
+const MOCK_CATEGORIES = [
+  { id:24, name:'Marketing Insights', count:15 },
+  { id:32, name:'Brand Stories', count:7 },
+  { id:44, name:'eCommerce SEO', count:4 },
+  { id:22, name:'AI Tools & Trends', count:2 },
+  { id:18, name:'World of WordPress', count:2 },
+  { id:27, name:'Developer Hub', count:1 },
+  { id:31, name:'Psychology of Marketing', count:1 },
+  { id:26, name:'Design Insights', count:1 }
+];
+
+const MOCK_POSTS = [
+  { slug:'near-me-keyword-seo-blueprint', title:'How to Dominate "Near Me" Keywords in 2026', categories:[24], image:null, excerpt:'"Near Me" searches turn into immediate leads when you build the right local SEO blueprint around them.', date:'2026-02-21' },
+  { slug:'city-specific-seo-to-rank-locally', title:'How to Rank Across Cities With City-Specific SEO', categories:[24], image:'https://abnjunction.com/wp-content/uploads/2026/02/Blog-Banner-1-1440-x-520-px.png', excerpt:'Why most local brands struggle with ads before discovering the power of city-specific SEO strategy.', date:'2026-02-20' },
+  { slug:'you-design-we-make-the-story-behind-icustomyzo', title:'"You Design, We Make" — The Story Behind ICustomyzo', categories:[32], image:'https://abnjunction.com/wp-content/uploads/2026/01/ICustomyzo.webp', excerpt:'In a world flooded with mass-produced fashion, ICustomyzo was born to make customization accessible to everyone.', date:'2026-01-26' },
+  { slug:'the-best-black-friday-developer-deals-2025', title:'The Best Black Friday Developer Deals 2025', categories:[22], image:'https://abnjunction.com/wp-content/uploads/2025/11/Best-Black-Friday-Developer-Deal-2025.png', excerpt:'Too many developer deals flooding your inbox? Here are the ones that actually help you grow.', date:'2025-11-18' },
+  { slug:'black-friday-wordpress-plugin-deals-2025', title:'The Best WordPress Plugins to Buy This Black Friday', categories:[22], image:'https://abnjunction.com/wp-content/uploads/2025/11/Black-Friday-Plugin-Stack-Blueprint-2025.png', excerpt:'Cutting through Black Friday plugin fatigue with tools that actually work for your WordPress stack.', date:'2025-11-06' },
+  { slug:'seo-service-in-hyderabad-boost-your-business-with-expert-seo-strategies', title:'SEO Service in Hyderabad — Expert Strategies', categories:[24], image:'https://abnjunction.com/wp-content/uploads/2025/09/SEO-Services-in-Hyderabad-.png', excerpt:'Hyderabad is one of India’s fastest-growing business hubs — here’s how to win search there.', date:'2025-09-16' },
+  { slug:'wordpress-core-web-vitals-2025', title:'Is WordPress Still the Best for Core Web Vitals?', categories:[27,18], image:'https://abnjunction.com/wp-content/uploads/2025/09/Blog-Banners.png', excerpt:'Why Core Web Vitals still matter in 2025 — and why WordPress sites keep struggling with them.', date:'2025-09-12' },
+  { slug:'performance-marketing-mistakes-startups-make-in-2025', title:'Top 5 Performance Marketing Mistakes Startups Make', categories:[24], image:'https://abnjunction.com/wp-content/uploads/2025/08/Performance-Marketing-Mistakes.png', excerpt:'Rising costs, AI-driven competition, and platform shifts are exposing these five costly mistakes.', date:'2025-08-22' },
+  { slug:'growth-engineer-mindset-how-to-plan-campaigns-strategy-2025', title:'Growth Engineer Mindset: Plan Campaigns Like an Analyst', categories:[24], image:'https://abnjunction.com/wp-content/uploads/2025/08/Growth-Engineer-Mindset.png', excerpt:'"Great marketing isn’t just creative — it’s calculated." Here’s the mindset behind it.', date:'2025-08-20' },
+  { slug:'youtube-monetization-update-2025-what-creators-must-know-now', title:'YouTube Monetization Update 2025', categories:[32,24], image:'https://abnjunction.com/wp-content/uploads/2025/07/Blog-banner.png', excerpt:'A major turning point for creators — what counts as low-effort content now, explained.', date:'2025-07-16' },
+  { slug:'how-to-make-brands-go-viral-in-2025-5-strategies-backed-by-real-examples', title:'How to Make Brands Go Viral in 2025', categories:[24,31], image:'https://abnjunction.com/wp-content/uploads/2025/07/Marketing-strategies-blog-banner.png', excerpt:'5 strategies backed by real examples — because having a great product is no longer enough.', date:'2025-07-01' },
+  { slug:'from-chaos-to-clarity-my-favorite-ecommerce-seo-tools-right-now', title:'From Chaos to Clarity: Favorite eCommerce SEO Tools', categories:[44], image:'https://abnjunction.com/wp-content/uploads/2025/06/eCommerce-SEO-tools-1.png', excerpt:'What started as manual keyword research and product descriptions became a real toolkit.', date:'2025-06-27' },
+  { slug:'product-descriptions-that-do-more-than-describe-a-proven-approach', title:'Product Descriptions That Do More Than Describe', categories:[44], image:'https://abnjunction.com/wp-content/uploads/2025/06/Product-descriptions-2.png', excerpt:'Product descriptions aren’t just words — they’re mini salespeople. Here’s a proven approach.', date:'2025-06-19' },
+  { slug:'boost-ux-with-this-new-wordpress-plugin-for-smooth-transitions', title:'Boost UX With This New WordPress Plugin', categories:[18], image:'https://abnjunction.com/wp-content/uploads/2025/06/WordPress-plugin.png', excerpt:'App-like speed for your WordPress site, without the app-like headaches.', date:'2025-06-13' },
+  { slug:'hocco-mango-ice-cream-how-one-shape-won-the-internet', title:'Hocco Mango Ice Cream: How One Shape Won The Internet', categories:[26], image:'https://abnjunction.com/wp-content/uploads/2025/05/Blog-banner.png', excerpt:'A mango-shaped ice cream that nailed product-led marketing without spending a rupee on ads.', date:'2025-05-27' },
+  { slug:'the-evolution-of-the-apple-logo-turned-a-simple-fruit-into-a-tech-empires-symbol', title:'The Evolution of the Apple Logo', categories:[32], image:'https://abnjunction.com/wp-content/uploads/2025/01/Evolution-Of-Apple-Logo.png', excerpt:'How a simple fruit became one of the most recognizable symbols in tech history.', date:'2025-02-01' },
+  { slug:'how-old-spices-brand-transformation-captured-a-new-generation', title:'How Old Spice’s Brand Transformation Captured a New Generation', categories:[32], image:'https://abnjunction.com/wp-content/uploads/2025/01/Old-Spices-Brand-Transformation.png', excerpt:'From traditional aftershave brand to a masterclass in humor-driven repositioning.', date:'2025-01-27' },
+  { slug:'why-the-starbucks-logo-change-was-revolutionary', title:'Why the Starbucks Logo Change Was Revolutionary', categories:[32], image:'https://abnjunction.com/wp-content/uploads/2025/01/Starbucks-Logo.png', excerpt:'More than a coffee shop — a case study in building a globally recognizable visual identity.', date:'2025-01-13' }
+];
+
+const MOCK_TAGS = [
+  { id:34, name:'marketing strategies', count:8 },
+  { id:33, name:'brand stories', count:7 },
+  { id:21, name:'AI Tools', count:4 },
+  { id:20, name:'Designer', count:3 },
+  { id:23, name:'Developer Tools', count:2 },
+  { id:30, name:'domain', count:1 },
+  { id:29, name:'hosting', count:1 },
+  { id:45, name:'latest update', count:1 },
+  { id:28, name:'web hosting', count:1 }
+];
+
+const TEAM_CARDS = [
+  { title:'Real Practitioners', desc:'Every article is written by the strategists and marketers actually running the campaigns — not an outsourced content mill.' },
+  { title:'Backed By Real Data', desc:'No recycled listicles. What you read here comes from live client results, A/B tests, and real ad spend.' },
+  { title:'Weekly Cadence', desc:'Fresh insights published every week, covering whatever we\'re actually seeing move the needle right now.' }
+];
+
+let state = { category:'all', page:1, perPage:8, totalPages:1, usingMock:false, categoriesMap:{}, search:'', tagId:'all' };
+
+/* ========================================================================
+   1. PRELOADER
+   ======================================================================== */
+window.addEventListener('load', () => {
+  const fill = document.getElementById('preloader-fill');
+  gsap.to(fill, { width:'100%', duration:0.9, ease:'power2.inOut' });
+  gsap.to('#preloader', {
+    opacity:0, duration:0.6, delay:0.7, ease:'power2.inOut',
+    onComplete: () => { document.getElementById('preloader').style.display='none'; playHeroIntro(); }
+  });
+});
+setTimeout(() => {
+  const pre = document.getElementById('preloader');
+  if (pre && pre.style.display !== 'none') { pre.style.display='none'; playHeroIntro(); }
+}, 4000);
+
+function playHeroIntro(){
+  gsap.to('.hero-title .line span', { yPercent:0, duration:1, stagger:0.12, ease:'power4.out' });
+  gsap.to('.eyebrow, .hero-sub, .hero-stats', { opacity:1, y:0, duration:0.9, stagger:0.12, delay:0.3, ease:'power3.out' });
+}
+gsap.set('.eyebrow, .hero-sub, .hero-stats', { opacity:0, y:20 });
+// Set via GSAP (not plain CSS) so GSAP's transform cache has a real yPercent
+// baseline to animate from — a CSS-authored translateY(110%) doesn't survive
+// as a percentage once GSAP reads the computed matrix, so gsap.to(yPercent:0)
+// silently no-ops and the line never appears.
+gsap.set('.hero-title .line span', { yPercent: 110 });
+
+/* ========================================================================
+   2. CUSTOM CURSOR
+   ======================================================================== */
+if (matchMedia('(pointer: fine)').matches) {
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  window.addEventListener('pointermove', e => {
+    gsap.to(dot, { x:e.clientX, y:e.clientY, duration:0.05 });
+    gsap.to(ring, { x:e.clientX, y:e.clientY, duration:0.35, ease:'power3.out' });
+  });
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest('a, button, .card, .feat-card, .filter-pill')) ring.classList.add('big');
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('a, button, .card, .feat-card, .filter-pill')) ring.classList.remove('big');
+  });
+}
+
+/* ========================================================================
+   3. SMOOTH SCROLL
+   ======================================================================== */
+try {
+  gsap.registerPlugin(ScrollTrigger);
+  const lenis = new Lenis({ duration:1.1, smoothWheel:true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+} catch (e) { console.warn('Smooth scroll unavailable', e); }
+
+/* ========================================================================
+   3b. SCROLL-DRIVEN EXPERIENCE — progress bar + pinned hero scrub.
+   The hero pins for one extra viewport of scroll; hero-scroll-progress (0-1)
+   drives both the DOM fade-out below and the Three.js camera zoom/rotation
+   inside initHero3D (read via window.heroScrollProgress).
+   ======================================================================== */
+window.heroScrollProgress = 0;
+
+gsap.to('#scroll-progress-bar', {
+  scaleX: 1, ease:'none',
+  scrollTrigger: { trigger: document.documentElement, start:'top top', end:'bottom bottom', scrub:0.3 }
+});
+
+ScrollTrigger.create({
+  trigger: '.hero',
+  start: 'top top',
+  end: '+=100%',
+  pin: true,
+  scrub: 0.6,
+  onUpdate: self => {
+    window.heroScrollProgress = self.progress;
+    gsap.set('.hero-inner', { opacity: 1 - self.progress, y: -self.progress * 60, scale: 1 - self.progress * 0.06 });
+    gsap.set('.scroll-cue', { opacity: Math.max(0, 1 - self.progress * 4) });
+  }
+});
+
+/* ========================================================================
+   4. THREE.JS HERO SCENE — networked icosahedron cluster + particles
+   ======================================================================== */
+(function initHero3D(){
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas || !window.THREE) return;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 8.5);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  const coreGeo = new THREE.IcosahedronGeometry(2.1, 1);
+  const coreMat = new THREE.MeshBasicMaterial({ color:0x38c5e7, wireframe:true, transparent:true, opacity:0.55 });
+  const core = new THREE.Mesh(coreGeo, coreMat);
+  group.add(core);
+
+  const innerGeo = new THREE.IcosahedronGeometry(1.15, 0);
+  const innerMat = new THREE.MeshBasicMaterial({ color:0x6f5aff, wireframe:true, transparent:true, opacity:0.6 });
+  const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+  group.add(innerMesh);
+
+  // Orbiting nodes connected by the network idea
+  const nodeCount = 40;
+  const positions = new Float32Array(nodeCount*3);
+  for (let i=0;i<nodeCount;i++){
+    const r = 3.2 + Math.random()*1.6;
+    const theta = Math.random()*Math.PI*2;
+    const phi = Math.acos((Math.random()*2)-1);
+    positions[i*3] = r*Math.sin(phi)*Math.cos(theta);
+    positions[i*3+1] = r*Math.sin(phi)*Math.sin(theta);
+    positions[i*3+2] = r*Math.cos(phi);
+  }
+  const nodeGeo = new THREE.BufferGeometry();
+  nodeGeo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+  const nodeMat = new THREE.PointsMaterial({ color:0x38c5e7, size:0.06, transparent:true, opacity:0.85 });
+  const nodes = new THREE.Points(nodeGeo, nodeMat);
+  group.add(nodes);
+
+  // Ambient background particles
+  const particleCount = 240;
+  const bgPositions = new Float32Array(particleCount*3);
+  for (let i=0;i<particleCount*3;i++) bgPositions[i] = (Math.random()-0.5)*18;
+  const bgGeo = new THREE.BufferGeometry();
+  bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPositions,3));
+  const bgMat = new THREE.PointsMaterial({ color:0x6f5aff, size:0.03, transparent:true, opacity:0.4 });
+  scene.add(new THREE.Points(bgGeo, bgMat));
+
+  let mouseX=0, mouseY=0;
+  window.addEventListener('pointermove', e => {
+    mouseX = (e.clientX/innerWidth - 0.5);
+    mouseY = (e.clientY/innerHeight - 0.5);
+  });
+
+  const clock = new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+    const sp = window.heroScrollProgress || 0; // 0-1, driven by the pinned-hero ScrollTrigger
+    core.rotation.y = t*0.15 + mouseX*0.5 + sp*2.6;
+    core.rotation.x = t*0.08 - mouseY*0.3;
+    innerMesh.rotation.y -= t*0.25 + sp*1.5;
+    innerMesh.rotation.x += t*0.1;
+    innerMesh.scale.setScalar(1 + sp*0.6); // core "opens up" as you scroll through the pin
+    nodes.rotation.y += 0.0009 + sp*0.002;
+    camera.position.x += (mouseX*1.0 - camera.position.x)*0.02;
+    camera.position.z = 8.5 - sp*3; // zoom in toward the network
+    camera.lookAt(0,0,0);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+})();
+
+/* ========================================================================
+   5. COUNTER ANIMATIONS
+   ======================================================================== */
+document.querySelectorAll('[data-count]').forEach(el => {
+  const target = +el.dataset.count;
+  const suffix = el.dataset.suffix || '';
+  const obj = { val:0 };
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(obj, { val:target, duration:1.8, ease:'power2.out', onUpdate:() => { el.textContent = Math.floor(obj.val).toLocaleString() + suffix; } })
+  });
+});
+
+/* ========================================================================
+   6. DATA LAYER
+   ======================================================================== */
+async function fetchWithRetry(url, tries = 2){
+  let lastErr;
+  for (let i=0;i<tries;i++){
+    try {
+      const res = await fetch(url, { cache:'no-store' });
+      if (!res.ok) throw new Error('status ' + res.status);
+      const text = await res.text();
+      if (!text) throw new Error('empty body');
+      return { data: JSON.parse(text), headers: res.headers };
+    } catch (err) {
+      lastErr = err;
+      await new Promise(r => setTimeout(r, 500));
+    }
+  }
+  throw lastErr;
+}
+
+function setStatus(mode, text){
+  const el = document.getElementById('data-status');
+  const txt = document.getElementById('data-status-text');
+  el.className = 'data-status' + (mode !== 'live' ? ' ' + mode : '');
+  txt.textContent = text;
+}
+
+function shortCatName(name){
+  return name.split(':')[0].replace(/&amp;/g,'&').trim();
+}
+
+async function loadCategories(){
+  try {
+    const { data } = await fetchWithRetry(`${WP}/categories?per_page=100&hide_empty=true`);
+    return data
+      .filter(c => c.count > 0 && !EXCLUDED_CAT_SLUGS.includes(c.slug))
+      .map(c => ({ id:c.id, name: shortCatName(c.name), count:c.count }))
+      .sort((a,b) => b.count - a.count);
+  } catch (e) {
+    console.warn('categories: falling back to mock', e);
+    return MOCK_CATEGORIES;
+  }
+}
+
+// Posts can belong to multiple categories, so summing per-category counts
+// double-counts — fetch the real total separately instead.
+async function loadTotalCount(){
+  try {
+    const { headers } = await fetchWithRetry(`${WP}/posts?per_page=1`);
+    return +headers.get('X-WP-Total') || MOCK_POSTS.length;
+  } catch (e) {
+    return MOCK_POSTS.length;
+  }
+}
+
+function formatDate(iso){
+  try { return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }); }
+  catch { return ''; }
+}
+
+function normalizePost(item){
+  const image = item._embedded && item._embedded['wp:featuredmedia'] && item._embedded['wp:featuredmedia'][0] ? item._embedded['wp:featuredmedia'][0].source_url : null;
+  let excerpt = (item.excerpt && item.excerpt.rendered ? item.excerpt.rendered.replace(/<[^>]+>/g,'') : '').trim();
+  if (excerpt.length > 140) excerpt = excerpt.slice(0,140).trim() + '…';
+  return {
+    slug:item.slug, title:item.title.rendered.replace(/&amp;/g,'&').replace(/&#8217;/g,"'").replace(/&#8220;|&#8221;/g,'"'),
+    categories:item.categories || [], image, excerpt, date:item.date
+  };
+}
+
+async function loadPosts(page, perPage, categoryId, search, tagId){
+  const params = new URLSearchParams({ per_page:perPage, page, _embed:1, orderby:'date', order:'desc' });
+  if (categoryId && categoryId !== 'all') params.set('categories', categoryId);
+  if (tagId && tagId !== 'all') params.set('tags', tagId);
+  if (search) params.set('search', search);
+  const { data, headers } = await fetchWithRetry(`${WP}/posts?${params}`);
+  return { items: data.map(normalizePost), totalPages: +headers.get('X-WP-TotalPages') || 1 };
+}
+
+function mockPosts(page, perPage, categoryId, search){
+  let items = MOCK_POSTS;
+  if (categoryId && categoryId !== 'all') items = items.filter(i => i.categories.includes(+categoryId));
+  // MOCK_POSTS carries no tag data, so tag filtering has no mock-mode equivalent — search still works.
+  if (search) {
+    const q = search.toLowerCase();
+    items = items.filter(i => i.title.toLowerCase().includes(q) || i.excerpt.toLowerCase().includes(q));
+  }
+  const totalPages = Math.max(1, Math.ceil(items.length / perPage));
+  const start = (page-1) * perPage;
+  return { items: items.slice(start, start+perPage), totalPages };
+}
+
+async function loadTags(){
+  try {
+    const { data } = await fetchWithRetry(`${WP}/tags?per_page=50&hide_empty=true`);
+    return data.filter(t => t.count > 0).map(t => ({ id:t.id, name:t.name, count:t.count })).sort((a,b) => b.count - a.count);
+  } catch (e) {
+    console.warn('tags: falling back to mock', e);
+    return MOCK_TAGS;
+  }
+}
+
+/* ========================================================================
+   7. RENDERING
+   ======================================================================== */
+function imageOrPlaceholder(url, label){
+  if (url) return `<img src="${url}" alt="${label}" loading="lazy">`;
+  return `<div class="ph">${label.charAt(0)}</div>`;
+}
+function categoryNames(ids){ return (ids||[]).map(id => state.categoriesMap[id]).filter(Boolean); }
+
+function renderFeatured(items){
+  const el = document.getElementById('featured-grid');
+  el.innerHTML = items.slice(0,3).map(item => `
+    <a class="feat-card" href="https://abnjunction.com/blog/${item.slug}/" target="_blank" rel="noopener">
+      <div class="feat-inner">
+        <div class="feat-media">${imageOrPlaceholder(item.image, item.title)}</div>
+        <span class="feat-date">${formatDate(item.date)}</span>
+        <h3 class="feat-title">${item.title}</h3>
+        <p class="feat-desc">${item.excerpt || 'Read the full article for the complete breakdown.'}</p>
+      </div>
+    </a>
+  `).join('');
+  gsap.fromTo('.feat-card', { opacity:0, y:40 }, { opacity:1, y:0, duration:0.8, stagger:0.12, ease:'power3.out', scrollTrigger:{ trigger:'#featured-grid', start:'top 85%' } });
+  el.querySelectorAll('.feat-card').forEach(attachTilt);
+}
+
+function renderFilters(categories, totalAll){
+  const el = document.getElementById('filters');
+  const all = [{ id:'all', name:'All Articles', count: totalAll }].concat(categories);
+  el.innerHTML = all.map(c => `<button class="filter-pill ${state.category == c.id ? 'active' : ''}" data-cat="${c.id}">${c.name} <span class="count">${c.count}</span></button>`).join('');
+  el.querySelectorAll('.filter-pill').forEach(btn => btn.addEventListener('click', () => setCategory(btn.dataset.cat)));
+
+  const sideEl = document.getElementById('cat-list');
+  sideEl.innerHTML = all.map(c => `<button data-cat="${c.id}" class="${state.category == c.id ? 'active' : ''}">${c.name} <span>${c.count}</span></button>`).join('');
+  sideEl.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => setCategory(btn.dataset.cat)));
+}
+
+function setCategory(catId){
+  state.category = catId;
+  state.page = 1;
+  document.querySelectorAll('.filter-pill').forEach(b => b.classList.toggle('active', b.dataset.cat == catId));
+  document.querySelectorAll('#cat-list button').forEach(b => b.classList.toggle('active', b.dataset.cat == catId));
+  refreshGrid();
+}
+
+function renderRecentPosts(items){
+  const el = document.getElementById('recent-posts');
+  el.innerHTML = items.slice(0,5).map(item => `
+    <a class="recent-item" href="https://abnjunction.com/blog/${item.slug}/" target="_blank" rel="noopener" style="text-decoration:none;">
+      <div class="recent-thumb">${item.image ? `<img src="${item.image}" alt="${item.title}" loading="lazy">` : ''}</div>
+      <div class="recent-info">
+        <a href="https://abnjunction.com/blog/${item.slug}/" target="_blank" rel="noopener">${item.title}</a>
+        <span>${formatDate(item.date)}</span>
+      </div>
+    </a>
+  `).join('');
+}
+
+function renderTeamCards(){
+  const el = document.getElementById('team-grid');
+  el.innerHTML = TEAM_CARDS.map(c => `
+    <div class="team-card">
+      <img src="https://abnjunction.com/wp-content/uploads/2026/07/abn-logo.webp" alt="ABN Junction">
+      <strong>${c.title}</strong>
+      <span>${c.desc}</span>
+    </div>
+  `).join('');
+  gsap.fromTo('.team-card', { opacity:0, y:30 }, { opacity:1, y:0, duration:0.7, stagger:0.15, ease:'power3.out', scrollTrigger:{ trigger:'#team-grid', start:'top 85%' } });
+}
+
+// Pins #team-banner and drags the trust cards horizontally as the user
+// scrolls vertically — desktop only (gsap.matchMedia); below 900px it's a
+// normal swipeable overflow-x row, since pinned horizontal scroll fights
+// touch-scroll gestures on phones/tablets.
+let teamMM;
+function setupHorizontalTeam(){
+  if (teamMM) teamMM.revert();
+  teamMM = gsap.matchMedia();
+  teamMM.add('(min-width: 900px)', () => {
+    const wrap = document.querySelector('.team-track-wrap');
+    const track = document.getElementById('team-grid');
+    const getDistance = () => Math.max(0, track.scrollWidth - wrap.clientWidth);
+    const tween = gsap.to(track, {
+      x: () => -getDistance(),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#team-banner',
+        start: 'top top',
+        end: () => '+=' + getDistance(),
+        pin: true,
+        scrub: 1,
+        invalidateOnRefresh: true
+      }
+    });
+    return () => { tween.scrollTrigger && tween.scrollTrigger.kill(); tween.kill(); gsap.set(track, { clearProps:'x' }); };
+  });
+}
+
+function renderTags(tags){
+  const el = document.getElementById('tag-cloud');
+  el.innerHTML = tags.map(t => `<button class="tag-pill ${state.tagId == t.id ? 'active' : ''}" data-tag="${t.id}">${t.name} (${t.count})</button>`).join('');
+  el.querySelectorAll('.tag-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.tag;
+      state.tagId = state.tagId == id ? 'all' : id; // click active tag again to clear it
+      state.page = 1;
+      el.querySelectorAll('.tag-pill').forEach(b => b.classList.toggle('active', state.tagId == b.dataset.tag));
+      refreshGrid();
+    });
+  });
+}
+
+function setupSearch(){
+  const input = document.getElementById('search-input');
+  const box = document.getElementById('search-box');
+  const clearBtn = document.getElementById('search-clear');
+  let debounceTimer;
+  input.addEventListener('input', () => {
+    box.classList.toggle('has-query', !!input.value);
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      state.search = input.value.trim();
+      state.page = 1;
+      refreshGrid();
+    }, 350);
+  });
+  clearBtn.addEventListener('click', () => {
+    input.value = '';
+    box.classList.remove('has-query');
+    state.search = '';
+    state.page = 1;
+    refreshGrid();
+  });
+}
+
+function setupNewsletter(){
+  const form = document.getElementById('newsletter-form');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    // Prototype only — no real subscription backend is wired up here.
+    form.classList.add('hide');
+    document.getElementById('newsletter-success').classList.add('show');
+  });
+}
+
+function renderGrid(items){
+  const el = document.getElementById('grid');
+  if (!items.length){ el.innerHTML = `<div class="empty-state">No articles found in this category yet.</div>`; return; }
+  el.innerHTML = items.map(item => `
+    <a class="card" href="https://abnjunction.com/blog/${item.slug}/" target="_blank" rel="noopener">
+      <div class="card-inner">
+        <div class="card-media">${imageOrPlaceholder(item.image, item.title)}</div>
+        <span class="card-date">${formatDate(item.date)}</span>
+        <h3 class="card-title">${item.title}</h3>
+        <p class="card-desc">${item.excerpt || 'Read the full article for the complete breakdown.'}</p>
+      </div>
+    </a>
+  `).join('');
+  gsap.fromTo('.card', { opacity:0, y:30 }, { opacity:1, y:0, duration:0.6, stagger:0.08, ease:'power3.out' });
+  el.querySelectorAll('.card').forEach(attachTilt);
+}
+
+function renderPagination(){
+  const el = document.getElementById('pagination');
+  const tp = state.totalPages;
+  if (tp <= 1){ el.innerHTML = ''; return; }
+  let html = `<button class="page-btn" id="prev-btn" ${state.page===1?'disabled':''}>←</button>`;
+  for (let i=1;i<=tp;i++) html += `<button class="page-btn ${i===state.page?'active':''}" data-page="${i}">${i}</button>`;
+  html += `<button class="page-btn" id="next-btn" ${state.page===tp?'disabled':''}>→</button>`;
+  el.innerHTML = html;
+  el.querySelectorAll('[data-page]').forEach(btn => btn.addEventListener('click', () => { state.page = +btn.dataset.page; refreshGrid(); }));
+  const prev = document.getElementById('prev-btn'), next = document.getElementById('next-btn');
+  if (prev) prev.addEventListener('click', () => { if (state.page>1){ state.page--; refreshGrid(); } });
+  if (next) next.addEventListener('click', () => { if (state.page<tp){ state.page++; refreshGrid(); } });
+}
+
+function attachTilt(card){
+  const inner = card.querySelector('.card-inner, .feat-inner');
+  if (!inner || !matchMedia('(pointer: fine)').matches) return;
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left)/r.width - 0.5;
+    const y = (e.clientY - r.top)/r.height - 0.5;
+    gsap.to(inner, { rotateY:x*8, rotateX:-y*8, duration:0.4, ease:'power2.out', transformPerspective:900 });
+  });
+  card.addEventListener('mouseleave', () => gsap.to(inner, { rotateY:0, rotateX:0, duration:0.6, ease:'power3.out' }));
+}
+
+/* ========================================================================
+   8. ORCHESTRATION
+   ======================================================================== */
+async function refreshGrid(){
+  document.getElementById('grid').style.opacity = '0.4';
+  const note = document.getElementById('search-note');
+  if (state.search) { note.textContent = `Showing results for "${state.search}"`; note.classList.add('show'); }
+  else { note.classList.remove('show'); }
+
+  try {
+    let result = state.usingMock
+      ? mockPosts(state.page, state.perPage, state.category, state.search)
+      : await loadPosts(state.page, state.perPage, state.category, state.search, state.tagId);
+    state.totalPages = result.totalPages;
+    renderGrid(result.items);
+    renderPagination();
+  } catch (e) {
+    console.warn('Grid load failed, switching to preview data', e);
+    state.usingMock = true;
+    setStatus('mock', 'Showing preview data (live connection unavailable)');
+    const result = mockPosts(state.page, state.perPage, state.category, state.search);
+    state.totalPages = result.totalPages;
+    renderGrid(result.items);
+    renderPagination();
+  }
+  document.getElementById('grid').style.opacity = '1';
+}
+
+async function init(){
+  const marqueeItems = ['SEO','PERFORMANCE MARKETING','BRAND STRATEGY','WORDPRESS','ECOMMERCE','AI TOOLS'];
+  const track = document.getElementById('marquee-track');
+  track.innerHTML = Array(2).fill(marqueeItems.map(m => `<span>${m}</span><span class="dot">✦</span>`).join('')).join('');
+
+  setupSearch();
+  setupNewsletter();
+  renderTeamCards();
+  setupHorizontalTeam();
+  loadTags().then(renderTags).catch(() => renderTags(MOCK_TAGS));
+
+  try {
+    const categories = await loadCategories();
+    state.categoriesMap = Object.fromEntries(categories.map(c => [c.id, c.name]));
+    const totalAll = await loadTotalCount();
+    renderFilters(categories, totalAll);
+
+    const featured = await loadPosts(1, 3, 'all');
+    renderFeatured(featured.items);
+    renderRecentPosts(featured.items.length >= 5 ? featured.items : (await loadPosts(1, 5, 'all')).items);
+
+    setStatus('live', 'Live data from WordPress');
+    await refreshGrid();
+  } catch (e) {
+    console.warn('Init failed, switching entirely to preview data', e);
+    state.usingMock = true;
+    state.categoriesMap = Object.fromEntries(MOCK_CATEGORIES.map(c => [c.id, c.name]));
+    renderFilters(MOCK_CATEGORIES, MOCK_POSTS.length);
+    renderFeatured(MOCK_POSTS.slice(0,3));
+    renderRecentPosts(MOCK_POSTS.slice(0,5));
+    setStatus('mock', 'Showing preview data (live connection unavailable)');
+    await refreshGrid();
+  }
+  refreshScrollTriggers();
+}
+
+// Featured/grid/team-card images all insert asynchronously well after
+// ScrollTrigger's initial pin calculations — each image finishing decode
+// changes document height and quietly invalidates pin start/end offsets.
+// Refresh once now, and once more after every <img> on the page has loaded.
+function refreshScrollTriggers(){
+  ScrollTrigger.refresh();
+  const imgs = Array.from(document.images).filter(img => !img.complete);
+  if (imgs.length) {
+    Promise.all(imgs.map(img => new Promise(res => { img.onload = img.onerror = res; }))).then(() => ScrollTrigger.refresh());
+  }
+}
+init();
+</script>
+</body>
+</html>

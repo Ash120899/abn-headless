@@ -12,6 +12,12 @@ export default function Gallery({ data }) {
 
   if (!images.length) return null
 
+  // The widest breakpoint below shows 2 slides at once, and Swiper's loop
+  // mode needs meaningfully more real slides than that to duplicate for a
+  // seamless loop — with too few it spams "Loop Warning" on every resize
+  // and its internal loop-fix can misbehave visibly.
+  const canLoop = images.length > 2
+
   return (
     <section className="bg-background text-foreground py-24">
       <div className="section-inner max-w-6xl mx-auto px-4 md:px-6 screenshot-section">
@@ -26,10 +32,8 @@ export default function Gallery({ data }) {
           modules={[Navigation, Pagination]}
           spaceBetween={30}
           slidesPerView={1}
-          autoscroll={{ delay: 3000 }}
-          pagination={{ clickable: true }}
-          loop={true}
-          autoPlay={{ delay: 3000 }}
+          pagination={{ clickable: images.length > 1 }}
+          loop={canLoop}
           className="!pb-14"
           breakpoints={{
   768: { slidesPerView: 1 },
