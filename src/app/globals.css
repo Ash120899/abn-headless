@@ -1135,7 +1135,9 @@ pre.code-content {
 .site-mobile-card .arrow {
   color: var(--site-cyan) !important;
 }
-
+ul.wp-block-list {
+    list-style: disc;
+}
 .site-mobile-group-label {
   font-size: 10px;
   font-weight: 900;

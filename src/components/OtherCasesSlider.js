@@ -100,10 +100,10 @@ export default function OtherCasesSlider({ currentSlug }) {
         {items.map((it) => (
           <Link key={it.slug} href={`/case-studies/${it.slug}`} className="snap-start min-w-[260px] max-w-[320px] flex-shrink-0">
             <article className="rounded-[20px] overflow-hidden border border-theme bg-surface p-4 h-full flex flex-col justify-between hover:shadow-lg transition">
-              <div className="h-[160px] w-full mb-4 rounded-md overflow-hidden bg-surface-2 flex items-center justify-center">
+              <div className="h-auto w-full mb-4 rounded-md overflow-hidden bg-surface-2 flex items-center justify-center">
                 {it.featured ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={it.featured} alt={it.title} className="w-full h-full object-contain" />
+                  <img src={it.featured} alt={it.title} className="w-full h-auto object-contain" />
                 ) : (
                   <div className="text-muted">No image</div>
                 )}

@@ -9,7 +9,6 @@ import React, {
 import * as cheerio from "cheerio";
 import OtherCasesSlider from "@/components/OtherCasesSlider";
 import OtherBlogsSlider from "@/components/OtherBlogsSlider";
-import DNAParallax from "@/components/DNAParallax";
 import CTA from "@/components/CTA";
 import useTheme from "@/hooks/useTheme";
 
@@ -398,7 +397,6 @@ export default function BlogPostClient({ slug }) {
 
       </section>
       {/* Place other cases and other blogs at the end of the page */}
-       <DNAParallax currentSlug={slug} />
       <OtherCasesSlider currentSlug={slug} />
       <OtherBlogsSlider currentSlug={slug} />
       <CTA />
