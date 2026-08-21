@@ -244,7 +244,7 @@ export default function BlogPostClient({ slug }) {
           </div>
 
           {/* TITLE */}
-          <h1 className="max-w-[980px] text-[45px] md:text-[72px] leading-[1.03] tracking-[-3px] font-[600] text-foreground" dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+          <h1 className="max-w-[980px] text-[38px] md:text-[72px] leading-[1.03] tracking-[-3px] font-[600] text-foreground" dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
 
           {/* META */}
           <div className="flex items-center justify-between flex-wrap gap-8 mt-[20px] lg:mt-14">
