@@ -9,6 +9,7 @@ import React, {
 import * as cheerio from "cheerio";
 import OtherCasesSlider from "@/components/OtherCasesSlider";
 import OtherBlogsSlider from "@/components/OtherBlogsSlider";
+import BannerBlog from "@/components/BannerBlog";
 import CTA from "@/components/CTA";
 import useTheme from "@/hooks/useTheme";
 
@@ -62,6 +63,7 @@ async function getBlogPost(slug) {
       post.acf = {
         ...post.acf,
         featured_image_dark: await resolveImageValue(post.acf?.featured_image_dark),
+        banner_image: await resolveImageValue(post.acf?.banner_image),
       };
     }
 
@@ -188,13 +190,14 @@ export default function BlogPostClient({ slug }) {
       "wp:featuredmedia"
     ]?.[0]?.source_url;
 
-  // Optional per-theme override, set via an ACF "featured_image_dark" field in WP admin
-  const darkFeaturedImage = post?.acf?.featured_image_dark || null;
+  // Main hero image has no theme variation — always the WP featured media
+  const featuredImage = lightFeaturedImage;
 
-  const featuredImage =
+  // Banner section image: "featured_image_dark" is the dark-mode variant of banner_image (not the hero)
+  const bannerImage =
     theme === "dark"
-      ? darkFeaturedImage || lightFeaturedImage
-      : lightFeaturedImage;
+      ? post?.acf?.featured_image_dark || post?.acf?.banner_image
+      : post?.acf?.banner_image;
 
   return (
 
@@ -397,6 +400,16 @@ export default function BlogPostClient({ slug }) {
         </div>
 
       </section>
+
+      {/* BANNER: optional ACF resource banner (title/paragraph/image/link/cta) */}
+      <BannerBlog
+        title={post?.acf?.banner}
+        paragraph={post?.acf?.banner_paragraph}
+        image={bannerImage}
+        link={post?.acf?.input_link}
+        cta={post?.acf?.input_cta}
+      />
+
       {/* Place other cases and other blogs at the end of the page */}
       <OtherCasesSlider currentSlug={slug} />
       <OtherBlogsSlider currentSlug={slug} />
