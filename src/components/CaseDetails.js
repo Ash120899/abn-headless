@@ -1,6 +1,6 @@
 export default function CaseDetails({ data }) {
   return (
-    <section className="bg-surface text-foreground py-24">
+    <section className="bg-surface text-foreground py-[40px] md:py-24">
       <div className="section-inner">
         <div className="grid gap-16 lg:grid-cols-[380px_minmax(0,1fr)]">
           <div className="space-y-12 lg:sticky lg:top-24 lg:self-start">

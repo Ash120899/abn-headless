@@ -19,8 +19,8 @@ export default function Gallery({ data }) {
   const canLoop = images.length > 2
 
   return (
-    <section className="bg-background text-foreground py-24">
-      <div className="section-inner max-w-6xl mx-auto px-4 md:px-6 screenshot-section">
+    <section className="bg-background text-foreground py-[40px] md:py-24">
+      <div className="section-inner max-w-6xl mx-auto md:px-6 screenshot-section">
 
         {/* TITLE */}
         <h2 className="section-heading text-foreground mb-16 text-center">

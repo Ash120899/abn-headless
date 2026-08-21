@@ -4,8 +4,8 @@ export default function Results({ data }) {
   const metrics = data?.metrics || []
 
   return (
-  <section className="py-24 bg-surface text-foreground">
-      <div className="max-w-5xl mx-auto px-6">
+  <section className="py-[40px] md:py-24 bg-surface text-foreground">
+      <div className="max-w-5xl mx-auto px-[20px] md:px-6">
 
         {/* TITLE */}
         <h2 className="text-5xl font-semibold mb-12">

@@ -63,7 +63,7 @@ export default function OtherBlogsSlider({ currentSlug }) {
   if (!items.length) return null;
 
   return (
-    <section className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16">
+    <section className="max-w-[1280px] mx-auto px-[20px] py-[40px] lg:px-10 lg:py-16">
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-3xl font-semibold text-foreground">More From The Blog</h3>
         <div className="flex gap-3">
@@ -84,8 +84,8 @@ export default function OtherBlogsSlider({ currentSlug }) {
         >
           {items.map((it) => (
             <Link key={it.slug} href={`/blog/${it.slug}`} className="snap-start min-w-[260px] max-w-[320px] lg:min-w-0 lg:max-w-none lg:w-[calc((100%-3rem)/3)] flex-shrink-0">
-              <article className="rounded-[20px] overflow-hidden border border-theme bg-surface p-4 h-full flex flex-col justify-between hover:shadow-lg transition">
-                <div className="h-[140px] lg:h-[200px] w-full mb-4 rounded-md overflow-hidden bg-surface-2 flex items-center justify-center">
+              <article className="rounded-[20px] overflow-hidden border border-theme bg-surface p-4 h-full flex flex-col justify-start hover:shadow-lg transition">
+                <div className="w-full mb-4 rounded-md overflow-hidden bg-surface-2 flex items-center justify-center">
                   {it.featured ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={it.featured} alt={it.title} className="w-full h-full object-contain" />

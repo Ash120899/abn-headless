@@ -24,7 +24,7 @@ export default function Hero({ data, metrics = [] }) {
       <div className="absolute inset-0 z-0" style={{ background: 'var(--overlay)' }}></div>
 
       {/* CONTENT */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-6 md:pt-10 pb-6">
+      <div className="relative z-10 max-w-6xl mx-auto px-[20px] md:px-6 pt-[40px] md:pt-10 pb-[40px] md:pb-6">
 
         {/* TITLE + LOGO */}
         <div className="flex items-center gap-4 mb-6 animate-fadeUp [animation-delay:0.1s]">

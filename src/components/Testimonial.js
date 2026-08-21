@@ -67,7 +67,7 @@ export default function Testimonial({ data }) {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-surface text-foreground py-24 overflow-hidden"
+      className="relative bg-surface text-foreground py-[40px] md:py-24 overflow-hidden"
     >
       {/* BACKGROUND GLOW */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -78,7 +78,7 @@ export default function Testimonial({ data }) {
 
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 md:px-6">
+      <div className="relative max-w-7xl mx-auto px-[20px] md:px-6">
 
         {/* HEADING */}
         <div className="testimonial-heading text-center mb-16">

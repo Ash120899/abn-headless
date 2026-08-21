@@ -18,7 +18,7 @@ export default function Clients({ data }) {
   const marqueeDuration = Math.max(25, logos.length * 7)
 
   return (
-    <section className="relative bg-surface text-foreground py-24 overflow-hidden">
+    <section className="relative bg-surface text-foreground py-[40px] md:py-24 overflow-hidden">
 
       {/* BG GLOW */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-orange-500/10 blur-[140px] rounded-full"></div>
@@ -27,7 +27,7 @@ export default function Clients({ data }) {
       <div className="relative z-10">
 
         {/* HEADING */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-14 px-[20px] md:px-0">
 
           <p className="text-xs uppercase tracking-[0.35em] text-accent mb-4">
             TRUSTED BY

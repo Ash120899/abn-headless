@@ -78,7 +78,7 @@ export default function OtherCasesSlider({ currentSlug }) {
   if (!items.length) return null;
 
   return (
-    <section className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16">
+    <section className="max-w-[1280px] mx-auto px-[20px] py-[40px] lg:px-10 lg:py-16">
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-3xl font-semibold text-foreground">Other Case Studies</h3>
         <div className="flex gap-3">
@@ -99,7 +99,7 @@ export default function OtherCasesSlider({ currentSlug }) {
         >
         {items.map((it) => (
           <Link key={it.slug} href={`/case-studies/${it.slug}`} className="snap-start min-w-[260px] max-w-[320px] flex-shrink-0">
-            <article className="rounded-[20px] overflow-hidden border border-theme bg-surface p-4 h-full flex flex-col justify-between hover:shadow-lg transition">
+            <article className="rounded-[20px] overflow-hidden border border-theme bg-surface p-4 h-full flex flex-col justify-start hover:shadow-lg transition">
               <div className="h-auto w-full mb-4 rounded-md overflow-hidden bg-surface-2 flex items-center justify-center">
                 {it.featured ? (
                   // eslint-disable-next-line @next/next/no-img-element

@@ -217,12 +217,12 @@ export default function BlogPostClient({ slug }) {
 
         {/* FEATURED IMAGE (sits above the title/meta instead of behind them, so nothing overlaps) */}
         {featuredImage ? (
-          <div className="w-full h-[280px] md:h-[420px]">
+          <div className="w-full h-auto md:h-[420px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={featuredImage}
               alt={post.title.rendered.replace(/<[^>]+>/g, "")}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </div>
         ) : (
@@ -232,10 +232,10 @@ export default function BlogPostClient({ slug }) {
           </div>
         )}
 
-        <div className="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-10 pt-16 pb-24">
+        <div className="relative z-10 max-w-[1280px] mx-auto px-[10px] pt-[40px] pb-[40px] lg:px-10 lg:pt-16 lg:pb-24">
 
           {/* BREADCRUMB */}
-          <div className="text-[14px] text-muted mb-12">
+          <div className="text-[14px] text-muted mb-[20px] lg:mb-12">
             <span className="text-accent">Home</span>
             {" / "}
             <span className="text-accent">Blog</span>
@@ -244,10 +244,10 @@ export default function BlogPostClient({ slug }) {
           </div>
 
           {/* TITLE */}
-          <h1 className="max-w-[980px] text-[54px] md:text-[72px] leading-[1.03] tracking-[-3px] font-[600] text-foreground" dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+          <h1 className="max-w-[980px] text-[45px] md:text-[72px] leading-[1.03] tracking-[-3px] font-[600] text-foreground" dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
 
           {/* META */}
-          <div className="flex items-center justify-between flex-wrap gap-8 mt-14">
+          <div className="flex items-center justify-between flex-wrap gap-8 mt-[20px] lg:mt-14">
 
             {/* AUTHOR */}
             <div className="flex items-center gap-5">
@@ -301,10 +301,11 @@ export default function BlogPostClient({ slug }) {
           max-w-[1760px]
           mx-auto
 
-          px-6
+          px-[20px]
           lg:px-10
 
-          py-[120px]
+          py-[40px]
+          lg:py-[120px]
         "
       >
 

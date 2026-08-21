@@ -18,7 +18,7 @@ export default function ServicesTabs({ data }) {
   const tabs = data.tabs || []
 
   return (
-    <section className="bg-surface text-foreground py-24">
+    <section className="bg-surface text-foreground py-[40px] md:py-24">
       <div className="section-inner">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col gap-8">

@@ -124,6 +124,9 @@ gap:10px;
 .screenshot-parent>div{
 width:100%;
 }
+  .section-inner {
+    width: min(1200px, calc(100% - 40px));
+  }
 }
 
 @keyframes marquee {
@@ -437,8 +440,10 @@ background-position: center;
 
 @media (max-width: 767px) {
   .cta-section {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .cta-intro {
