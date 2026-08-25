@@ -10,9 +10,24 @@ import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
 import ScrollReveal from "./ScrollReveal";
-import { categoryNames, STORY_ACCENTS } from "@/lib/case-study-shared";
+import SwitchWord from "./SwitchWord";
+import { categoryNames, findMetric, STORY_ACCENTS } from "@/lib/case-study-shared";
 
-function StoryCard({ item, categoriesMap, accent }) {
+// Each featured card shows a DIFFERENT metric type instead of always
+// whichever metric happens to be first in that case study's own ACF data —
+// varies the story being told across the row (leads, then reach, then cost
+// efficiency) instead of 3 cards all saying "+X leads". Falls back to
+// whatever metric the case study actually has if it doesn't track this
+// particular type — never fabricates a number it doesn't have.
+const FEATURED_METRIC_PRIORITY = [["lead"], ["reach"], ["cpl"]];
+
+function displayMetric(item, priorityIndex) {
+  const found = findMetric(item, FEATURED_METRIC_PRIORITY[priorityIndex] || []);
+  if (found) return `${found.value} ${found.label}`;
+  return item.metric || "Case Study";
+}
+
+function StoryCard({ item, categoriesMap, accent, metricText }) {
   const cardRef = useRef(null);
   const innerRef = useRef(null);
 
@@ -70,7 +85,7 @@ function StoryCard({ item, categoriesMap, accent }) {
               className="object-cover"
             />
           ) : (
-            <span className="text-3xl text-muted" style={{ fontFamily: "var(--font-display)" }}>
+            <span className="text-3xl text-muted" style={{ fontFamily: "var(--font-editorial)", fontWeight: 800 }}>
               {item.title.charAt(0)}
             </span>
           )}
@@ -88,13 +103,13 @@ function StoryCard({ item, categoriesMap, accent }) {
               border: `1px solid color-mix(in srgb, ${accent} 30%, var(--border))`,
             }}
           >
-            {item.metric || "Case Study"}
+            {metricText}
           </div>
           <h3 className="font-bold text-[1.05rem] leading-snug text-foreground">{item.title}</h3>
           <p className="text-muted text-[13px] leading-relaxed mt-2 flex-1">
             {item.desc || "A closer look at the strategy, execution, and measurable results behind this project."}
           </p>
-          <span className="inline-flex mt-3.5 text-[13px] font-bold" style={{ color: accent }}>
+          <span className="inline-flex mt-3.5 text-[13px] font-bold" style={{ color: "#F97316" }}>
             Read the Case Study →
           </span>
         </div>
@@ -103,40 +118,40 @@ function StoryCard({ item, categoriesMap, accent }) {
   );
 }
 
-function BrowseAllCard() {
+function RandomStoryCard({ href }) {
   return (
     <a
-      href="#explore"
+      href={href}
       className="card block rounded-[20px] border overflow-hidden transition-colors duration-300"
       style={{ background: "#050505", color: "#fff", borderColor: "rgba(255,255,255,.11)" }}
     >
       <div className="flex flex-col justify-between p-6 h-full min-h-[280px]">
-        <div
-          className="w-[42px] h-[42px] rounded-full grid place-items-center text-lg"
-          style={{ border: "1px solid rgba(255,255,255,.16)", color: "#F97316" }}
-        >
-          ↗
-        </div>
         <div>
-          <strong
-            className="block uppercase mt-5 mb-2.5 text-[clamp(1.5rem,2.2vw,1.9rem)]"
-            style={{ fontFamily: "var(--font-display)" }}
+          <div
+            className="w-[42px] h-[42px] rounded-full grid place-items-center text-lg"
+            style={{ border: "1px solid rgba(255,255,255,.16)", color: "#F97316" }}
           >
-            Explore Every Case Study
+            ↗
+          </div>
+          <strong
+            className="block uppercase mt-[34px] mb-4 text-[clamp(1.875rem,2.8vw,2.75rem)] leading-[.93]"
+            style={{ fontFamily: "var(--font-editorial)", fontWeight: 900, letterSpacing: "-0.04em" }}
+          >
+            Click for a random case study
           </strong>
-          <p className="text-[13px] leading-relaxed" style={{ color: "rgba(255,255,255,.65)" }}>
-            Filter by service pillar and browse the full library below.
+          <p className="text-[14px] leading-relaxed" style={{ color: "rgba(255,255,255,.65)" }}>
+            Not sure what to open first? Jump into one real ABN growth story at random.
           </p>
-          <span className="inline-flex mt-3.5 text-[13px] font-bold" style={{ color: "#F97316" }}>
-            See All Results →
-          </span>
         </div>
+        <span className="inline-flex mt-7 text-[14px] font-bold" style={{ color: "#F97316" }}>
+          Surprise me →
+        </span>
       </div>
     </a>
   );
 }
 
-export default function FeaturedGrid({ items, categoriesMap }) {
+export default function FeaturedGrid({ items, categoriesMap, randomHref = "/case-studies#explore" }) {
   const cards = items || [];
 
   return (
@@ -148,22 +163,27 @@ export default function FeaturedGrid({ items, categoriesMap }) {
               Featured Case Studies
             </span>
             {/*
-              Sentence-case sans, not the site-wide .section-heading utility
+              Sentence-case, not the site-wide .section-heading utility
               (League Gothic) — the concept explicitly calls these 5
               section-intro headings out as deliberately NOT the display
               font (design-concepts/case-studies-listing.html ~line 181-190).
+              Typography (Inter, weight 880, tight tracking) and the
+              switching-word accent both match
+              design-concepts/ABN_Blogs_V4_Magnetic_Interactive_Concept.html's
+              .section-title + .switch-word pattern, used on every section
+              heading on that page.
             */}
             <h2
               className="text-foreground mt-2"
               style={{
-                fontFamily: "var(--font-sans)",
-                fontWeight: 800,
-                letterSpacing: "-0.03em",
+                fontFamily: "var(--font-editorial)",
+                fontWeight: 880,
+                letterSpacing: "-0.05em",
                 fontSize: "clamp(2.1rem,4.6vw,4rem)",
                 lineHeight: 1.02,
               }}
             >
-              Start with a story that matches your challenge.
+              Start with a story that matches your <SwitchWord words={["challenge", "goal"]} />
             </h2>
           </div>
           <p className="text-muted leading-relaxed text-[15.5px]">
@@ -180,9 +200,15 @@ export default function FeaturedGrid({ items, categoriesMap }) {
           y={40}
         >
           {cards.slice(0, 3).map((item, i) => (
-            <StoryCard key={item.slug} item={item} categoriesMap={categoriesMap} accent={STORY_ACCENTS[i % STORY_ACCENTS.length]} />
+            <StoryCard
+              key={item.slug}
+              item={item}
+              categoriesMap={categoriesMap}
+              accent={STORY_ACCENTS[i % STORY_ACCENTS.length]}
+              metricText={displayMetric(item, i)}
+            />
           ))}
-          <BrowseAllCard />
+          <RandomStoryCard href={randomHref} />
         </ScrollReveal>
       </div>
     </section>

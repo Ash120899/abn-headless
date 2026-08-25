@@ -9,6 +9,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { CURATED_QUOTES, GOOGLE_RATING } from "@/lib/case-study-shared";
+import SwitchWord from "./SwitchWord";
 
 const AUTOPLAY_MS = 6000;
 const GENERIC_QUOTE = "Working with ABN Junction moved the needle for us.";
@@ -69,18 +70,18 @@ export default function TestimonialCarousel({ testimonials = [] }) {
       <div className="max-w-[1200px] mx-auto px-[20px] md:px-6">
         <div className="text-center">
           <span className="text-accent uppercase tracking-[0.35em] text-xs font-bold">What Clients Say</span>
-          {/* Sentence-case sans per the concept, not League Gothic — see FeaturedGrid.js for the full note. */}
+          {/* Sentence-case per the concept, not League Gothic — see FeaturedGrid.js for the full note. */}
           <h2
             className="mt-3 text-white"
             style={{
-              fontFamily: "var(--font-sans)",
-              fontWeight: 800,
-              letterSpacing: "-0.03em",
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 880,
+              letterSpacing: "-0.05em",
               fontSize: "clamp(2.1rem,4.6vw,4rem)",
               lineHeight: 1.02,
             }}
           >
-            Voices of <span className="text-accent">trust.</span>
+            Voices of <SwitchWord words={["trust", "proof"]} />
           </h2>
           <p className="mt-3 max-w-[640px] mx-auto text-[#aeb8bd]">
             From challenges to champions — their stories say it all.
@@ -122,7 +123,7 @@ export default function TestimonialCarousel({ testimonials = [] }) {
             <div className="mt-6 flex items-center gap-2.5">
               <span
                 className="text-[#ffa436] text-[32px] leading-none"
-                style={{ fontFamily: "var(--font-display)" }}
+                style={{ fontFamily: "var(--font-editorial)", fontWeight: 900 }}
               >
                 {GOOGLE_RATING.score}
               </span>
@@ -187,8 +188,8 @@ export default function TestimonialCarousel({ testimonials = [] }) {
               <div aria-live="polite">
                 <div
                   ref={quoteRef}
-                  className="font-normal text-[clamp(1.5rem,2.8vw,2.2rem)] leading-[1.3] text-white min-h-[130px] flex items-center justify-center"
-                  style={{ fontFamily: "var(--font-display)" }}
+                  className="text-[clamp(1.5rem,2.8vw,2.2rem)] leading-[1.3] text-white min-h-[130px] flex items-center justify-center"
+                  style={{ fontFamily: "var(--font-editorial)", fontWeight: 600, letterSpacing: "-0.02em" }}
                 >
                   <span aria-hidden="true" className="text-accent">&ldquo;</span>
                   {active.quote}

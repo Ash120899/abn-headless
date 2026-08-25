@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=League+Gothic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400..900&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -13,6 +14,11 @@
   --surface-weak: rgba(0,0,0,0.04);
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-display: "League Gothic", sans-serif;
+  /* Case-studies listing page only, per design-concepts/ABN_Blogs_V4_Magnetic_Interactive_Concept.html's
+     typography (Inter, very heavy weights, tight negative tracking on
+     headings) — not swapped into the site-wide --font-sans since other
+     pages' headings are tuned around that default stack. */
+  --font-editorial: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 html {
@@ -1352,4 +1358,24 @@ h3{
 }
 .screenshot-section img {
     object-fit: contain !important;
+}
+
+/* Case-studies listing page: "switching word" heading accent — blinking
+   cursor after whichever word SwitchWord.js is currently typing/deleting.
+   Ported from design-concepts/ABN_Blogs_V4_Magnetic_Interactive_Concept.html's
+   .switch-word::after (~line 79). Global (not scoped per-component) since
+   this same class renders on several headings on one page. */
+.case-studies-switch-word::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 0.82em;
+  margin-left: 2px;
+  vertical-align: -0.08em;
+  background: var(--accent);
+  animation: case-studies-switchword-cursor 0.9s step-end infinite;
+}
+@keyframes case-studies-switchword-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }

@@ -112,7 +112,7 @@ export default function ProcessSection() {
               <span className="text-accent uppercase tracking-[0.35em] text-xs font-bold">How We Work</span>
               <h2
                 className="mt-3.5 text-[clamp(1.8rem,3.6vw,2.6rem)] text-foreground uppercase"
-                style={{ fontFamily: "var(--font-display)", letterSpacing: "0.01em" }}
+                style={{ fontFamily: "var(--font-editorial)", fontWeight: 900, letterSpacing: "-0.04em" }}
               >
                 From First Call To Measurable Growth
               </h2>
@@ -139,13 +139,13 @@ export default function ProcessSection() {
                     >
                       <div
                         className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-background border border-theme text-accent text-[1.4rem] mb-6.5"
-                        style={{ fontFamily: "var(--font-display)" }}
+                        style={{ fontFamily: "var(--font-editorial)", fontWeight: 800 }}
                       >
                         {String(i + 1).padStart(2, "0")}
                       </div>
                       <h3
                         className="text-[1.6rem] mb-3 text-foreground uppercase"
-                        style={{ fontFamily: "var(--font-display)", letterSpacing: "0.01em" }}
+                        style={{ fontFamily: "var(--font-editorial)", fontWeight: 900, letterSpacing: "-0.03em" }}
                       >
                         {step.title}
                       </h3>

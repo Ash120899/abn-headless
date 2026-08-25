@@ -142,6 +142,8 @@ export async function getAggregateData(totalCount) {
       logoUrls,
       leadsSum: extras.leadsSum,
       reachSum: extras.reachSum,
+      revenueSum: extras.revenueSum,
+      roasMax: extras.roasMax,
       lowestCpl: extras.lowestCpl,
     };
   } catch (err) {
@@ -151,6 +153,8 @@ export async function getAggregateData(totalCount) {
       logoUrls: MOCK_LOGOS,
       leadsSum: MOCK_AGGREGATES.leads,
       reachSum: MOCK_AGGREGATES.reachM * 1e6,
+      revenueSum: MOCK_AGGREGATES.revenueL * 1e5,
+      roasMax: MOCK_AGGREGATES.roas,
       lowestCpl: MOCK_AGGREGATES.lowestCpl,
     };
   }

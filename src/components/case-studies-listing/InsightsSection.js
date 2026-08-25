@@ -9,6 +9,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ScrollReveal from "./ScrollReveal";
+import SwitchWord from "./SwitchWord";
 
 export default function InsightsSection({ posts = [], children }) {
   return (
@@ -19,18 +20,18 @@ export default function InsightsSection({ posts = [], children }) {
             <span className="text-accent uppercase tracking-[0.35em] text-xs font-bold">
               Insights Behind The Results
             </span>
-            {/* Sentence-case sans per the concept, not League Gothic — see FeaturedGrid.js for the full note. */}
+            {/* Sentence-case per the concept, not League Gothic — see FeaturedGrid.js for the full note. */}
             <h2
               className="mt-3 text-foreground"
               style={{
-                fontFamily: "var(--font-sans)",
-                fontWeight: 800,
-                letterSpacing: "-0.03em",
+                fontFamily: "var(--font-editorial)",
+                fontWeight: 880,
+                letterSpacing: "-0.05em",
                 fontSize: "clamp(2.1rem,4.6vw,4rem)",
                 lineHeight: 1.02,
               }}
             >
-              You saw the outcome. Now see how we <span className="text-accent">think.</span>
+              You saw the outcome. Now see how we <SwitchWord words={["think", "work"]} />
             </h2>
           </div>
           <p className="text-muted text-sm leading-relaxed">
@@ -91,7 +92,7 @@ export default function InsightsSection({ posts = [], children }) {
           >
             <strong
               className="text-[clamp(1.4rem,2.6vw,1.9rem)] leading-[1.02] uppercase"
-              style={{ fontFamily: "var(--font-display)" }}
+              style={{ fontFamily: "var(--font-editorial)", fontWeight: 900, letterSpacing: "-0.03em" }}
             >
               Go To
               <br />

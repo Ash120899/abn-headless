@@ -22,7 +22,7 @@ export default function Marquee() {
           <span key={i} className="flex items-center gap-9 shrink-0 whitespace-nowrap">
             <span
               className="text-2xl tracking-wide text-muted uppercase"
-              style={{ fontFamily: "var(--font-display)" }}
+              style={{ fontFamily: "var(--font-editorial)", fontWeight: 800 }}
             >
               {label}
             </span>

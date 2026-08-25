@@ -9,7 +9,7 @@ export default function FinalCTA() {
       <div className="max-w-[820px] mx-auto px-[20px] md:px-6 text-center">
         <h2
           className="text-[clamp(2.2rem,5.5vw,3.8rem)] leading-[1.08] mb-5.5 text-foreground uppercase"
-          style={{ fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "0.01em" }}
+          style={{ fontFamily: "var(--font-editorial)", fontWeight: 900, letterSpacing: "-0.04em" }}
         >
           Your Business Could Be
           <br />

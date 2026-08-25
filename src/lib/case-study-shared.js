@@ -4,19 +4,24 @@
 // browser/Node-only globals here.
 
 // metric: the first headline number from the case_details_section (e.g.
-// "730% ROAS"), used for card pills. Falls back to null, which callers
-// should cover with a generic label — no fabricated numbers.
+// "730% ROAS"), used for card pills that only show one number. metrics: the
+// full label+value list from the same section, for callers (FeaturedGrid)
+// that want to pick a specific metric TYPE per card rather than always the
+// first one. Falls back to null/[], which callers should cover with a
+// generic label — no fabricated numbers.
 export function normalizeCaseStudy(item) {
   let desc = "";
-  let metric = null;
+  let metrics = [];
   const sections = item.acf && item.acf.content_sections;
   const hero = sections ? sections.find((s) => s.acf_fc_layout === "hero_section") : null;
   if (hero && hero.client_description) {
     desc = hero.client_description.replace(/<[^>]+>/g, "").trim().slice(0, 180);
   }
   const details = sections ? sections.find((s) => s.acf_fc_layout === "case_details_section") : null;
-  if (details && Array.isArray(details.metrics) && details.metrics.length && details.metrics[0].value) {
-    metric = String(details.metrics[0].value).trim();
+  if (details && Array.isArray(details.metrics)) {
+    metrics = details.metrics
+      .filter((m) => m && m.value)
+      .map((m) => ({ label: String(m.label || "").trim(), value: String(m.value).trim() }));
   }
   const image =
     item._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
@@ -26,9 +31,23 @@ export function normalizeCaseStudy(item) {
     categories: item.case_study_category || [],
     image,
     desc,
-    metric,
+    metric: metrics.length ? metrics[0].value : null,
+    metrics,
     date: item.date,
   };
+}
+
+// Finds a metric on a normalized case study whose label contains one of the
+// given substrings (case-insensitive), in priority order. Used by
+// FeaturedGrid to show a different metric TYPE per featured card (leads /
+// reach / CPL) instead of always the first metric regardless of what it is.
+export function findMetric(item, labelSubstrings) {
+  if (!item?.metrics?.length) return null;
+  for (const needle of labelSubstrings) {
+    const found = item.metrics.find((m) => m.label.toLowerCase().includes(needle));
+    if (found) return found;
+  }
+  return null;
 }
 
 export function parseMetricValue(str) {
@@ -54,6 +73,8 @@ export function extractExtras(fullItems) {
   const logoIds = [];
   let leadsSum = 0;
   let reachSum = 0;
+  let revenueSum = 0;
+  let roasMax = null;
   const cplValues = [];
 
   fullItems.forEach((item) => {
@@ -81,6 +102,8 @@ export function extractExtras(fullItems) {
           if (label.includes("lead")) leadsSum += val;
           if (label.includes("reach")) reachSum += val;
           if (label.includes("cpl")) cplValues.push(val);
+          if (label.includes("revenue")) revenueSum += val;
+          if (label.includes("roas")) roasMax = roasMax === null ? val : Math.max(roasMax, val);
         });
       }
     });
@@ -91,6 +114,8 @@ export function extractExtras(fullItems) {
     logoIds: [...new Set(logoIds)].slice(0, 16),
     leadsSum,
     reachSum,
+    revenueSum,
+    roasMax,
     lowestCpl: cplValues.length ? Math.min(...cplValues) : null,
   };
 }
@@ -205,7 +230,7 @@ export const MOCK_LOGOS = [
 
 // Real aggregates computed once from live metrics data (see extractExtras) —
 // used only as the fallback if the live fetch fails.
-export const MOCK_AGGREGATES = { leads: 6516, reachM: 6.5, lowestCpl: "₹3.24" };
+export const MOCK_AGGREGATES = { leads: 6516, reachM: 6.5, lowestCpl: "₹3.24", roas: 13, revenueL: 75 };
 
 // Honest generic fallback (not fabricated post data) — used only if the live
 // /posts fetch fails. All three intentionally point at the blog index rather

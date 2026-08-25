@@ -52,15 +52,15 @@ function Counter({ target, suffix = '', decimals = 0 }) {
   return (
     <strong
       ref={ref}
-      className="block font-[family-name:var(--font-display)] text-foreground"
-      style={{ fontSize: 'clamp(2.2rem,4vw,3.4rem)' }}
+      className="block text-foreground"
+      style={{ fontFamily: 'var(--font-editorial)', fontWeight: 900, letterSpacing: '-0.03em', fontSize: 'clamp(1.1rem,5vw,3.4rem)' }}
     >
       0
     </strong>
   )
 }
 
-export default function HeroScene({ totalCount = 0, leadsSum = 0, reachSum = 0 }) {
+export default function HeroScene({ totalCount = 0 }) {
   const heroRef = useRef(null)
   const canvasRef = useRef(null)
   const heroInnerRef = useRef(null)
@@ -294,7 +294,6 @@ export default function HeroScene({ totalCount = 0, leadsSum = 0, reachSum = 0 }
     }
   }, [])
 
-  const reachM = (reachSum / 1e6).toFixed(1) + 'M+'
 
   return (
     <section
@@ -313,24 +312,24 @@ export default function HeroScene({ totalCount = 0, leadsSum = 0, reachSum = 0 }
       <div ref={heroInnerRef} className="hero-inner relative z-[2] px-[20px] pt-[40px] text-center lg:px-0">
         <span className="eyebrow text-accent mb-[22px] inline-flex items-center gap-[10px] text-[12px] font-extrabold uppercase tracking-[.3em]">
           <span className="bg-accent h-px w-[28px]" />
-          Proven Results
+          Case Studies · Proven Results
         </span>
 
         <h1
           className="hero-title text-foreground uppercase"
           style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: 400,
-            letterSpacing: '0.01em',
-            fontSize: 'clamp(2.6rem, 8vw, 6.4rem)',
-            lineHeight: 0.98,
+            fontFamily: 'var(--font-editorial)',
+            fontWeight: 900,
+            letterSpacing: '-0.04em',
+            fontSize: 'clamp(3.5rem, 8vw, 7rem)',
+            lineHeight: 0.91,
           }}
         >
           <span className="line block overflow-hidden">
-            <span className="block">WE DON&apos;T GUESS.</span>
+            <span className="block">We don&apos;t guess.</span>
           </span>
           <span className="line block overflow-hidden">
-            <span className="text-accent block">WE ENGINEER GROWTH.</span>
+            <span className="text-accent block">We engineer growth.</span>
           </span>
         </h1>
 
@@ -338,30 +337,34 @@ export default function HeroScene({ totalCount = 0, leadsSum = 0, reachSum = 0 }
           className="hero-sub text-muted mx-auto mt-[26px] max-w-[640px]"
           style={{ fontSize: 'clamp(1rem,1.6vw,1.2rem)', lineHeight: 1.6 }}
         >
-          Real businesses. Real ad spend. Real revenue. Explore exactly how ABN Junction turns strategy into
-          measurable growth — no fluff, just numbers.
+          Real businesses. Real investment. Real outcomes. Explore how ABN Junction turns connected strategy,
+          creativity and technology into measurable growth.
         </p>
 
         <div
-          className="hero-stats mt-[56px] flex flex-wrap justify-center"
-          style={{ gap: 'clamp(28px,6vw,80px)' }}
+          className="hero-stats mt-[56px] grid grid-cols-4 justify-items-center md:flex md:flex-wrap md:justify-center"
+          style={{ gap: 'clamp(6px,3vw,70px)' }}
         >
           <div className="stat text-center">
             <Counter target={totalCount} suffix="+" />
             <span className="text-muted mt-1 block text-[11px] uppercase tracking-[.14em]">Case Studies</span>
           </div>
           <div className="stat text-center">
-            <Counter target={leadsSum} suffix="+" />
+            {/* Static per product decision — live ROAS/revenue aggregation
+                across case studies isn't reliable enough yet (metrics mix
+                "%"-style and "×"-style ROAS with no consistent unit), so
+                this and the KPI strip below use fixed, correct numbers
+                instead of a live computation that can currently go wrong. */}
+            <Counter target={6500} suffix="+" />
             <span className="text-muted mt-1 block text-[11px] uppercase tracking-[.14em]">Leads Generated</span>
           </div>
           <div className="stat text-center">
-            <strong
-              className="block font-[family-name:var(--font-display)] text-foreground"
-              style={{ fontSize: 'clamp(2.2rem,4vw,3.4rem)' }}
-            >
-              {reachM}
-            </strong>
-            <span className="text-muted mt-1 block text-[11px] uppercase tracking-[.14em]">Total Reach</span>
+            <Counter target={13} suffix="×" />
+            <span className="text-muted mt-1 block text-[11px] uppercase tracking-[.14em]">Peak ROAS</span>
+          </div>
+          <div className="stat text-center">
+            <Counter target={5} />
+            <span className="text-muted mt-1 block text-[11px] uppercase tracking-[.14em]">Service Pillars</span>
           </div>
         </div>
       </div>

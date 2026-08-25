@@ -5,6 +5,7 @@
 // opposite-direction technique via animation-direction: reverse) instead of
 // inventing new keyframes.
 import Image from "next/image";
+import SwitchWord from "./SwitchWord";
 
 function LogoRow({ urls, reverse }) {
   // Duplicated for a seamless loop, same technique as the marquee above /
@@ -59,18 +60,18 @@ export default function TrustedLogos({ logoUrls }) {
             <span className="inline-block text-[11.5px] font-extrabold tracking-[0.24em] uppercase text-accent mb-4">
               Trusted Across Industries
             </span>
-            {/* Sentence-case sans per the concept, not the site-wide League-Gothic .section-heading — see FeaturedGrid.js for the full note. */}
+            {/* Sentence-case per the concept, not the site-wide League-Gothic .section-heading — see FeaturedGrid.js for the full note. */}
             <h2
               className="text-foreground mt-2"
               style={{
-                fontFamily: "var(--font-sans)",
-                fontWeight: 800,
-                letterSpacing: "-0.03em",
+                fontFamily: "var(--font-editorial)",
+                fontWeight: 880,
+                letterSpacing: "-0.05em",
                 fontSize: "clamp(2.1rem,4.6vw,4rem)",
                 lineHeight: 1.02,
               }}
             >
-              Brands that trusted us with <span className="text-accent">real growth.</span>
+              Brands that trusted us with real <SwitchWord words={["growth", "results"]} />
             </h2>
           </div>
           <p className="text-muted leading-relaxed text-[15px]">

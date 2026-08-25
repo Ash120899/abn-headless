@@ -23,6 +23,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { categoryNames } from "@/lib/case-study-shared";
 import { fetchCaseStudiesClient } from "@/lib/wp-proxy-client";
+import SwitchWord from "./SwitchWord";
 
 function ExploreCard({ item, categoriesMap }) {
   const cardRef = useRef(null);
@@ -76,7 +77,7 @@ function ExploreCard({ item, categoriesMap }) {
               className="object-cover"
             />
           ) : (
-            <span className="text-4xl text-muted" style={{ fontFamily: "var(--font-display)" }}>
+            <span className="text-4xl text-muted" style={{ fontFamily: "var(--font-editorial)", fontWeight: 800 }}>
               {item.title.charAt(0)}
             </span>
           )}
@@ -87,17 +88,6 @@ function ExploreCard({ item, categoriesMap }) {
         ) : null}
 
         <h3 className="font-bold text-[1.15rem] leading-snug text-foreground">{item.title}</h3>
-
-        <span
-          className="inline-flex items-center w-max mt-2 px-3 py-1 rounded-full text-[12px] font-bold"
-          style={{
-            color: "var(--accent)",
-            background: "color-mix(in srgb, var(--accent) 14%, transparent)",
-            border: "1px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
-          }}
-        >
-          {item.metric || "Case Study"}
-        </span>
 
         <p className="text-muted text-[13.5px] leading-relaxed mt-2 flex-1">
           {item.desc || "A closer look at the strategy, execution, and measurable results behind this project."}
@@ -226,22 +216,22 @@ export default function ExploreGrid({ categories, categoriesMap, totalCount, ini
           <span className="inline-block text-[11.5px] font-extrabold tracking-[0.24em] uppercase text-accent mb-4">
             Browse All Case Studies
           </span>
-          {/* Sentence-case sans per the concept, not the site-wide League-Gothic .section-heading — see FeaturedGrid.js for the full note. */}
+          {/* Sentence-case per the concept, not the site-wide League-Gothic .section-heading; typography + switching-word accent match FeaturedGrid.js's note. */}
           <h2
             className="text-foreground mt-2"
             style={{
-              fontFamily: "var(--font-sans)",
-              fontWeight: 800,
-              letterSpacing: "-0.03em",
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 880,
+              letterSpacing: "-0.05em",
               fontSize: "clamp(2.1rem,4.6vw,4rem)",
               lineHeight: 1.02,
             }}
           >
-            Find the <span className="text-accent">outcome</span> relevant to you.
+            Find the <SwitchWord words={["outcome", "result"]} /> relevant to you.
           </h2>
           <p className="text-muted text-sm max-w-[560px] mt-2.5">
-            Filter by service pillar, then load more results in place — no page reloads, no pagination to click
-            through.
+            Start with one of ABN Junction&apos;s five core pillars. Secondary filters only appear after you choose
+            a primary category, keeping the page simple as the case-study library grows.
           </p>
         </div>
 

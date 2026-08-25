@@ -80,17 +80,27 @@ export default async function CaseStudiesPage() {
 
   const categoriesMap = buildCategoryNameMap(categories);
 
+  // "Surprise me" tile in FeaturedGrid — picked fresh each request from data
+  // already fetched above (no extra WP round-trip just for this), preferring
+  // a case study not already shown as one of the 3 featured cards.
+  const featuredSlugs = new Set(featured.map((item) => item.slug));
+  const randomPool = firstPage.items.filter((item) => !featuredSlugs.has(item.slug));
+  const randomPick = (randomPool.length ? randomPool : firstPage.items)[
+    Math.floor(Math.random() * (randomPool.length ? randomPool.length : firstPage.items.length))
+  ];
+  const randomHref = randomPick ? `/case-studies/${randomPick.slug}` : "/case-studies#explore";
+
   return (
     <main className="bg-background text-foreground">
       <ScrollFX />
 
-      <HeroScene totalCount={totalCount} leadsSum={aggregate.leadsSum} reachSum={aggregate.reachSum} />
+      <HeroScene totalCount={totalCount} />
 
       <Marquee />
 
-      <FeaturedGrid items={featured} categoriesMap={categoriesMap} />
+      <FeaturedGrid items={featured} categoriesMap={categoriesMap} randomHref={randomHref} />
 
-      <NumbersBar totalCount={totalCount} leadsSum={aggregate.leadsSum} reachSum={aggregate.reachSum} lowestCpl={aggregate.lowestCpl} />
+      <NumbersBar totalCount={totalCount} />
 
       <TrustedLogos logoUrls={aggregate.logoUrls} />
 
