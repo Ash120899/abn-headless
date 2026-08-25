@@ -19,7 +19,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="dark" className="h-full antialiased">
+    // suppressHydrationWarning: browser extensions (e.g. focus-visible
+    // polyfills) commonly inject attributes/classes onto <html> before React
+    // hydrates, which otherwise logs a false-positive mismatch warning on
+    // every page — see https://nextjs.org/docs/messages/react-hydration-error.
+    // Only suppresses this element's own attributes, not its children.
+    <html lang="en" data-theme="dark" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-background text-foreground">
 
         <SiteHeader />

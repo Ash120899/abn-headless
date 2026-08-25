@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
 <link rel="icon" href="https://abnjunction.com/wp-content/uploads/2026/07/abn-logo.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#050708;
@@ -17,19 +17,38 @@
     --white:#f7fbfc;
     --muted:#a9b4ba;
     --line: rgba(255,255,255,.11);
+    --line-strong: rgba(255,255,255,.18);
     --cyan:#38c5e7;
     --violet:#6f5aff;
     --orange:#F97316;
-    --accent: var(--cyan);
-    --accent-2: var(--violet);
+    --accent: var(--orange);
+    --accent-2: var(--cyan);
     --max: 1320px;
+    /* Same stack as the real site's --font-sans (globals.css), matching the
+       fix applied to case-studies-listing.html — body copy uses the system
+       stack, League Gothic stays reserved for headings/stat numbers. */
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+  /* Light mode — identical scheme to case-studies-listing.html so the two
+     listing pages feel like one site: accent swaps orange (dark) / cyan (light),
+     matching the real site's [data-theme] tokens in globals.css. */
+  html[data-theme="light"]{
+    --bg:#ffffff;
+    --panel:#f6f7f9;
+    --panel-2:#edeff2;
+    --white:#11181d;
+    --muted:#5b6670;
+    --line: rgba(16,24,29,.12);
+    --line-strong: rgba(16,24,29,.22);
+    --accent: var(--cyan);
+    --accent-2: var(--orange);
   }
   *{ box-sizing: border-box; }
-  html{ scroll-behavior:smooth; background:var(--bg); }
+  html{ scroll-behavior:smooth; background:var(--bg); scrollbar-color:var(--accent) var(--bg); scrollbar-width:thin; }
   body{
     margin:0; background:var(--bg); color:var(--white);
-    font-family:'Barlow', sans-serif; font-size:16px; line-height:1.5;
-    overflow-x:hidden;
+    font-family:var(--font-sans); font-size:16px; line-height:1.3;
+    overflow-x:hidden; transition:background .3s ease, color .3s ease;
   }
   ::selection{ background:var(--accent); color:#0a0a0a; }
   img{ max-width:100%; display:block; }
@@ -40,7 +59,7 @@
   .accent-2{ color:var(--accent-2); }
   ::-webkit-scrollbar{ width:10px; }
   ::-webkit-scrollbar-track{ background:var(--bg); }
-  ::-webkit-scrollbar-thumb{ background:linear-gradient(var(--accent),var(--accent-2)); border-radius:8px; }
+  ::-webkit-scrollbar-thumb{ background:linear-gradient(var(--accent),var(--accent-2)); border-radius:999px; }
 
   .grain{
     position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.035; mix-blend-mode:overlay;
@@ -52,8 +71,8 @@
     transform:translate(-50%,-50%); will-change:transform;
   }
   .cursor-dot{ width:6px; height:6px; background:var(--accent); }
-  .cursor-ring{ width:34px; height:34px; border:1px solid rgba(255,255,255,.4); transition:width .25s,height .25s,border-color .25s,background .25s; }
-  .cursor-ring.big{ width:64px; height:64px; border-color:var(--accent); background:rgba(56,197,231,.08); }
+  .cursor-ring{ width:34px; height:34px; border:1px solid var(--line-strong); transition:width .25s,height .25s,border-color .25s,background .25s; }
+  .cursor-ring.big{ width:64px; height:64px; border-color:var(--accent); background:rgba(249,115,22,.08); }
   @media (pointer:coarse){ .cursor-dot,.cursor-ring{ display:none; } }
 
   #preloader{
@@ -66,9 +85,15 @@
 
   .site-header{
     position:fixed; top:0; left:0; right:0; z-index:9999; height:82px;
-    background:rgba(5,7,8,.7); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);
+    background:color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);
   }
   .header-inner{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+  .theme-toggle{
+    display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
+    border-radius:50%; border:1px solid var(--line); background:var(--panel); color:var(--white);
+    font-size:16px; cursor:pointer; transition:all .25s ease; flex-shrink:0;
+  }
+  .theme-toggle:hover{ border-color:var(--accent); color:var(--accent); }
   .logo img{ height:34px; width:auto; }
   .nav{ display:flex; align-items:center; gap:clamp(16px,3vw,34px); }
   .nav a{ font-size:12.5px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); position:relative; padding:6px 0; }
@@ -79,7 +104,7 @@
     background:var(--accent); color:#0a0a0a; font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:.04em;
     transition:transform .3s ease, box-shadow .3s ease;
   }
-  .cta-pill:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(56,197,231,.35); }
+  .cta-pill:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(249,115,22,.35); }
   .cta-pill.big{ padding:18px 34px; font-size:16px; }
   @media (max-width:880px){ .nav{ display:none; } }
 
@@ -87,26 +112,45 @@
     position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
     padding-top:82px; overflow:hidden;
   }
-  #hero-canvas{ position:absolute; inset:0; z-index:0; opacity:.9; }
+  #hero-particles{ position:absolute; inset:0; z-index:0; }
   .hero-glow{
     position:absolute; inset:0; z-index:1; pointer-events:none;
-    background:radial-gradient(ellipse 60% 50% at 50% 15%, rgba(56,197,231,.15), transparent 60%),
-               radial-gradient(ellipse 50% 40% at 85% 80%, rgba(111,90,255,.15), transparent 60%);
+    background:radial-gradient(ellipse 60% 50% at 50% 15%, rgba(249,115,22,.15), transparent 60%),
+               radial-gradient(ellipse 50% 40% at 85% 80%, rgba(56,197,231,.15), transparent 60%);
   }
-  .hero-inner{ position:relative; z-index:2; text-align:center; padding-top:40px; }
+  .hero-inner{ position:relative; z-index:2; padding-top:10px; display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:32px; }
+  .hero-copy{ max-width:640px; }
   .eyebrow{
     display:inline-flex; align-items:center; gap:10px; font-size:12px; font-weight:800; letter-spacing:.3em;
     text-transform:uppercase; color:var(--accent); margin-bottom:22px;
   }
   .eyebrow::before{ content:''; width:28px; height:1px; background:var(--accent); }
-  .hero-title{ font-size:clamp(2.5rem, 7.6vw, 6.1rem); line-height:.98; }
+  .hero-title{ font-size:clamp(2.5rem, 6.4vw, 5.4rem); line-height:.98; }
   .hero-title .line{ display:block; overflow:hidden; }
   .hero-title .line span{ display:block; }
-  .hero-sub{ max-width:640px; margin:26px auto 0; color:var(--muted); font-size:clamp(1rem,1.6vw,1.2rem); line-height:1.6; }
-  .hero-stats{ display:flex; justify-content:center; gap:clamp(28px,6vw,80px); margin-top:56px; flex-wrap:wrap; }
-  .stat{ text-align:center; }
-  .stat strong{ display:block; font-family:'League Gothic',sans-serif; font-size:clamp(2.2rem,4vw,3.4rem); color:var(--white); }
-  .stat span{ display:block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:4px; }
+  .hero-sub{ max-width:600px; margin-top:22px; color:var(--muted); font-size:clamp(1rem,1.4vw,1.15rem); line-height:1.6; }
+  .hero-stats{ display:flex; gap:14px; flex-wrap:wrap; margin-top:32px; }
+  .stat{ min-width:140px; padding:14px 17px 13px; border:1px solid var(--line); border-radius:20px; background:var(--panel); }
+  .stat strong{ display:block; font-family:'League Gothic',sans-serif; font-size:1.9rem; color:var(--white); }
+  .stat span{ display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+
+  /* Video panel on the right — real rendered "ABN Junction orbit" MP4,
+     background keyed to transparent via ffmpeg colorkey (dark backdrop this
+     time, keys much cleaner than the earlier light-studio-background
+     attempt). aspect-ratio:16/9 matches the source exactly so the
+     object-fit:cover-style draw in JS needs zero side-cropping. Stays
+     transparent — no panel background — with a drop-shadow on the canvas
+     itself so the shapes (sphere, badges, lines) get a defining dark edge
+     against a light page instead of sitting in a solid dark box. */
+  .hero-video-panel{ position:relative; aspect-ratio:16/9; }
+  .hero-sequence{ position:absolute; inset:0; width:100%; height:100%; filter:drop-shadow(2px 4px 6px black); }
+  @media (max-width:1180px){
+    .hero-inner{ grid-template-columns:1fr; }
+    .hero-video-panel{ margin-top:24px; }
+  }
+  @media (max-width:760px){
+    .hero-copy{ max-width:none; }
+  }
 
   .scroll-cue{
     position:absolute; bottom:32px; left:50%; transform:translateX(-50%); z-index:2;
@@ -124,29 +168,145 @@
   @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
   section{ position:relative; z-index:2; }
-  .section-tag{ display:inline-block; font-size:11.5px; font-weight:800; letter-spacing:.24em; text-transform:uppercase; color:var(--accent-2); margin-bottom:18px; }
+  .section-tag{ display:inline-block; font-size:11.5px; font-weight:800; letter-spacing:.24em; text-transform:uppercase; color:var(--accent); margin-bottom:18px; }
 
+  /* Section intro headings — big, bold, sentence-case sans (matches the
+     client's V4 magnetic concept, and the same shared pattern already used
+     on case-studies-listing.html so both listing pages read as one system). */
+  .section-head{ display:grid; grid-template-columns:minmax(0,1.15fr) minmax(260px,.65fr); gap:34px; align-items:end; margin-bottom:34px; }
+  .section-head h2, .team-head h2, .cases-head h2, .tools-head h2{
+    font-family:var(--font-sans); text-transform:none; font-weight:800; letter-spacing:-.03em;
+    font-size:clamp(2.1rem,4.6vw,4rem); line-height:1.02; color:var(--white); margin-top:10px;
+  }
+  .section-head p, .team-head p, .cases-head p, .tools-head p{ color:var(--muted); line-height:1.65; font-size:15.5px; }
+  @media (max-width:900px){ .section-head{ grid-template-columns:1fr; } }
+
+  /* FEATURED — 5-cell magnetic-concept layout: lead story, support story, a
+     "random article" discovery tile, a mini recent/topics side panel, and a
+     rotating strategy-call CTA card. Real posts feed feature-main/support-
+     story/random-box/side panel; only the swap-card copy is decorative. */
   .featured{ padding:110px 0 40px; }
-  .featured-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:10px; }
-  .feat-card{ perspective:1000px; }
-  .feat-inner{
-    background:#111111; border:1px solid rgba(255,255,255,.10); border-radius:20px;
-    display:flex; flex-direction:column; height:100%; padding:18px;
-    transform-style:preserve-3d; transition:box-shadow .3s ease, border-color .3s ease;
+  /* Masonry-style columns, not a 2-row grid: earlier, support-story/random-box
+     shared "row 1" with side-panel-wrap/cta-swap-card in "row 2" — a shared
+     grid row is only as tall as its tallest occupant, so whichever column had
+     the shorter row-1 card left a visible gap before row 2 started, even
+     though neither card had blank space inside it anymore. Wrapping each
+     column's two cards in their own flex-column (.col-2/.col-3) lets each
+     column size to its own content, independent of the others.
+     col-2 (support-story + the 2 side panels) is naturally the tallest, real
+     content varying — so align-items:stretch makes it the shared target
+     height, and feature-main/col-3 stretch to match it. The extra space each
+     gets is sent somewhere that reads as intentional rather than empty:
+     feature-main's image grows (a bigger hero image, not a gap — see
+     .feature-main .blog-visual below), and col-3's two cards spread apart via
+     justify-content:space-between so the gap sits cleanly between them. */
+  .featured-layout{ display:grid; grid-template-columns:1.18fr .82fr .82fr; gap:24px; align-items:start; }
+  /* Height is set inline by equalizeFeaturedHeights() (JS) once col-2's real
+     rendered height is known — percentage heights here would need to resolve
+     through 3 nested levels (grid row → flex column → flex child), which
+     CSS Grid's auto-sized rows don't reliably guarantee across browsers.
+     Measuring and setting a real pixel height is the dependable version. */
+  .feature-main{ min-height:520px; }
+  .col-2, .col-3{ display:flex; flex-direction:column; gap:24px; justify-content:space-between; }
+  .blog-card{
+    position:relative; border:1px solid var(--line); border-radius:26px; overflow:hidden;
+    background:var(--panel-2); box-shadow:0 20px 45px rgba(0,0,0,.35); display:flex; flex-direction:column;
   }
-  .feat-inner:hover{ box-shadow:0 20px 45px rgba(0,0,0,.45); border-color:rgba(255,255,255,.18); }
-  .feat-media{
-    position:relative; height:210px; border-radius:10px; overflow:hidden; background:#141414;
-    display:flex; align-items:center; justify-content:center; margin-bottom:16px; flex-shrink:0;
+  /* height (not min-height) is required here — the <img> inside uses
+     height:100%, which only resolves against a definite parent height. With
+     only min-height, a wide/short WP banner image renders at its own
+     natural (much shorter) height instead of being cropped to fill via
+     object-fit:cover, leaving dark filler space below it. */
+  .blog-visual{ position:relative; height:200px; overflow:hidden; background:var(--panel); flex-shrink:0; }
+  .blog-visual img{ width:100%; height:100%; object-fit:cover; }
+  /* flex:1 (not a fixed height) so the image grows to soak up whatever extra
+     room feature-main has once it's stretched to match col-2's height — a
+     bigger hero image reads as intentional, unlike blank space would. */
+  .feature-main .blog-visual{ flex:1 1 auto; height:auto; min-height:280px; max-height:440px; }
+  /* Decorative fallback pattern when a post has no featured image — cycled
+     across the 2 real featured cards for visual variety, same idea as the
+     ideation's hand-picked pattern-yellow/red/blue treatments. */
+  .visual-pattern{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+  .pattern-1{ background:color-mix(in srgb, var(--orange) 24%, var(--panel-2)); }
+  .pattern-2{ background:color-mix(in srgb, var(--cyan) 22%, var(--panel-2)); }
+  .pattern-3{ background:color-mix(in srgb, var(--violet) 22%, var(--panel-2)); }
+  .visual-pattern .ph{ font-family:'League Gothic',sans-serif; font-size:2.6rem; color:rgba(255,255,255,.6); }
+  .feature-badge{
+    position:absolute; left:16px; top:16px; z-index:2; padding:8px 13px; border-radius:999px;
+    background:rgba(7,10,13,.62); backdrop-filter:blur(10px); font-size:11px; font-weight:900;
+    letter-spacing:.14em; text-transform:uppercase; color:#fff;
   }
-  .feat-media img{ width:100%; height:100%; object-fit:contain; }
-  .feat-media .ph{ font-family:'League Gothic',sans-serif; font-size:2.6rem; color:rgba(255,255,255,.5); }
-  .feat-date{ font-size:11.5px; color:var(--muted); margin-bottom:6px; display:block; }
-  .feat-title{ font-family:'Barlow',sans-serif; font-weight:700; font-size:1.2rem; line-height:1.3; color:var(--white); text-transform:none; letter-spacing:0; }
-  .feat-desc{ color:var(--muted); font-size:13.5px; line-height:1.6; margin-top:8px; flex:1; }
+  /* No flex:1 here on purpose: earlier this stretched to fill the grid row's
+     full height (feature-main spans 2 rows, so it's often much taller than
+     its own text), which pushed a big gap in between the excerpt and the
+     "Read the Article" link. Natural height + any real leftover space
+     collects at the very bottom of the card instead, which reads as normal
+     card padding rather than a gap mid-sentence. */
+  .blog-body{ padding:24px 24px 26px; display:flex; flex-direction:column; }
+  .blog-type{ font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  .blog-title{ font-family:var(--font-sans); text-transform:none; font-weight:800; letter-spacing:-.03em; font-size:clamp(1.65rem,2vw,2rem); line-height:1.08; margin-top:12px; color:var(--white); }
+  .feature-main .blog-title{ font-size:clamp(2.1rem,3.6vw,3rem); }
+  .blog-desc{ margin-top:10px; color:var(--muted); font-size:14.5px; line-height:1.6; }
+  .card-link{ margin-top:16px; display:inline-flex; font-weight:800; font-size:13px; color:var(--accent); }
+  .random-box{ display:grid; place-items:center; text-align:center; min-height:260px; padding:26px; background:#050505; color:#fff; }
+  .random-box .big-kicker{ font-family:var(--font-sans); text-transform:none; font-weight:800; letter-spacing:-.03em; font-size:clamp(1.7rem,2.6vw,2.1rem); }
+  .random-box p{ margin:12px 0 0; color:rgba(255,255,255,.6); font-size:13px; }
+  .random-box .eyebrow{ justify-content:center; color:var(--orange); }
+  .side-panel{ border:1px solid var(--line); border-radius:22px; padding:22px; background:var(--panel); }
+  .side-panel h4{ font-family:'League Gothic',sans-serif; font-size:1.1rem; text-transform:uppercase; letter-spacing:.06em; margin-bottom:14px; }
+  .side-list{ display:grid; gap:11px; }
+  .side-link{ padding-bottom:10px; border-bottom:1px dashed var(--line); font-weight:600; font-size:13px; color:var(--muted); cursor:pointer; background:none; border-left:0; border-right:0; border-top:0; text-align:left; font-family:inherit; }
+  .side-link:hover{ color:var(--white); }
+  .side-link:last-child{ border-bottom:0; padding-bottom:0; }
+  .cta-swap-card{
+    border:1px solid var(--line); border-radius:24px; padding:22px; background:linear-gradient(145deg, var(--panel), var(--panel-2));
+    display:flex; flex-direction:column; justify-content:space-between; min-height:260px; position:relative; overflow:hidden;
+  }
+  .swap-label{ font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  .swap-headline{ font-family:var(--font-sans); text-transform:none; font-weight:800; letter-spacing:-.03em; font-size:1.35rem; line-height:1.15; margin-top:10px; color:var(--white); min-height:2.2em; }
+  .swap-copy-wrap{ position:relative; min-height:80px; margin-top:8px; }
+  .swap-copy{ position:absolute; inset:0; opacity:0; transform:translateY(12px); transition:opacity .4s ease, transform .4s ease; color:var(--muted); font-size:13px; line-height:1.6; }
+  .swap-copy.active{ opacity:1; transform:none; }
+  .swap-actions{ display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+  .btn-outline{
+    display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:999px; border:1px solid var(--line);
+    background:transparent; color:var(--white); font-weight:700; font-size:12.5px; cursor:pointer; transition:all .25s ease;
+  }
+  .btn-outline:hover{ border-color:var(--accent); color:var(--accent); }
+  .swap-dots{ display:flex; gap:7px; margin-top:14px; }
+  .swap-dots span{ width:7px; height:7px; border-radius:50%; background:var(--line); transition:.3s ease; }
+  .swap-dots span.active{ background:var(--accent); transform:scale(1.15); }
+  @media (max-width:1180px){
+    /* feature-main spans the full width in its own row; col-2/col-3 fall
+       into the next row side by side automatically (grid auto-placement) —
+       no explicit grid-row needed since nothing spans multiple rows anymore. */
+    .featured-layout{ grid-template-columns:1fr 1fr; }
+    .feature-main{ grid-column:1 / -1; }
+  }
+  @media (max-width:760px){
+    .featured-layout{ grid-template-columns:1fr; }
+    .feature-main{ grid-column:auto; }
+  }
+
+  /* Why ABN Insights — pinned horizontal scroll on desktop (see setupHorizontalTeam),
+     a plain swipeable row on touch/narrow screens. */
+  .team-banner{ padding:70px 0 90px; border-top:1px solid var(--line); overflow:hidden; }
+  .team-head{ margin-bottom:50px; }
+  .team-track-wrap{ overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .team-track-wrap::-webkit-scrollbar{ display:none; }
+  .team-grid{ display:flex; gap:24px; width:max-content; padding:4px 420px 20px 4px; }
+  .team-card{
+    width:min(78vw,320px); flex:0 0 auto; padding:30px 28px; border-radius:22px;
+    background:var(--panel); border:1px solid var(--line); display:flex; flex-direction:column; justify-content:space-between; min-height:220px;
+  }
+  .team-num{ font-size:11px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); }
+  .team-card strong{ display:block; color:var(--white); font-size:17px; margin-top:14px; margin-bottom:10px; }
+  .team-card span{ display:block; color:var(--muted); font-size:13.5px; line-height:1.6; }
+  @media (min-width:900px){ .team-card{ width:320px; } }
 
   .explore{ padding:70px 0 130px; }
   .explore-head{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; }
+  .explore-sub{ color:var(--muted); font-size:15.5px; line-height:1.65; max-width:620px; margin-top:10px; }
   .data-status{ display:inline-flex; align-items:center; gap:8px; font-size:11.5px; color:var(--muted); letter-spacing:.05em; border:1px solid var(--line); padding:7px 14px; border-radius:999px; }
   .data-status .dot{ width:7px; height:7px; border-radius:50%; background:#4ade80; box-shadow:0 0 8px #4ade80; }
   .data-status.mock .dot{ background:#facc15; box-shadow:0 0 8px #facc15; }
@@ -155,7 +315,7 @@
   .filter-search-row{ display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-top:30px; }
   .filters{ display:flex; flex-wrap:wrap; gap:10px; margin:0 0 46px; }
   .filter-pill{ display:inline-flex; align-items:center; gap:8px; padding:11px 20px; border-radius:999px; border:1px solid var(--line); background:var(--panel); color:var(--muted); font-size:13px; font-weight:700; cursor:pointer; transition:all .25s ease; }
-  .filter-pill:hover{ border-color:rgba(56,197,231,.4); color:var(--white); }
+  .filter-pill:hover{ border-color:color-mix(in srgb, var(--accent) 40%, transparent); color:var(--white); }
   .filter-pill.active{ background:var(--accent); border-color:var(--accent); color:#0a0a0a; }
   .filter-pill .count{ opacity:.65; font-weight:600; font-size:11.5px; }
   .filter-pill.active .count{ opacity:.8; }
@@ -164,20 +324,20 @@
   .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:26px; min-height:200px; }
   .card{ perspective:1200px; }
   .card-inner{
-    background:#111111; border:1px solid rgba(255,255,255,.10); border-radius:20px;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:20px;
     display:flex; flex-direction:column; height:100%; padding:18px;
     transform-style:preserve-3d; transition:box-shadow .3s ease, border-color .3s ease;
   }
-  .card:hover .card-inner{ box-shadow:0 20px 45px rgba(0,0,0,.45); border-color:rgba(255,255,255,.18); }
+  .card:hover .card-inner{ box-shadow:0 20px 45px rgba(0,0,0,.45); border-color:var(--line-strong); }
   .card-media{
-    position:relative; height:190px; border-radius:10px; overflow:hidden; background:#141414;
+    position:relative; height:190px; border-radius:10px; overflow:hidden; background:var(--panel);
     display:flex; align-items:center; justify-content:center; margin-bottom:16px; flex-shrink:0;
   }
   .card-media img{ width:100%; height:100%; object-fit:contain; }
-  .card-media .ph{ font-family:'League Gothic',sans-serif; font-size:2.4rem; color:rgba(255,255,255,.5); }
+  .card-media .ph{ font-family:'League Gothic',sans-serif; font-size:2.4rem; color:var(--muted); }
   .card-date{ font-size:11.5px; color:var(--muted); display:block; margin-bottom:6px; }
-  .card-title{ font-family:'Barlow',sans-serif; font-weight:700; font-size:1.1rem; line-height:1.3; color:var(--white); text-transform:none; letter-spacing:0; }
-  .card-desc{ color:var(--muted); font-size:13.5px; line-height:1.6; margin-top:8px; flex:1; }
+  .card-title{ font-family:var(--font-sans); font-weight:700; font-size:1.1rem; line-height:1.3; color:var(--white); text-transform:none; letter-spacing:0; }
+  .card-desc{ color:var(--muted); font-size:14px; line-height:1.6; margin-top:8px; }
 
   .empty-state{ grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--muted); }
 
@@ -191,77 +351,67 @@
   .sidebar{ display:flex; flex-direction:column; gap:28px; position:sticky; top:110px; }
   .widget{ background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:26px; }
   .widget h4{ font-family:'League Gothic',sans-serif; font-size:1.15rem; text-transform:uppercase; letter-spacing:.08em; color:var(--white); margin-bottom:18px; }
-  .recent-item{ display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); }
-  .recent-item:last-child{ border-bottom:none; }
-  .recent-thumb{ width:56px; height:56px; border-radius:10px; overflow:hidden; flex:0 0 56px; background:linear-gradient(135deg, rgba(56,197,231,.25), rgba(111,90,255,.2)); }
-  .recent-thumb img{ width:100%; height:100%; object-fit:cover; }
-  .recent-info a{ font-size:13px; font-weight:700; line-height:1.35; color:var(--white); display:block; }
-  .recent-info a:hover{ color:var(--accent); }
-  .recent-info span{ font-size:11px; color:var(--muted); margin-top:4px; display:block; }
   .cat-list{ display:flex; flex-direction:column; gap:4px; }
   .cat-list button{ all:unset; display:flex; justify-content:space-between; align-items:center; padding:10px 6px; border-radius:8px; cursor:pointer; color:var(--muted); font-size:13.5px; font-weight:600; }
-  .cat-list button:hover{ background:rgba(255,255,255,.04); color:var(--white); }
+  .cat-list button:hover{ background:var(--panel-2); color:var(--white); }
   .cat-list button.active{ color:var(--accent); }
   .cat-list button span{ font-size:11px; color:var(--muted); }
 
-  .cta-block{ padding:130px 0; border-top:1px solid var(--line); background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(56,197,231,.08), transparent 70%); }
-  .cta-inner{ text-align:center; max-width:820px; margin:0 auto; }
-  .cta-inner h2{ font-size:clamp(2.2rem,5.5vw,3.8rem); line-height:1.08; margin-bottom:22px; }
-  .cta-inner p{ color:var(--muted); font-size:1.1rem; margin-bottom:38px; }
+  /* Cases bridge — links blog back to real case studies */
+  .cases-bridge{ padding:90px 0; border-top:1px solid var(--line); }
+  .case-track{ display:grid; grid-auto-flow:column; grid-auto-columns:minmax(280px,1fr); gap:22px; overflow-x:auto; padding-bottom:10px; }
+  .case-mini{ border:1px solid var(--line); border-radius:22px; padding:22px; background:var(--panel); }
+  .case-meta{ display:flex; justify-content:space-between; gap:12px; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .case-mini h4{ font-family:var(--font-sans); text-transform:none; font-weight:800; letter-spacing:-.02em; font-size:1.3rem; margin-top:12px; color:var(--white); }
+  .case-mini .metric{ font-size:1.7rem; font-weight:900; color:var(--accent); margin-top:6px; font-family:'League Gothic',sans-serif; }
+  .case-mini p{ color:var(--muted); font-size:13px; margin-top:8px; }
+  .case-mini .card-link{ margin-top:12px; }
 
-  .site-footer{ border-top:1px solid var(--line); padding:34px 0; }
-  .footer-inner{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; color:var(--muted); font-size:13px; }
-  .footer-inner a{ color:var(--accent); font-weight:700; }
-
-  @media (max-width:1080px){
-    .blog-layout{ grid-template-columns:1fr; }
-    .sidebar{ position:static; flex-direction:row; flex-wrap:wrap; }
-    .widget{ flex:1; min-width:260px; }
-  }
-  @media (max-width:980px){
-    .featured-grid{ grid-template-columns:1fr; }
-    .grid{ grid-template-columns:1fr; }
-  }
-  @media (max-width:640px){
-    .hero-stats{ gap:30px; }
-    .sidebar{ flex-direction:column; }
-  }
-
-  /* Why ABN Junction — pinned horizontal scroll on desktop (see setupHorizontalTeam),
-     a plain swipeable row on touch/narrow screens. */
-  .team-banner{ padding:70px 0 90px; border-top:1px solid var(--line); overflow:hidden; }
-  .team-head{ text-align:center; margin-bottom:50px; }
-  .team-head h2{ font-size:clamp(1.7rem,3.4vw,2.4rem); margin-top:14px; }
-  .team-track-wrap{ overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
-  .team-track-wrap::-webkit-scrollbar{ display:none; }
-  /* Right padding is deliberately large: it guarantees the track is wider than
-     its wrap regardless of card count/viewport, so the pinned horizontal-scroll
-     in setupHorizontalTeam always has real distance to travel — with only 3
-     cards, natural content width didn't overflow a 1320px wrap at all, so the
-     track never moved. */
-  .team-grid{ display:flex; gap:28px; width:max-content; padding:4px 420px 20px 4px; }
-  .team-card{
-    width:min(80vw,360px); flex:0 0 auto; padding:34px 30px; border-radius:22px;
-    background:var(--panel); border:1px solid var(--line);
-  }
-  .team-card img{ height:34px; width:auto; margin-bottom:22px; }
-  .team-card strong{ display:block; color:var(--white); font-size:16px; margin-bottom:10px; }
-  .team-card span{ display:block; color:var(--muted); font-size:13.5px; line-height:1.6; }
-  @media (min-width:900px){ .team-card{ width:360px; } }
+  /* Tools rail */
+  .tools{ padding:70px 0 100px; }
+  .tool-rail{ display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:16px; margin-top:28px; }
+  .tool-card{ padding:22px; border:1px solid var(--line); border-radius:20px; background:var(--panel); display:flex; align-items:center; gap:10px; justify-content:center; min-height:88px; font-weight:800; font-size:13px; color:var(--white); transition:transform .2s ease, border-color .2s ease; }
+  .tool-card:hover{ transform:translateY(-3px); border-color:var(--line-strong); }
+  .tool-logo{ width:18px; height:18px; display:grid; place-items:center; position:relative; flex:0 0 18px; }
+  .tool-logo.ads::before{ content:""; position:absolute; width:8px; height:15px; background:#5bb8ff; border-radius:6px 6px 2px 2px; transform:rotate(25deg); left:3px; top:1px; }
+  .tool-logo.ads::after{ content:""; position:absolute; width:7px; height:7px; background:#f0b253; border-radius:50%; right:0; bottom:1px; }
+  .tool-logo.meta::before{ content:"∞"; position:static; color:#5ba6ff; font-weight:900; font-size:14px; }
+  .tool-logo.ga4::before{ content:""; position:absolute; width:4px; height:13px; background:#f0ad54; border-radius:10px; left:2px; bottom:1px; box-shadow:6px -4px 0 0 #d79242, 12px -8px 0 0 #5bb8ff; }
+  .tool-logo.wp::before{ content:"W"; position:static; width:18px; height:18px; border-radius:50%; display:grid; place-items:center; background:#1e2f3d; color:#fff; font-size:10px; font-weight:900; }
+  .tool-logo.shop::before{ content:"S"; position:static; width:18px; height:18px; border-radius:4px; display:grid; place-items:center; background:#86c268; color:#fff; font-size:10px; font-weight:900; }
+  .tool-logo.search::before{ content:""; position:absolute; width:11px; height:11px; border:2px solid #6abcf7; border-radius:50%; left:1px; top:1px; }
+  .tool-logo.search::after{ content:""; position:absolute; width:7px; height:2px; background:#6abcf7; right:-1px; bottom:1px; transform:rotate(42deg); border-radius:2px; }
+  .tool-logo.merchant::before{ content:"M"; position:static; width:18px; height:18px; border-radius:5px; display:grid; place-items:center; background:#f5d3a6; color:#7e5220; font-size:10px; font-weight:900; }
+  .tool-logo.next::before{ content:"N"; position:static; width:18px; height:18px; border-radius:50%; display:grid; place-items:center; background:#111; color:#fff; font-size:10px; font-weight:900; border:1px solid rgba(255,255,255,.14); }
+  .tool-logo.figma::before{ content:"F"; position:static; width:18px; height:18px; border-radius:6px; display:grid; place-items:center; background:#7d6bff; color:#fff; font-size:10px; font-weight:900; }
+  .tool-logo.analytics::before{ content:""; position:absolute; width:4px; height:13px; background:#f0ad54; border-radius:10px; left:2px; bottom:1px; box-shadow:6px -3px 0 0 #5bb8ff, 12px -8px 0 0 #8ec8b6; }
+  @media (max-width:1080px){ .tool-rail{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:640px){ .tool-rail{ grid-template-columns:1fr 1fr; } }
 
   /* Search */
-  .search-box{ position:relative; width:min(320px, 100%); }
+  .search-box{ position:relative; width:min(340px, 100%); }
   .search-box input{
-    width:100%; padding:12px 40px 12px 16px; border-radius:999px; border:1px solid var(--line);
-    background:var(--panel); color:var(--white); font-family:inherit; font-size:13.5px;
+    width:100%; height:52px; padding:0 44px 0 20px; border-radius:999px; border:1px solid var(--line);
+    background:var(--panel-2); color:var(--white); font-family:inherit; font-size:14px; font-weight:500;
+    box-shadow:0 10px 26px rgba(0,0,0,.22); transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
   }
   .search-box input::placeholder{ color:var(--muted); }
-  .search-box input:focus{ outline:none; border-color:var(--accent); }
-  .search-box .search-icon{ position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:14px; pointer-events:none; }
-  .search-box .search-clear{
-    position:absolute; right:10px; top:50%; transform:translateY(-50%); width:20px; height:20px; border-radius:50%;
-    border:none; background:var(--line); color:var(--white); font-size:11px; cursor:pointer; display:none; align-items:center; justify-content:center;
+  .search-box input:hover{ border-color:var(--line-strong); }
+  .search-box input:focus{
+    outline:none; border-color:var(--accent); background:var(--panel);
+    box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent), 0 10px 26px rgba(0,0,0,.22);
   }
+  .search-box .search-icon{
+    position:absolute; right:16px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:15px; pointer-events:none;
+    transition:color .2s ease;
+  }
+  .search-box input:focus ~ .search-icon{ color:var(--accent); }
+  .search-box .search-clear{
+    position:absolute; right:12px; top:50%; transform:translateY(-50%); width:24px; height:24px; border-radius:50%;
+    border:none; background:var(--line-strong); color:var(--white); font-size:12px; cursor:pointer; display:none; align-items:center; justify-content:center;
+    transition:background .2s ease;
+  }
+  .search-box .search-clear:hover{ background:var(--accent); color:#0a0a0a; }
   .search-box.has-query .search-icon{ display:none; }
   .search-box.has-query .search-clear{ display:flex; }
   .search-note{ display:none; font-size:12.5px; color:var(--muted); margin:-30px 0 30px; }
@@ -278,7 +428,7 @@
   .tag-pill.active{ background:var(--accent); border-color:var(--accent); color:#0a0a0a; }
 
   /* Newsletter */
-  .newsletter{ padding:0 0 130px; }
+  .newsletter{ padding:0 0 100px; }
   .newsletter-inner{
     text-align:center; max-width:640px; margin:0 auto; padding:56px 32px; border-radius:24px;
     background:var(--panel); border:1px solid var(--line);
@@ -299,6 +449,65 @@
   .newsletter-success{ display:none; align-items:center; justify-content:center; gap:10px; color:var(--accent); font-weight:700; }
   .newsletter-success.show{ display:flex; }
   .newsletter-form.hide{ display:none; }
+
+  /* CTA duo — character card (bridges to Case Studies) + steps bar, same
+     "always dark" character-card pattern as case-studies-listing.html. A
+     real character illustration wasn't extractable from the source file
+     (huge inline base64 image); an emoji stands in for it here. */
+  .cta-duo-wrap{ padding:70px 0 0; }
+  .cta-duo{ display:grid; grid-template-columns:1.3fr .7fr; gap:20px; align-items:stretch; }
+  .character-panel, .resource-panel{ border-radius:24px; }
+  .character-panel{
+    background:#0d1115; border:1px solid rgba(255,255,255,.11); color:#fff;
+    padding:28px; display:grid; grid-template-columns:140px 1fr; gap:22px; align-items:center;
+  }
+  .character-figure{ position:relative; display:grid; place-items:center; min-height:120px; }
+  .character-emoji{ font-size:76px; line-height:1; display:block; }
+  .character-bubble{
+    position:absolute; top:-6px; right:-8px; max-width:150px; background:#fff; color:#0a0a0a;
+    padding:9px 12px; border-radius:14px; font-size:12px; font-weight:700; line-height:1.25; opacity:0; transform:scale(.65);
+  }
+  .character-bubble::after{ content:""; position:absolute; left:16px; bottom:-7px; border:8px solid transparent; border-top-color:#fff; border-bottom:0; }
+  .character-panel h3{ font-family:var(--font-sans); text-transform:none; font-weight:800; letter-spacing:-.03em; font-size:clamp(1.5rem,2.4vw,2rem); }
+  .character-panel p{ margin-top:10px; color:rgba(255,255,255,.62); font-size:13.5px; line-height:1.55; }
+  .resource-panel{
+    background:linear-gradient(135deg, var(--panel-2), var(--panel)); border:1px solid var(--line); color:var(--white);
+    display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start; padding:30px 32px; transition:all .25s ease;
+  }
+  .resource-panel:hover{ transform:translateY(-4px); border-color:var(--accent); }
+  /* Bigger, so the 3 stacked words ("Go To / Case / Studies") actually fill
+     the panel's width instead of sitting small in a lot of empty space. */
+  .resource-panel strong{ font-family:'League Gothic',sans-serif; font-size:clamp(2.2rem,4.2vw,3.4rem); line-height:.96; text-transform:uppercase; }
+  .resource-panel span{ align-self:flex-end; font-size:32px; color:var(--accent); margin-top:14px; }
+  .steps-bar{
+    margin-top:26px; padding:22px; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    display:flex; justify-content:center; gap:20px; flex-wrap:wrap; color:var(--white); font-weight:800; font-size:14px;
+  }
+  .steps-bar span{ position:relative; padding-right:16px; }
+  .steps-bar span:not(:last-child)::after{ content:"→"; position:absolute; right:-6px; color:var(--accent); }
+  @media (max-width:900px){ .cta-duo{ grid-template-columns:1fr; } .character-panel{ grid-template-columns:90px 1fr; padding:22px; } .character-emoji{ font-size:52px; } }
+
+  .cta-block{ padding:130px 0; border-top:1px solid var(--line); background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(249,115,22,.08), transparent 70%); }
+  .cta-inner{ text-align:center; max-width:820px; margin:0 auto; }
+  .cta-inner h2{ font-size:clamp(2.2rem,5.5vw,3.8rem); line-height:1.08; margin-bottom:22px; }
+  .cta-inner p{ color:var(--muted); font-size:1.1rem; margin-bottom:38px; }
+
+  .site-footer{ border-top:1px solid var(--line); padding:34px 0; }
+  .footer-inner{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; color:var(--muted); font-size:13px; }
+  .footer-inner a{ color:var(--accent); font-weight:700; }
+
+  @media (max-width:1080px){
+    .blog-layout{ grid-template-columns:1fr; }
+    .sidebar{ position:static; flex-direction:row; flex-wrap:wrap; }
+    .widget{ flex:1; min-width:260px; }
+  }
+  @media (max-width:980px){
+    .grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width:640px){
+    .hero-stats{ gap:30px; }
+    .sidebar{ flex-direction:column; }
+  }
 
   /* Scroll progress bar */
   .scroll-progress{ position:fixed; top:0; left:0; right:0; height:3px; z-index:100001; pointer-events:none; }
@@ -327,24 +536,31 @@
       <a href="https://abnjunction.com/case-studies/">Case Studies</a>
     </nav>
     <a class="cta-pill" href="https://abnjunction.com/contact-us/">Book a Strategy Call →</a>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme">☾</button>
   </div>
 </header>
 
 <main>
   <section class="hero">
-    <canvas id="hero-canvas"></canvas>
+    <canvas id="hero-particles"></canvas>
     <div class="hero-glow"></div>
     <div class="wrap hero-inner">
-      <span class="eyebrow">Insights &amp; Ideas</span>
-      <h1 class="hero-title">
-        <span class="line"><span>IDEAS THAT MOVE</span></span>
-        <span class="line"><span class="accent">THE NEEDLE.</span></span>
-      </h1>
-      <p class="hero-sub">Deep dives on SEO, performance marketing, brand strategy, and everything else we obsess over — straight from the team behind the results.</p>
-      <div class="hero-stats">
-        <div class="stat"><strong data-count="57" data-suffix="+">0</strong><span>Articles Published</span></div>
-        <div class="stat"><strong data-count="10" data-suffix="+">0</strong><span>Topics Covered</span></div>
-        <div class="stat"><strong>Weekly</strong><span>New Insights</span></div>
+      <div class="hero-copy">
+        <span class="eyebrow">Insights &amp; Ideas</span>
+        <h1 class="hero-title">
+          <span class="line"><span>IDEAS THAT MOVE</span></span>
+          <span class="line"><span class="accent">THE NEEDLE.</span></span>
+        </h1>
+        <p class="hero-sub">Deep dives on SEO, performance marketing, brand strategy, and everything else we obsess over — straight from the team behind the results.</p>
+        <div class="hero-stats">
+          <div class="stat"><strong data-count="57" data-suffix="+">0</strong><span>Articles Published</span></div>
+          <div class="stat"><strong data-count="10" data-suffix="+">0</strong><span>Topics Covered</span></div>
+          <div class="stat"><strong data-count="5">0</strong><span>Service Pillars</span></div>
+        </div>
+      </div>
+
+      <div class="hero-video-panel">
+        <canvas id="heroSequence" class="hero-sequence"></canvas>
       </div>
     </div>
     <div class="scroll-cue"><span></span>Scroll</div>
@@ -356,16 +572,25 @@
 
   <section class="featured" id="featured">
     <div class="wrap">
-      <span class="section-tag">Latest Reads</span>
-      <div class="featured-grid" id="featured-grid"></div>
+      <div class="section-head">
+        <div>
+          <span class="section-tag">Latest / Editor's Pick</span>
+          <h2>Open with stories worth reading.</h2>
+        </div>
+        <p>One lead story, one support story, a random-article starter, and a conversion-friendly CTA — a stronger editorial hierarchy than a flat grid.</p>
+      </div>
+      <div class="featured-layout" id="featured-layout"></div>
     </div>
   </section>
 
   <section class="team-banner" id="team-banner">
     <div class="wrap">
-      <div class="team-head">
-        <span class="section-tag">Why ABN Junction</span>
-        <h2>Written By The People Running The Campaigns</h2>
+      <div class="team-head section-head">
+        <div>
+          <span class="section-tag">Why ABN Insights</span>
+          <h2>Written by the people running the campaigns.</h2>
+        </div>
+        <p>Instead of generic marketing content, this is where the blog becomes brand-specific — these ideas come from execution, data, iteration and cross-service thinking.</p>
       </div>
       <div class="team-track-wrap">
         <div class="team-grid" id="team-grid"></div>
@@ -376,9 +601,13 @@
   <section class="explore" id="explore">
     <div class="wrap">
       <div class="explore-head">
-        <span class="section-tag">All Articles</span>
+        <div>
+          <span class="section-tag">Browse all articles</span>
+          <h2>Find the <span class="accent">outcome</span> relevant to you.</h2>
+        </div>
         <div class="data-status" id="data-status"><span class="dot"></span><span id="data-status-text">Connecting to WordPress…</span></div>
       </div>
+      <p class="explore-sub">Primary filters keep the library scannable — the same scalable logic used on the case-studies concept.</p>
       <div class="filter-search-row">
         <div class="filters" id="filters"></div>
         <div class="search-box" id="search-box">
@@ -396,10 +625,6 @@
         </div>
         <aside class="sidebar">
           <div class="widget">
-            <h4>Recent Posts</h4>
-            <div id="recent-posts"></div>
-          </div>
-          <div class="widget">
             <h4>Categories</h4>
             <div class="cat-list" id="cat-list"></div>
           </div>
@@ -408,6 +633,43 @@
             <div class="tag-cloud" id="tag-cloud"></div>
           </div>
         </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="cases-bridge" id="cases-bridge">
+    <div class="wrap">
+      <div class="cases-head section-head">
+        <div>
+          <span class="section-tag">Connected proof</span>
+          <h2>See the case studies behind the ideas.</h2>
+        </div>
+        <p>Blogs and case studies shouldn't feel isolated — jump from ideas to proof, and from proof back to related articles.</p>
+      </div>
+      <div class="case-track" id="case-track"></div>
+    </div>
+  </section>
+
+  <section class="tools" id="tools">
+    <div class="wrap">
+      <div class="tools-head section-head">
+        <div>
+          <span class="section-tag">The stack behind the thinking</span>
+          <h2>Tools we actually use.</h2>
+        </div>
+        <p>Rather than stuffing logos into the hero, the real ecosystem shows up here — keeping the first fold premium while the tools still appear in a useful way.</p>
+      </div>
+      <div class="tool-rail">
+        <div class="tool-card"><span class="tool-logo ads"></span>Google Ads</div>
+        <div class="tool-card"><span class="tool-logo meta"></span>Meta Ads</div>
+        <div class="tool-card"><span class="tool-logo ga4"></span>GA4 / GTM</div>
+        <div class="tool-card"><span class="tool-logo wp"></span>WordPress</div>
+        <div class="tool-card"><span class="tool-logo shop"></span>Shopify</div>
+        <div class="tool-card"><span class="tool-logo search"></span>Search Console</div>
+        <div class="tool-card"><span class="tool-logo merchant"></span>Merchant Center</div>
+        <div class="tool-card"><span class="tool-logo next"></span>Next.js</div>
+        <div class="tool-card"><span class="tool-logo figma"></span>Figma</div>
+        <div class="tool-card"><span class="tool-logo analytics"></span>Analytics</div>
       </div>
     </div>
   </section>
@@ -422,6 +684,34 @@
           <button type="submit">Subscribe</button>
         </form>
         <div class="newsletter-success" id="newsletter-success">✓ You're on the list — check your inbox.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-duo-wrap">
+    <div class="wrap">
+      <div class="cta-duo">
+        <div class="character-panel" id="characterPanel">
+          <div class="character-figure" id="characterFigure">
+            <span class="character-emoji">🙋‍♂️</span>
+            <div class="character-bubble" id="characterBubble">Check out real results!</div>
+          </div>
+          <div>
+            <h3>Not sure what to explore next?</h3>
+            <p>Jump into the ABN knowledge hub for practical articles, tools and ideas behind better digital performance.</p>
+          </div>
+        </div>
+        <a class="resource-panel" href="https://abnjunction.com/case-studies/">
+          <strong>Go to<br>Case<br>Studies</strong>
+          <span>▶</span>
+        </a>
+      </div>
+      <div class="steps-bar">
+        <span>Understand</span>
+        <span>Strategise</span>
+        <span>Execute</span>
+        <span>Measure</span>
+        <span>Improve</span>
       </div>
     </div>
   </section>
@@ -442,7 +732,6 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
@@ -498,13 +787,42 @@ const MOCK_TAGS = [
   { id:28, name:'web hosting', count:1 }
 ];
 
+// "Why ABN Insights" — same 5-point copy as the client's V4 magnetic concept.
 const TEAM_CARDS = [
-  { title:'Real Practitioners', desc:'Every article is written by the strategists and marketers actually running the campaigns — not an outsourced content mill.' },
-  { title:'Backed By Real Data', desc:'No recycled listicles. What you read here comes from live client results, A/B tests, and real ad spend.' },
-  { title:'Weekly Cadence', desc:'Fresh insights published every week, covering whatever we\'re actually seeing move the needle right now.' }
+  { num:'01 · Real Practitioners', title:'Not theory. Practice.', desc:'Articles are written by people handling campaigns, SEO decisions, content systems and client growth work.' },
+  { num:'02 · Backed by Real Data', title:'Learn from what actually moved.', desc:'We publish ideas shaped by click data, search demand, user behaviour and implementation realities.' },
+  { num:'03 · Across One Junction', title:'Connected expertise.', desc:'Marketing, design, development, video and tracking do not live in silos here — and neither do the insights.' },
+  { num:'04 · Practical Usefulness', title:'Take something away.', desc:'Each article should leave readers with something they can test, fix, improve or think differently about.' },
+  { num:'05 · Brand-Led Thinking', title:'Results with context.', desc:'ABN’s content is not just tactical — it is meant to show how business, content and growth connect together.' }
+];
+
+// Real case studies (same figures verified on case-studies-listing.html) —
+// used as the "cases-bridge" fallback if the live case_study fetch fails.
+const MOCK_CASES = [
+  { slug:'shopify-seo-indexing-fix-turbolader24', label:'SEO + Development', title:'Turbolader24 indexing cleanup', metric:'10,000+ pages visible', desc:'From technical fixes to real search visibility.' },
+  { slug:'moonbakes-baking-up-digital-success-with-smarter-strategies', label:'Marketing + Creative', title:'Moonbakes growth system', metric:'730% ROAS', desc:'How media, messaging and landing improvements worked as one engine.' },
+  { slug:'arena-animation-velachery', label:'Lead Generation', title:'Arena Admissions Growth', metric:'1,270+ leads', desc:'Meta and Google strategy built around stronger student intent.' }
 ];
 
 let state = { category:'all', page:1, perPage:8, totalPages:1, usingMock:false, categoriesMap:{}, search:'', tagId:'all' };
+let recentPool = []; // shared pool used by the sidebar AND the "random article" featured tile
+
+/* ========================================================================
+   1b. LIGHT / DARK THEME TOGGLE — same mechanism as case-studies-listing.html.
+   ======================================================================== */
+(function initThemeToggle(){
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('abn-blog-theme');
+  if (saved === 'light' || saved === 'dark') root.dataset.theme = saved;
+  function syncIcon(){ btn.textContent = root.dataset.theme === 'light' ? '☀' : '☾'; }
+  syncIcon();
+  btn.addEventListener('click', () => {
+    root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('abn-blog-theme', root.dataset.theme);
+    syncIcon();
+  });
+})();
 
 /* ========================================================================
    1. PRELOADER
@@ -522,15 +840,11 @@ setTimeout(() => {
   if (pre && pre.style.display !== 'none') { pre.style.display='none'; playHeroIntro(); }
 }, 4000);
 
+// No opacity fade on entrance — eyebrow/sub/stats are visible immediately.
+// The title keeps its slide-up line reveal (a translate, not a fade).
 function playHeroIntro(){
   gsap.to('.hero-title .line span', { yPercent:0, duration:1, stagger:0.12, ease:'power4.out' });
-  gsap.to('.eyebrow, .hero-sub, .hero-stats', { opacity:1, y:0, duration:0.9, stagger:0.12, delay:0.3, ease:'power3.out' });
 }
-gsap.set('.eyebrow, .hero-sub, .hero-stats', { opacity:0, y:20 });
-// Set via GSAP (not plain CSS) so GSAP's transform cache has a real yPercent
-// baseline to animate from — a CSS-authored translateY(110%) doesn't survive
-// as a percentage once GSAP reads the computed matrix, so gsap.to(yPercent:0)
-// silently no-ops and the line never appears.
 gsap.set('.hero-title .line span', { yPercent: 110 });
 
 /* ========================================================================
@@ -544,10 +858,10 @@ if (matchMedia('(pointer: fine)').matches) {
     gsap.to(ring, { x:e.clientX, y:e.clientY, duration:0.35, ease:'power3.out' });
   });
   document.addEventListener('mouseover', e => {
-    if (e.target.closest('a, button, .card, .feat-card, .filter-pill')) ring.classList.add('big');
+    if (e.target.closest('a, button, .card, .blog-card, .filter-pill')) ring.classList.add('big');
   });
   document.addEventListener('mouseout', e => {
-    if (e.target.closest('a, button, .card, .feat-card, .filter-pill')) ring.classList.remove('big');
+    if (e.target.closest('a, button, .card, .blog-card, .filter-pill')) ring.classList.remove('big');
   });
 }
 
@@ -564,9 +878,6 @@ try {
 
 /* ========================================================================
    3b. SCROLL-DRIVEN EXPERIENCE — progress bar + pinned hero scrub.
-   The hero pins for one extra viewport of scroll; hero-scroll-progress (0-1)
-   drives both the DOM fade-out below and the Three.js camera zoom/rotation
-   inside initHero3D (read via window.heroScrollProgress).
    ======================================================================== */
 window.heroScrollProgress = 0;
 
@@ -575,6 +886,11 @@ gsap.to('#scroll-progress-bar', {
   scrollTrigger: { trigger: document.documentElement, start:'top top', end:'bottom bottom', scrub:0.3 }
 });
 
+// No fade-out here on purpose: the pin still drives window.heroScrollProgress
+// (which the frame sequence below scrubs against), but the hero content and
+// video stay fully visible the whole way through instead of fading to
+// nothing — fading it out would mean the video's last frames are invisible
+// by the time you'd actually reach them.
 ScrollTrigger.create({
   trigger: '.hero',
   start: 'top top',
@@ -583,92 +899,143 @@ ScrollTrigger.create({
   scrub: 0.6,
   onUpdate: self => {
     window.heroScrollProgress = self.progress;
-    gsap.set('.hero-inner', { opacity: 1 - self.progress, y: -self.progress * 60, scale: 1 - self.progress * 0.06 });
-    gsap.set('.scroll-cue', { opacity: Math.max(0, 1 - self.progress * 4) });
   }
 });
 
 /* ========================================================================
-   4. THREE.JS HERO SCENE — networked icosahedron cluster + particles
+   4. HERO PARTICLE CANVAS — lightweight 2D ambient background (ported from
+      the client's V4 magnetic concept; no WebGL needed for this one).
    ======================================================================== */
-(function initHero3D(){
-  const canvas = document.getElementById('hero-canvas');
-  if (!canvas || !window.THREE) return;
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 100);
-  camera.position.set(0, 0, 8.5);
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+(function initHeroParticles(){
+  const canvas = document.getElementById('hero-particles');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let particles = [];
 
-  const group = new THREE.Group();
-  scene.add(group);
-
-  const coreGeo = new THREE.IcosahedronGeometry(2.1, 1);
-  const coreMat = new THREE.MeshBasicMaterial({ color:0x38c5e7, wireframe:true, transparent:true, opacity:0.55 });
-  const core = new THREE.Mesh(coreGeo, coreMat);
-  group.add(core);
-
-  const innerGeo = new THREE.IcosahedronGeometry(1.15, 0);
-  const innerMat = new THREE.MeshBasicMaterial({ color:0x6f5aff, wireframe:true, transparent:true, opacity:0.6 });
-  const innerMesh = new THREE.Mesh(innerGeo, innerMat);
-  group.add(innerMesh);
-
-  // Orbiting nodes connected by the network idea
-  const nodeCount = 40;
-  const positions = new Float32Array(nodeCount*3);
-  for (let i=0;i<nodeCount;i++){
-    const r = 3.2 + Math.random()*1.6;
-    const theta = Math.random()*Math.PI*2;
-    const phi = Math.acos((Math.random()*2)-1);
-    positions[i*3] = r*Math.sin(phi)*Math.cos(theta);
-    positions[i*3+1] = r*Math.sin(phi)*Math.sin(theta);
-    positions[i*3+2] = r*Math.cos(phi);
+  function resizeCanvas(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const h = Math.max(window.innerHeight, 720);
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
   }
-  const nodeGeo = new THREE.BufferGeometry();
-  nodeGeo.setAttribute('position', new THREE.BufferAttribute(positions,3));
-  const nodeMat = new THREE.PointsMaterial({ color:0x38c5e7, size:0.06, transparent:true, opacity:0.85 });
-  const nodes = new THREE.Points(nodeGeo, nodeMat);
-  group.add(nodes);
-
-  // Ambient background particles
-  const particleCount = 240;
-  const bgPositions = new Float32Array(particleCount*3);
-  for (let i=0;i<particleCount*3;i++) bgPositions[i] = (Math.random()-0.5)*18;
-  const bgGeo = new THREE.BufferGeometry();
-  bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPositions,3));
-  const bgMat = new THREE.PointsMaterial({ color:0x6f5aff, size:0.03, transparent:true, opacity:0.4 });
-  scene.add(new THREE.Points(bgGeo, bgMat));
-
-  let mouseX=0, mouseY=0;
-  window.addEventListener('pointermove', e => {
-    mouseX = (e.clientX/innerWidth - 0.5);
-    mouseY = (e.clientY/innerHeight - 0.5);
-  });
-
-  const clock = new THREE.Clock();
-  function animate(){
-    requestAnimationFrame(animate);
-    const t = clock.getElapsedTime();
-    const sp = window.heroScrollProgress || 0; // 0-1, driven by the pinned-hero ScrollTrigger
-    core.rotation.y = t*0.15 + mouseX*0.5 + sp*2.6;
-    core.rotation.x = t*0.08 - mouseY*0.3;
-    innerMesh.rotation.y -= t*0.25 + sp*1.5;
-    innerMesh.rotation.x += t*0.1;
-    innerMesh.scale.setScalar(1 + sp*0.6); // core "opens up" as you scroll through the pin
-    nodes.rotation.y += 0.0009 + sp*0.002;
-    camera.position.x += (mouseX*1.0 - camera.position.x)*0.02;
-    camera.position.z = 8.5 - sp*3; // zoom in toward the network
-    camera.lookAt(0,0,0);
-    renderer.render(scene, camera);
+  function initParticles(){
+    resizeCanvas();
+    const h = Math.max(window.innerHeight, 720);
+    const count = window.innerWidth < 768 ? 46 : 80;
+    particles = Array.from({ length: count }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * h,
+      vx: (Math.random() - .5) * .32,
+      vy: (Math.random() - .5) * .32,
+      r: Math.random() * 2.1 + .8,
+      c: Math.random() > .5 ? 'rgba(249,115,22,.75)' : 'rgba(56,197,231,.8)'
+    }));
   }
-  animate();
+  function drawParticles(){
+    const h = Math.max(window.innerHeight, 720);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach((p,i)=>{
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
+      if (p.y < 0 || p.y > h) p.vy *= -1;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = p.c;
+      ctx.fill();
+      for (let j=i+1;j<particles.length;j++){
+        const q = particles[j];
+        const dx = p.x-q.x, dy = p.y-q.y;
+        const d = Math.sqrt(dx*dx+dy*dy);
+        if (d < 96){
+          ctx.beginPath();
+          ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y);
+          ctx.strokeStyle = 'rgba(255,255,255,.07)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    });
+    requestAnimationFrame(drawParticles);
+  }
+  window.addEventListener('resize', initParticles);
+  initParticles();
+  drawParticles();
+})();
 
-  window.addEventListener('resize', () => {
-    camera.aspect = innerWidth/innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth, innerHeight);
-  });
+/* ========================================================================
+   4b. SCROLL-SCRUBBED FRAME SEQUENCE — real rendered "ABN Junction orbit"
+   video, swapped back in over the CSS/DOM orbit once a second render came
+   back with a dark background (keys far more cleanly than the first
+   light-studio-background attempt). 40 transparent WebP frames (design-
+   concepts/hero-frames/frame-001.webp … frame-040.webp), extracted at
+   10fps/960px wide via ffmpeg, background keyed via colorkey. Preloads all
+   frames, then on each scroll update picks the frame matching
+   window.heroScrollProgress (0-1, already computed by the hero's pinned
+   ScrollTrigger above) and draws it to canvas with a cover-style crop, same
+   idea as Apple-style scroll-driven video sections.
+   ======================================================================== */
+(function initHeroSequence(){
+  const canvas = document.getElementById('heroSequence');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const FRAME_COUNT = 40;
+  const frames = [];
+  let currentFrame = 0;
+
+  function frameSrc(i){
+    return `hero-frames/frame-${String(i + 1).padStart(3, '0')}.webp`;
+  }
+
+  function resizeCanvas(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    drawFrame(currentFrame);
+  }
+
+  // object-fit:cover equivalent — crop the source frame to fill the canvas
+  // without distorting it, same as .blog-visual img{object-fit:cover}.
+  function drawFrame(index){
+    const img = frames[index];
+    if (!img || !img.complete || !img.naturalWidth) return;
+    const cw = canvas.clientWidth, ch = canvas.clientHeight;
+    const ir = img.naturalWidth / img.naturalHeight;
+    const cr = cw / ch;
+    let sx, sy, sw, sh;
+    if (ir > cr){ sh = img.naturalHeight; sw = sh * cr; sy = 0; sx = (img.naturalWidth - sw) / 2; }
+    else { sw = img.naturalWidth; sh = sw / cr; sx = 0; sy = (img.naturalHeight - sh) / 2; }
+    ctx.clearRect(0, 0, cw, ch);
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
+  }
+
+  function updateSequence(){
+    const p = window.heroScrollProgress || 0;
+    const index = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(p * (FRAME_COUNT - 1))));
+    if (index === currentFrame) return;
+    currentFrame = index;
+    drawFrame(index);
+  }
+
+  for (let i = 0; i < FRAME_COUNT; i++){
+    const img = new Image();
+    img.src = frameSrc(i);
+    img.onload = () => { if (i === 0) drawFrame(0); }; // show the first frame the moment it's ready
+    frames.push(img);
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('scroll', updateSequence, { passive: true });
+  resizeCanvas();
+
+  function loop(){ updateSequence(); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
 })();
 
 /* ========================================================================
@@ -728,8 +1095,6 @@ async function loadCategories(){
   }
 }
 
-// Posts can belong to multiple categories, so summing per-category counts
-// double-counts — fetch the real total separately instead.
 async function loadTotalCount(){
   try {
     const { headers } = await fetchWithRetry(`${WP}/posts?per_page=1`);
@@ -766,7 +1131,6 @@ async function loadPosts(page, perPage, categoryId, search, tagId){
 function mockPosts(page, perPage, categoryId, search){
   let items = MOCK_POSTS;
   if (categoryId && categoryId !== 'all') items = items.filter(i => i.categories.includes(+categoryId));
-  // MOCK_POSTS carries no tag data, so tag filtering has no mock-mode equivalent — search still works.
   if (search) {
     const q = search.toLowerCase();
     items = items.filter(i => i.title.toLowerCase().includes(q) || i.excerpt.toLowerCase().includes(q));
@@ -786,6 +1150,28 @@ async function loadTags(){
   }
 }
 
+// case_study per_page is capped at 6 on the live REST endpoint (same limit
+// documented on case-studies-listing.html) — 3 is well under that.
+async function loadCasesBridge(){
+  try {
+    const { data } = await fetchWithRetry(`https://abnjunction.com/wp-json/wp/v2/case_study?per_page=3&_embed&orderby=date&order=desc`);
+    return data.map(item => {
+      const hero = item.acf && item.acf.content_sections ? item.acf.content_sections.find(s => s.acf_fc_layout === 'hero_section') : null;
+      const details = item.acf && item.acf.content_sections ? item.acf.content_sections.find(s => s.acf_fc_layout === 'case_details_section') : null;
+      return {
+        slug:item.slug,
+        label: (details && details.metrics && details.metrics[0] && details.metrics[0].label) || 'Case Study',
+        title: item.title.rendered.replace(/&amp;/g,'&'),
+        metric: (details && details.metrics && details.metrics[0] && details.metrics[0].value) || '',
+        desc: hero && hero.client_description ? hero.client_description.replace(/<[^>]+>/g,'').trim().slice(0,90) : ''
+      };
+    });
+  } catch (e) {
+    console.warn('cases-bridge: falling back to known real cases', e);
+    return MOCK_CASES;
+  }
+}
+
 /* ========================================================================
    7. RENDERING
    ======================================================================== */
@@ -795,20 +1181,143 @@ function imageOrPlaceholder(url, label){
 }
 function categoryNames(ids){ return (ids||[]).map(id => state.categoriesMap[id]).filter(Boolean); }
 
+const VISUAL_PATTERNS = ['pattern-1','pattern-2','pattern-3'];
+
+function featureVisual(item, idx){
+  if (item.image) return `<img src="${item.image}" alt="${item.title}" loading="lazy">`;
+  return `<div class="visual-pattern ${VISUAL_PATTERNS[idx % VISUAL_PATTERNS.length]}"><span class="ph">${item.title.charAt(0)}</span></div>`;
+}
+
 function renderFeatured(items){
-  const el = document.getElementById('featured-grid');
-  el.innerHTML = items.slice(0,3).map(item => `
-    <a class="feat-card" href="https://abnjunction.com/blog/${item.slug}/" target="_blank" rel="noopener">
-      <div class="feat-inner">
-        <div class="feat-media">${imageOrPlaceholder(item.image, item.title)}</div>
-        <span class="feat-date">${formatDate(item.date)}</span>
-        <h3 class="feat-title">${item.title}</h3>
-        <p class="feat-desc">${item.excerpt || 'Read the full article for the complete breakdown.'}</p>
+  const el = document.getElementById('featured-layout');
+  const [lead, support] = items;
+  recentPool = items;
+
+  const leadCat = categoryNames(lead.categories)[0] || 'Latest';
+  const supportCat = support ? (categoryNames(support.categories)[0] || 'Latest') : '';
+
+  el.innerHTML = `
+    <a class="blog-card feature-main" href="https://abnjunction.com/blog/${lead.slug}/" target="_blank" rel="noopener">
+      <div class="blog-visual">${featureVisual(lead, 0)}<div class="feature-badge">Featured · ${leadCat}</div></div>
+      <div class="blog-body">
+        <div class="blog-type">${leadCat} · ${formatDate(lead.date)}</div>
+        <h3 class="blog-title">${lead.title}</h3>
+        <p class="blog-desc">${lead.excerpt || 'Read the full article for the complete breakdown.'}</p>
+        <span class="card-link">Read the Article →</span>
       </div>
     </a>
-  `).join('');
-  gsap.fromTo('.feat-card', { opacity:0, y:40 }, { opacity:1, y:0, duration:0.8, stagger:0.12, ease:'power3.out', scrollTrigger:{ trigger:'#featured-grid', start:'top 85%' } });
-  el.querySelectorAll('.feat-card').forEach(attachTilt);
+
+    <div class="col-2">
+      ${support ? `
+      <a class="blog-card support-story" href="https://abnjunction.com/blog/${support.slug}/" target="_blank" rel="noopener">
+        <div class="blog-visual">${featureVisual(support, 1)}<div class="feature-badge">${supportCat}</div></div>
+        <div class="blog-body">
+          <div class="blog-type">${supportCat}</div>
+          <h3 class="blog-title">${support.title}</h3>
+          <p class="blog-desc">${support.excerpt || 'Read the full article for the complete breakdown.'}</p>
+          <span class="card-link">Read the Article →</span>
+        </div>
+      </a>` : ''}
+
+      <div class="side-panel">
+        <h4>Recent Posts</h4>
+        <div class="side-list" id="sideRecent"></div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <a class="blog-card random-box" href="#" id="randomBlogLink">
+        <div>
+          <div class="eyebrow">Discovery Mode</div>
+          <div class="big-kicker">Read a random blog.</div>
+          <p>Not sure where to start? Let ABN pick one useful article for you.</p>
+        </div>
+      </a>
+
+      <div class="side-panel">
+        <h4>Core Topics</h4>
+        <div class="side-list" id="sideTopics"></div>
+      </div>
+
+      <div class="cta-swap-card" id="ctaSwapCard">
+        <div>
+          <div class="swap-label">Need something more direct?</div>
+          <div class="swap-headline" id="swapHeadline">Turn blog interest into a strategy conversation.</div>
+          <div class="swap-copy-wrap">
+            <div class="swap-copy active">If a topic resonates, the next natural step is to speak with ABN about applying that thinking to your own brand or campaign.</div>
+            <div class="swap-copy">Want a growth audit, campaign direction or landing-page input? Use this space to move readers from insights to action.</div>
+            <div class="swap-copy">Curious how these ideas apply to your business specifically? A quick call is the fastest way to find out.</div>
+          </div>
+        </div>
+        <div>
+          <div class="swap-actions">
+            <a href="https://abnjunction.com/contact-us/" class="cta-pill" style="padding:11px 18px;font-size:12px;">Book a Strategy Call</a>
+            <a href="https://abnjunction.com/contact-us/" class="btn-outline">Contact ABN</a>
+          </div>
+          <div class="swap-dots" id="swapDots"><span class="active"></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  gsap.fromTo('.blog-card', { opacity:0, y:40 }, { opacity:1, y:0, duration:0.8, stagger:0.1, ease:'power3.out', scrollTrigger:{ trigger:'#featured-layout', start:'top 85%' } });
+  el.querySelectorAll('.blog-card.feature-main, .blog-card.support-story').forEach(attachTilt);
+
+  setupRandomBlog();
+  setupSwapCta();
+}
+
+function setupRandomBlog(){
+  const link = document.getElementById('randomBlogLink');
+  if (!link) return;
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const pool = recentPool.length ? recentPool : MOCK_POSTS;
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    window.open(`https://abnjunction.com/blog/${pick.slug}/`, '_blank', 'noopener');
+  });
+}
+
+function setupSwapCta(){
+  const swapCopies = Array.from(document.querySelectorAll('.swap-copy'));
+  const swapDots = Array.from(document.querySelectorAll('#swapDots span'));
+  const swapHead = document.getElementById('swapHeadline');
+  const swapHeads = [
+    'Turn blog interest into a strategy conversation.',
+    'Need help applying the insight to your business?',
+    'Want ABN to cover a topic relevant to you?'
+  ];
+  let swapIndex = 0;
+  function showSwap(index){
+    swapIndex = index;
+    swapCopies.forEach((el,i)=> el.classList.toggle('active', i===index));
+    swapDots.forEach((el,i)=> el.classList.toggle('active', i===index));
+    if (swapHead) swapHead.textContent = swapHeads[index];
+  }
+  const timer = setInterval(()=> showSwap((swapIndex + 1) % swapCopies.length), 3200);
+  swapDots.forEach((dot,i)=> dot.addEventListener('click', ()=> { clearInterval(timer); showSwap(i); }));
+}
+
+// 4 recent posts / up to 4 real categories — a bit more than the original 3
+// each, but pulled back from an earlier attempt at 5/6, which made col-2 (the
+// column these lists live in) grow tall enough that matching it forced the
+// feature image to over-stretch. equalizeFeaturedHeights() now caps how far
+// the other two columns stretch to follow it either way.
+function renderSidePanels(recent, categories){
+  const recentEl = document.getElementById('sideRecent');
+  const topicsEl = document.getElementById('sideTopics');
+  if (recentEl){
+    recentEl.innerHTML = recent.slice(0,4).map(p => `<a class="side-link" href="https://abnjunction.com/blog/${p.slug}/" target="_blank" rel="noopener">${p.title}</a>`).join('');
+  }
+  if (topicsEl){
+    topicsEl.innerHTML = categories.slice(0,4).map(c => `<button type="button" class="side-link" data-cat="${c.id}">${c.name}</button>`).join('');
+    topicsEl.querySelectorAll('button[data-cat]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setCategory(btn.dataset.cat);
+        document.getElementById('explore').scrollIntoView({ behavior:'smooth', block:'start' });
+      });
+    });
+  }
 }
 
 function renderFilters(categories, totalAll){
@@ -830,26 +1339,15 @@ function setCategory(catId){
   refreshGrid();
 }
 
-function renderRecentPosts(items){
-  const el = document.getElementById('recent-posts');
-  el.innerHTML = items.slice(0,5).map(item => `
-    <a class="recent-item" href="https://abnjunction.com/blog/${item.slug}/" target="_blank" rel="noopener" style="text-decoration:none;">
-      <div class="recent-thumb">${item.image ? `<img src="${item.image}" alt="${item.title}" loading="lazy">` : ''}</div>
-      <div class="recent-info">
-        <a href="https://abnjunction.com/blog/${item.slug}/" target="_blank" rel="noopener">${item.title}</a>
-        <span>${formatDate(item.date)}</span>
-      </div>
-    </a>
-  `).join('');
-}
-
 function renderTeamCards(){
   const el = document.getElementById('team-grid');
   el.innerHTML = TEAM_CARDS.map(c => `
     <div class="team-card">
-      <img src="https://abnjunction.com/wp-content/uploads/2026/07/abn-logo.webp" alt="ABN Junction">
-      <strong>${c.title}</strong>
-      <span>${c.desc}</span>
+      <div>
+        <div class="team-num">${c.num}</div>
+        <strong>${c.title}</strong>
+        <span>${c.desc}</span>
+      </div>
     </div>
   `).join('');
   gsap.fromTo('.team-card', { opacity:0, y:30 }, { opacity:1, y:0, duration:0.7, stagger:0.15, ease:'power3.out', scrollTrigger:{ trigger:'#team-grid', start:'top 85%' } });
@@ -883,13 +1381,26 @@ function setupHorizontalTeam(){
   });
 }
 
+function renderCasesBridge(cases){
+  const el = document.getElementById('case-track');
+  el.innerHTML = cases.map(c => `
+    <a class="case-mini" href="https://abnjunction.com/case-studies/${c.slug}/" target="_blank" rel="noopener">
+      <div class="case-meta"><span>Case Study</span><span>${c.label}</span></div>
+      <h4>${c.title}</h4>
+      ${c.metric ? `<div class="metric">${c.metric}</div>` : ''}
+      <p>${c.desc}</p>
+      <span class="card-link">View Case Study →</span>
+    </a>
+  `).join('');
+}
+
 function renderTags(tags){
   const el = document.getElementById('tag-cloud');
   el.innerHTML = tags.map(t => `<button class="tag-pill ${state.tagId == t.id ? 'active' : ''}" data-tag="${t.id}">${t.name} (${t.count})</button>`).join('');
   el.querySelectorAll('.tag-pill').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.dataset.tag;
-      state.tagId = state.tagId == id ? 'all' : id; // click active tag again to clear it
+      state.tagId = state.tagId == id ? 'all' : id;
       state.page = 1;
       el.querySelectorAll('.tag-pill').forEach(b => b.classList.toggle('active', state.tagId == b.dataset.tag));
       refreshGrid();
@@ -924,7 +1435,6 @@ function setupNewsletter(){
   const form = document.getElementById('newsletter-form');
   form.addEventListener('submit', e => {
     e.preventDefault();
-    // Prototype only — no real subscription backend is wired up here.
     form.classList.add('hide');
     document.getElementById('newsletter-success').classList.add('show');
   });
@@ -962,15 +1472,55 @@ function renderPagination(){
 }
 
 function attachTilt(card){
-  const inner = card.querySelector('.card-inner, .feat-inner');
-  if (!inner || !matchMedia('(pointer: fine)').matches) return;
+  // .grid cards have a .card-inner wrapper that carries the 3D transform;
+  // .blog-card (featured layout) has no such wrapper, so it tilts directly.
+  const inner = card.querySelector('.card-inner') || card;
+  if (!matchMedia('(pointer: fine)').matches) return;
   card.addEventListener('mousemove', e => {
     const r = card.getBoundingClientRect();
     const x = (e.clientX - r.left)/r.width - 0.5;
     const y = (e.clientY - r.top)/r.height - 0.5;
-    gsap.to(inner, { rotateY:x*8, rotateX:-y*8, duration:0.4, ease:'power2.out', transformPerspective:900 });
+    gsap.to(inner, { rotateY:x*6, rotateX:-y*6, duration:0.4, ease:'power2.out', transformPerspective:900 });
   });
   card.addEventListener('mouseleave', () => gsap.to(inner, { rotateY:0, rotateX:0, duration:0.6, ease:'power3.out' }));
+}
+
+// "Not sure what to explore next?" character — same 4 behaviors as the
+// case-studies-listing.html character (entrance, idle bob, scroll-direction
+// reaction, hover wiggle); emoji stands in for a real illustration here too.
+function initCharacter(){
+  const figure = document.getElementById('characterFigure');
+  const bubble = document.getElementById('characterBubble');
+  const emoji = figure && figure.querySelector('.character-emoji');
+  if (!figure || !emoji) return;
+
+  gsap.set(emoji, { scale:.6, opacity:0, rotation:-10 });
+  gsap.set(bubble, { scale:.6, opacity:0 });
+  const entrance = gsap.timeline({ scrollTrigger:{ trigger:figure, start:'top 85%', once:true } });
+  entrance
+    .to(emoji, { scale:1, opacity:1, rotation:0, duration:.7, ease:'back.out(1.8)' })
+    .to(bubble, { scale:1, opacity:1, duration:.35, ease:'back.out(1.7)' }, '-=.2')
+    .to(bubble, { opacity:0, scale:.9, duration:.35, delay:2 });
+
+  gsap.to(emoji, { y:-8, rotation:3, duration:1.6, ease:'sine.inOut', repeat:-1, yoyo:true });
+
+  let lastDirection = 1;
+  ScrollTrigger.create({
+    trigger: figure, start:'top bottom', end:'bottom top',
+    onUpdate(self){
+      if (self.direction === lastDirection) return;
+      lastDirection = self.direction;
+      gsap.to(figure, {
+        y: self.direction > 0 ? 8 : -8, rotation: self.direction > 0 ? 3 : -3,
+        duration:.25, overwrite:true,
+        onComplete: () => gsap.to(figure, { y:0, rotation:0, duration:.5, ease:'elastic.out(1,.45)' })
+      });
+    }
+  });
+
+  figure.addEventListener('mouseenter', () => {
+    gsap.fromTo(emoji, { rotation:-6 }, { rotation:6, duration:.12, yoyo:true, repeat:5, ease:'power1.inOut' });
+  });
 }
 
 /* ========================================================================
@@ -1010,7 +1560,9 @@ async function init(){
   setupNewsletter();
   renderTeamCards();
   setupHorizontalTeam();
+  initCharacter();
   loadTags().then(renderTags).catch(() => renderTags(MOCK_TAGS));
+  loadCasesBridge().then(renderCasesBridge).catch(() => renderCasesBridge(MOCK_CASES));
 
   try {
     const categories = await loadCategories();
@@ -1018,9 +1570,11 @@ async function init(){
     const totalAll = await loadTotalCount();
     renderFilters(categories, totalAll);
 
-    const featured = await loadPosts(1, 3, 'all');
-    renderFeatured(featured.items);
-    renderRecentPosts(featured.items.length >= 5 ? featured.items : (await loadPosts(1, 5, 'all')).items);
+    const featured = await loadPosts(1, 5, 'all');
+    renderFeatured(featured.items.slice(0,2));
+    recentPool = featured.items;
+    renderSidePanels(featured.items, categories);
+    equalizeFeaturedHeights();
 
     setStatus('live', 'Live data from WordPress');
     await refreshGrid();
@@ -1029,25 +1583,71 @@ async function init(){
     state.usingMock = true;
     state.categoriesMap = Object.fromEntries(MOCK_CATEGORIES.map(c => [c.id, c.name]));
     renderFilters(MOCK_CATEGORIES, MOCK_POSTS.length);
-    renderFeatured(MOCK_POSTS.slice(0,3));
-    renderRecentPosts(MOCK_POSTS.slice(0,5));
+    renderFeatured(MOCK_POSTS.slice(0,2));
+    recentPool = MOCK_POSTS.slice(0,5);
+    renderSidePanels(MOCK_POSTS.slice(0,5), MOCK_CATEGORIES);
+    equalizeFeaturedHeights();
     setStatus('mock', 'Showing preview data (live connection unavailable)');
     await refreshGrid();
   }
   refreshScrollTriggers();
 }
 
-// Featured/grid/team-card images all insert asynchronously well after
-// ScrollTrigger's initial pin calculations — each image finishing decode
-// changes document height and quietly invalidates pin start/end offsets.
-// Refresh once now, and once more after every <img> on the page has loaded.
 function refreshScrollTriggers(){
   ScrollTrigger.refresh();
   const imgs = Array.from(document.images).filter(img => !img.complete);
   if (imgs.length) {
-    Promise.all(imgs.map(img => new Promise(res => { img.onload = img.onerror = res; }))).then(() => ScrollTrigger.refresh());
+    Promise.all(imgs.map(img => new Promise(res => { img.onload = img.onerror = res; }))).then(() => {
+      ScrollTrigger.refresh();
+      equalizeFeaturedHeights();
+    });
   }
 }
+
+// Measures col-2's real rendered height (support-story + the 2 side panels —
+// naturally the tallest of the 3 featured columns) and applies it as an
+// explicit pixel height to feature-main and col-3. Only active in the
+// 3-column desktop layout — below 1180px the CSS switches to a stacked/
+// 2-column layout where forcing equal heights doesn't make sense.
+//
+// Matching col-2 exactly (no ceiling) is what caused the previous bug:
+// col-2 holds compact list rows (recent posts, categories) which pack a lot
+// of real content into relatively little height, while feature-main/col-3
+// hold a couple of large blocks. Once col-2 grew tall from those lists, the
+// gap to close became big enough that feature-main's image ballooned
+// (flex:1 filling it) and col-3's justify-content:space-between gap turned
+// into a visible hole. CAP below limits how far feature-main/col-3 stretch
+// beyond their OWN natural height — past that, col-2 is simply allowed to
+// run a little longer than the other two, which reads as a normal
+// masonry-style column difference rather than a distorted image or an
+// obviously empty gap.
+const FEATURED_STRETCH_CAP = 200;
+
+function equalizeFeaturedHeights(){
+  const col2 = document.querySelector('#featured-layout .col-2');
+  const featureMain = document.querySelector('#featured-layout .feature-main');
+  const col3 = document.querySelector('#featured-layout .col-3');
+  if (!col2 || !featureMain || !col3) return;
+
+  featureMain.style.height = '';
+  col3.style.height = '';
+
+  if (window.innerWidth <= 1180) return;
+
+  const col2Height = col2.offsetHeight;
+  const naturalMax = Math.max(featureMain.offsetHeight, col3.offsetHeight);
+  const target = Math.min(col2Height, naturalMax + FEATURED_STRETCH_CAP);
+
+  featureMain.style.height = target + 'px';
+  col3.style.height = target + 'px';
+}
+
+let equalizeResizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(equalizeResizeTimer);
+  equalizeResizeTimer = setTimeout(equalizeFeaturedHeights, 150);
+});
+
 init();
 </script>
 </body>
