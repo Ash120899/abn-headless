@@ -185,7 +185,21 @@ export default function BlogGrid({ categories, totalCount, initialItems, initial
           </p>
         </ScrollReveal>
 
-        <ScrollReveal as="div" className="flex flex-wrap gap-3 mt-7 mb-8" role="group" aria-label="Filter articles by category">
+        {/*
+          Wrapping into 8 separate rows on mobile (each pill full-width-ish)
+          ate a huge amount of vertical space before the reader ever saw an
+          article. Below md this is a 2-row grid that fills column-by-column
+          (grid-flow-col) and scrolls horizontally as one unit, instead of
+          either that tall 8-row stack or a single very-long scrolling row —
+          reverting to the normal multi-row wrap once there's enough width
+          to not need scrolling at all.
+        */}
+        <ScrollReveal
+          as="div"
+          className="grid grid-rows-2 grid-flow-col auto-cols-max gap-3 mt-7 mb-8 overflow-x-auto md:flex md:flex-wrap md:overflow-visible pb-1 md:pb-0 [scrollbar-width:none] [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden"
+          role="group"
+          aria-label="Filter articles by category"
+        >
           {pills.map((c) => {
             const pressed = category === c.id;
             return (
@@ -196,7 +210,7 @@ export default function BlogGrid({ categories, totalCount, initialItems, initial
                 disabled={status === "loading"}
                 onClick={() => handleFilterClick(c.id)}
                 className={
-                  "inline-flex items-baseline gap-2 px-[22px] py-3.5 rounded-full border transition-colors disabled:cursor-not-allowed disabled:opacity-60 " +
+                  "shrink-0 inline-flex items-baseline gap-2 px-[22px] py-3.5 rounded-full border transition-colors disabled:cursor-not-allowed disabled:opacity-60 " +
                   (pressed ? "bg-accent border-accent" : "border-theme text-muted hover:text-foreground")
                 }
                 style={{

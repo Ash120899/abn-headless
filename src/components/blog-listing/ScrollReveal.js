@@ -1,13 +1,19 @@
 "use client";
 
-// Reusable scroll-reveal wrapper. Identical to
-// src/components/case-studies-listing/ScrollReveal.js — duplicated rather
-// than shared so each listing page's component folder stays self-contained.
+// Reusable scroll-reveal wrapper — ported to match the concept's own
+// mechanism exactly (design-concepts/ABN_Blogs_V4_Magnetic_Interactive_Concept.html
+// ~line 1229-1232: a plain IntersectionObserver adding a "revealed" class,
+// same threshold 0.12), not GSAP ScrollTrigger as originally built here.
+// ScrollTrigger pre-calculates absolute scroll-offset trigger points at
+// refresh() time and only recomputes them on an explicit refresh call —
+// on this page (a hero with a height that depends on live post/category
+// counts, a canvas, and images below it) that repeatedly went stale enough
+// that every section's reveal fired noticeably later on mobile than where
+// it visually entered the screen, even after adding several redundant
+// refresh calls (see ScrollFX.js's git history). IntersectionObserver has
+// no such cache — it's driven by the browser's own real-time viewport
+// intersection — so this class of bug can't recur.
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function ScrollReveal({
   children,
@@ -15,36 +21,41 @@ export default function ScrollReveal({
   className,
   y = 40,
   stagger,
-  start = "top 85%",
   duration = 0.8,
-  ease = "power3.out",
   selector,
   ...rest
 }) {
   const ref = useRef(null);
 
   useEffect(() => {
-    if (!ref.current) return;
+    const el = ref.current;
+    if (!el) return;
 
-    const targets = selector ? ref.current.querySelectorAll(selector) : ref.current;
-    const tween = gsap.fromTo(
-      targets,
-      { opacity: 0, y },
-      {
-        opacity: 1,
-        y: 0,
-        duration,
-        ease,
-        stagger,
-        scrollTrigger: { trigger: ref.current, start },
-      }
+    const targets = selector ? Array.from(el.querySelectorAll(selector)) : [el];
+    targets.forEach((t) => {
+      t.style.opacity = "0";
+      t.style.transform = `translateY(${y}px)`;
+      t.style.transition = `opacity ${duration}s ease, transform ${duration}s ease`;
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const target = entry.target;
+          const idx = targets.indexOf(target);
+          target.style.transitionDelay = stagger ? `${idx * stagger}s` : "0s";
+          target.style.opacity = "1";
+          target.style.transform = "none";
+          observer.unobserve(target);
+        });
+      },
+      { threshold: 0.12 }
     );
+    targets.forEach((t) => observer.observe(t));
 
-    return () => {
-      tween.scrollTrigger?.kill();
-      tween.kill();
-    };
-  }, [y, stagger, start, duration, ease, selector]);
+    return () => observer.disconnect();
+  }, [y, stagger, duration, selector]);
 
   return (
     <Tag ref={ref} className={className} {...rest}>

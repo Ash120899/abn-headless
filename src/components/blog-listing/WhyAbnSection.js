@@ -113,7 +113,7 @@ export default function WhyAbnSection() {
               ref={wrapRef}
               className="overflow-x-auto min-[900px]:overflow-hidden snap-x snap-mandatory min-[900px]:snap-none [scrollbar-width:none] [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden"
             >
-              <ScrollReveal as="div" selector=".why-card" stagger={0.12} start="top 85%">
+              <ScrollReveal as="div" selector=".why-card" stagger={0.12}>
                 <div ref={trackRef} className="flex w-max gap-[22px] px-1 py-1 pb-5">
                   {WHY_ABN_ITEMS.map((item) => (
                     <div

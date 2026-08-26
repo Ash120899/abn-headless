@@ -443,16 +443,33 @@ export default function HeroScene({ totalCount = 0, categoryCount = 0 }) {
           .bh-inner{padding-top:100px}
         }
         @media (max-width:760px){
+          /* The scroll-jacked sticky pin needs hero-copy + orbit-shell
+             (stacked into one column on mobile) to together fit inside a
+             single fixed-height, overflow:hidden box — the pin was
+             dropped entirely in an earlier pass because the orb (last in
+             the stack) was taller than the leftover space and got clipped
+             off-screen. Restored here with the pin kept (so the page still
+             holds on the hero until the absorb animation finishes, same as
+             desktop) by instead shrinking everything enough to actually
+             fit: the orb goes first (order:-1, so it's guaranteed visible
+             even if something still doesn't fit), the KPI row is forced
+             into a single row of 3 instead of wrapping into 2, and text
+             sizing/spacing is tightened throughout. */
           .bh-magnet-zone{height:152svh}
-          .bh-hero{height:100svh}
-          .bh-inner{height:calc(100svh - 20px);padding:90px 0 16px}
-          .bh-title{font-size:clamp(2.6rem,12vw,3.35rem)}
-          .bh-kpis{gap:10px}
-          .bh-kpi{min-width:calc(50% - 8px);padding:12px 14px 11px}
-          .bh-orbit-shell{min-height:min(58vw,260px)}
-          .bh-orb-outer-shell{width:clamp(190px,46vw,240px);height:clamp(190px,46vw,240px)}
-          .bh-orb-core{width:clamp(130px,32vw,168px);height:clamp(130px,32vw,168px)}
-          .bh-chip{font-size:10px;padding:7px 10px}
+          .bh-hero{height:100svh;padding-top:0}
+          .bh-inner{height:calc(100svh - 76px);padding:76px 0 10px;gap:14px}
+          .bh-copy{max-width:none}
+          .bh-eyebrow{font-size:10px}
+          .bh-title{font-size:clamp(2rem,8.5vw,2.5rem)}
+          .bh-sub{margin-top:10px;font-size:.92rem;line-height:1.5}
+          .bh-kpis{margin-top:14px;gap:8px;flex-wrap:nowrap}
+          .bh-kpi{min-width:0;flex:1 1 0;padding:9px 6px 8px;border-radius:16px}
+          .bh-kpi-num{font-size:1.4rem}
+          .bh-kpi span{font-size:9px;letter-spacing:.1em;margin-top:4px}
+          .bh-orbit-shell{order:-1;min-height:min(46vw,190px);margin-bottom:2px}
+          .bh-orb-outer-shell{width:clamp(140px,38vw,180px);height:clamp(140px,38vw,180px)}
+          .bh-orb-core{width:clamp(98px,26vw,126px);height:clamp(98px,26vw,126px)}
+          .bh-chip{font-size:9px;padding:6px 9px}
           .bh-scroll-cue{display:none}
         }
       `}</style>
