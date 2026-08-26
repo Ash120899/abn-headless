@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import SwitchWord from "./SwitchWord";
+import ScrollReveal from "./ScrollReveal";
 
 const BLOG_TITLE = {
   fontFamily: "var(--font-editorial)",
@@ -18,13 +19,21 @@ const BLOG_TITLE = {
   color: "var(--heading, var(--foreground))",
 };
 
+const BLOG_CARD_BG = {
+  background:
+    "linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 84%, transparent), color-mix(in srgb, var(--surface) 92%, transparent))",
+};
+
 function PostCard({ item, big }) {
   return (
     <Link href={`/blog/${item.slug}`} className="block h-full">
-      <article className="rounded-[30px] border border-theme overflow-hidden bg-surface-2 flex flex-col h-full shadow-sm">
+      <article
+        className="rounded-[30px] border border-theme overflow-hidden flex flex-col h-full shadow-sm"
+        style={BLOG_CARD_BG}
+      >
         <div
           className="relative overflow-hidden bg-surface flex-shrink-0"
-          style={{ minHeight: big ? 300 : 200 }}
+          style={{ minHeight: big ? 360 : 220 }}
         >
           {item.image ? (
             <Image
@@ -40,23 +49,32 @@ function PostCard({ item, big }) {
             </div>
           )}
           <span className="absolute left-[18px] top-[18px] z-[2] px-3.5 py-2 rounded-full bg-black/60 backdrop-blur text-white text-[11px] font-black uppercase tracking-[.16em]">
-            {big ? "Featured" : "Latest"} {item.categoryLabel ? `· ${item.categoryLabel}` : ""}
+            {big ? `Featured${item.categoryLabel ? ` · ${item.categoryLabel}` : ""}` : item.categoryLabel || "Blog"}
           </span>
         </div>
         <div className="p-6 flex flex-col flex-1">
-          <div className="text-[12px] uppercase text-muted" style={{ fontWeight: 900, letterSpacing: ".18em" }}>
+          <div className="flex items-center gap-2.5 text-[12px] uppercase text-muted" style={{ fontWeight: 900, letterSpacing: ".18em" }}>
+            {/* The concept only shows the 3-dot service marker on the
+                feature-main card, not on support-story. */}
+            {big ? (
+              <span className="flex gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "linear-gradient(145deg,var(--accent),var(--bl-cyan))" }} />
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "linear-gradient(145deg,var(--accent),var(--bl-cyan))" }} />
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "linear-gradient(145deg,var(--accent),var(--bl-cyan))" }} />
+              </span>
+            ) : null}
             {item.categoryLabel || "Blog"}
           </div>
           <h3
             className="text-foreground mt-3.5"
-            style={{ ...BLOG_TITLE, fontSize: big ? "clamp(2.2rem,4.1vw,3.6rem)" : "clamp(1.5rem,2vw,2rem)" }}
+            style={{ ...BLOG_TITLE, fontSize: big ? "clamp(2.2rem,4.1vw,4.35rem)" : "clamp(1.65rem,2vw,2.8rem)" }}
           >
             {item.title}
           </h3>
           <p className="text-muted mt-3.5 flex-1" style={{ fontSize: "1.03rem", maxWidth: "50ch" }}>
             {item.desc}
           </p>
-          <span className="inline-flex mt-4.5 font-black text-accent" style={{ fontSize: "1rem" }}>
+          <span className="inline-flex mt-4.5 font-black" style={{ fontSize: "1rem", color: "var(--bl-cyan)" }}>
             Read the Article →
           </span>
         </div>
@@ -69,13 +87,13 @@ function RandomBox({ href }) {
   return (
     <a
       href={href}
-      className="rounded-[30px] border border-theme bg-[var(--random-bg,#050505)] text-white grid place-items-center text-center min-h-[260px] p-8"
+      className="h-full rounded-[30px] border border-theme bg-[#080a0d] text-white grid place-items-center text-center min-h-[260px] p-8"
     >
       <div>
         <div className="text-accent text-[12px] font-black uppercase tracking-[.24em]">Discovery Mode</div>
         <div
           className="mt-3 uppercase mx-auto"
-          style={{ ...BLOG_TITLE, fontWeight: 735, letterSpacing: "-.055em", lineHeight: 0.9, fontSize: "clamp(2.25rem,4vw,3rem)", maxWidth: "6.5ch" }}
+          style={{ ...BLOG_TITLE, color: "#fff", fontWeight: 735, letterSpacing: "-.055em", lineHeight: 0.9, fontSize: "clamp(2.25rem,4vw,3.8rem)", maxWidth: "6.5ch" }}
         >
           Read a random blog.
         </div>
@@ -87,11 +105,13 @@ function RandomBox({ href }) {
   );
 }
 
+const SIDE_PANEL_BG = { background: "color-mix(in srgb, var(--surface) 86%, transparent)" };
+
 function SidePanelWrap({ recentPosts, topics }) {
   return (
     <div className="grid gap-6 content-start">
-      <div className="border border-theme rounded-[26px] p-6 bg-surface-weak">
-        <h4 className="font-black text-[1.34rem] mb-4 text-foreground">Recent Posts</h4>
+      <div className="border border-theme rounded-[26px] p-6" style={SIDE_PANEL_BG}>
+        <h4 className="text-[1.34rem] mb-4 text-foreground" style={{ fontWeight: 900 }}>Recent Posts</h4>
         <div className="grid gap-3.5">
           {recentPosts.map((p) => (
             <Link
@@ -104,8 +124,8 @@ function SidePanelWrap({ recentPosts, topics }) {
           ))}
         </div>
       </div>
-      <div className="border border-theme rounded-[26px] p-6 bg-surface-weak">
-        <h4 className="font-black text-[1.34rem] mb-4 text-foreground">Core Topics</h4>
+      <div className="border border-theme rounded-[26px] p-6" style={SIDE_PANEL_BG}>
+        <h4 className="text-[1.34rem] mb-4 text-foreground" style={{ fontWeight: 900 }}>Core Topics</h4>
         <div className="grid gap-3.5">
           {topics.map((c) => (
             <span key={c.id} className="pb-3 border-b border-dashed border-theme font-bold text-muted last:border-b-0 last:pb-0">
@@ -144,7 +164,13 @@ function CtaSwapCard() {
   const slide = SWAP_SLIDES[index];
 
   return (
-    <div className="rounded-[28px] border border-theme p-6 bg-surface-weak flex flex-col justify-between min-h-[292px] relative overflow-hidden">
+    <div
+      className="bl-swap-card rounded-[28px] border border-theme p-6 flex flex-col justify-between min-h-[292px] relative overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(145deg, color-mix(in srgb, var(--surface) 86%, transparent), color-mix(in srgb, var(--surface-2) 96%, transparent))",
+      }}
+    >
       <div>
         <div className="text-accent text-[12px] font-black uppercase tracking-[.18em]">
           Need something more direct?
@@ -178,7 +204,7 @@ function CtaSwapCard() {
               key={i}
               className="w-2 h-2 rounded-full transition-transform"
               style={{
-                background: i === index ? "var(--accent)" : "var(--border)",
+                background: i === index ? "linear-gradient(145deg,var(--accent),var(--bl-cyan))" : "var(--border)",
                 transform: i === index ? "scale(1.18)" : "none",
               }}
             />
@@ -198,11 +224,11 @@ export default function FeaturedGrid({ items, categoriesMap, categories, randomH
   return (
     <section className="py-[70px] md:py-[100px]">
       <div className="max-w-[1320px] mx-auto px-[20px] md:px-6">
-        <div className="grid md:grid-cols-[1.4fr_1fr] gap-8 items-end mb-9">
+        <ScrollReveal as="div" className="grid md:grid-cols-[1.4fr_1fr] gap-8 items-end mb-9">
           <div>
             <span
               className="inline-flex items-center gap-3 text-[12px] uppercase"
-              style={{ fontFamily: "var(--font-editorial)", fontWeight: 800, letterSpacing: ".28em", color: "var(--accent)" }}
+              style={{ fontFamily: "var(--font-editorial)", fontWeight: 800, letterSpacing: ".28em", color: "var(--bl-cyan)" }}
             >
               <span className="w-8 h-px" style={{ background: "currentColor" }} />
               Latest / Editor&apos;s Pick
@@ -218,28 +244,54 @@ export default function FeaturedGrid({ items, categoriesMap, categories, randomH
             One lead story, one support story, a random article starter, and a conversion-friendly CTA block —
             a stronger editorial hierarchy for the page.
           </p>
-        </div>
+        </ScrollReveal>
 
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 min-[1180px]:grid-cols-[1.18fr_.82fr_.82fr] min-[1180px]:grid-rows-[auto_auto]">
-          <div className="md:col-span-2 min-[1180px]:col-span-1 min-[1180px]:col-start-1 min-[1180px]:row-start-1 min-[1180px]:row-span-2">
+        <ScrollReveal as="div" className="bl-featured-layout">
+          <div className="bl-feature-main">
             <PostCard item={featureMain} big />
           </div>
-          {supportStory ? (
-            <div className="min-[1180px]:col-start-2 min-[1180px]:row-start-1">
-              <PostCard item={supportStory} />
-            </div>
-          ) : null}
-          <div className="min-[1180px]:col-start-3 min-[1180px]:row-start-1">
-            <RandomBox href={randomHref} />
-          </div>
-          <div className="min-[1180px]:col-start-2 min-[1180px]:row-start-2">
+          {/*
+            Column 2 and column 3 are each a single grid item — a flex column
+            holding its own 2 cards — rather than the concept's literal
+            grid-row-span split (bl-feature-main spanning rows 1-2 while
+            support-story/random-box sit in row 1 and side-panel/cta-swap sit
+            in row 2). The grid stretches all 3 columns to equal height (the
+            default align-items:stretch — matching feature-main, usually the
+            tallest). Within each column the TOP card (support-story /
+            random-box) is flex-1 and grows to absorb that extra height,
+            while the bottom card (side-panel / cta-swap) stays at its
+            natural size, pinned below — not justify-content:space-between,
+            which just relocates the dead space into a gap between the two
+            cards instead of removing it.
+          */}
+          <div className="bl-side-col flex flex-col gap-6">
+            {supportStory ? (
+              <div className="flex-1">
+                <PostCard item={supportStory} />
+              </div>
+            ) : null}
             <SidePanelWrap recentPosts={recentPosts} topics={(categories || []).slice(0, 3)} />
           </div>
-          <div className="min-[1180px]:col-start-3 min-[1180px]:row-start-2">
+          <div className="bl-side-col flex flex-col gap-6">
+            <div className="flex-1">
+              <RandomBox href={randomHref} />
+            </div>
             <CtaSwapCard />
           </div>
-        </div>
+        </ScrollReveal>
       </div>
+
+      <style>{`
+        .bl-featured-layout{display:grid;gap:24px;grid-template-columns:1.18fr .82fr .82fr}
+        @media (max-width:1180px){
+          .bl-featured-layout{grid-template-columns:1fr 1fr}
+          .bl-feature-main{grid-column:1 / -1}
+        }
+        @media (max-width:760px){
+          .bl-featured-layout{grid-template-columns:1fr}
+        }
+        .bl-swap-card::before{content:"";position:absolute;inset:auto -15% -15% auto;width:180px;height:180px;background:radial-gradient(circle, rgba(87,200,243,.16), transparent 68%);pointer-events:none}
+      `}</style>
     </section>
   );
 }

@@ -87,11 +87,11 @@ export default function WhyAbnSection() {
             className="flex flex-col justify-center min-[900px]:sticky min-[900px]:overflow-hidden"
             style={{ top: HEADER_OFFSET, minHeight: `calc(100vh - ${HEADER_OFFSET}px)` }}
           >
-            <div className="grid md:grid-cols-[1.4fr_1fr] gap-8 items-end mb-9">
+            <ScrollReveal as="div" className="grid md:grid-cols-[1.4fr_1fr] gap-8 items-end mb-9">
               <div>
                 <span
                   className="inline-flex items-center gap-3 text-[12px] uppercase"
-                  style={{ fontFamily: "var(--font-editorial)", fontWeight: 800, letterSpacing: ".28em", color: "var(--accent)" }}
+                  style={{ fontFamily: "var(--font-editorial)", fontWeight: 800, letterSpacing: ".28em", color: "var(--bl-cyan)" }}
                 >
                   <span className="w-8 h-px" style={{ background: "currentColor" }} />
                   Why ABN Insights
@@ -107,7 +107,7 @@ export default function WhyAbnSection() {
                 This is where the blog becomes brand-specific — not generic marketing content, but ideas shaped by
                 execution, data, iteration and cross-service thinking.
               </p>
-            </div>
+            </ScrollReveal>
 
             <div
               ref={wrapRef}
@@ -118,8 +118,13 @@ export default function WhyAbnSection() {
                   {WHY_ABN_ITEMS.map((item) => (
                     <div
                       key={item.num}
-                      className="why-card snap-start flex-none rounded-[28px] border border-theme bg-surface-weak p-[26px] flex flex-col justify-between"
-                      style={{ width: "320px", minHeight: "260px" }}
+                      className="why-card snap-start flex-none rounded-[28px] border border-theme p-[26px] flex flex-col justify-between"
+                      style={{
+                        width: "320px",
+                        minHeight: "260px",
+                        background:
+                          "linear-gradient(180deg, color-mix(in srgb, var(--surface) 74%, transparent), color-mix(in srgb, var(--surface-2) 92%, transparent))",
+                      }}
                     >
                       <div>
                         <div
@@ -143,7 +148,11 @@ export default function WhyAbnSection() {
             </div>
 
             <div className="h-1.5 rounded-full bg-surface-weak overflow-hidden mt-4.5">
-              <span ref={progressBarRef} className="block h-full w-0 rounded-full bg-accent" />
+              <span
+                ref={progressBarRef}
+                className="block h-full w-0 rounded-full"
+                style={{ background: "linear-gradient(90deg,var(--accent),var(--bl-cyan))" }}
+              />
             </div>
           </div>
         </div>

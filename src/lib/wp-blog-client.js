@@ -25,12 +25,13 @@ async function fetchWithRetry(url, { tries = 2, backoffMs = 500 } = {}) {
 }
 
 /**
- * @param {{page?:number, perPage?:number, categoryId?:string|number}} opts
+ * @param {{page?:number, perPage?:number, categoryId?:string|number, search?:string}} opts
  * @returns {Promise<{items: Array, totalPages: number}>}
  */
-export async function fetchPostsClient({ page = 1, perPage = 9, categoryId = "all" } = {}) {
+export async function fetchPostsClient({ page = 1, perPage = 9, categoryId = "all", search = "" } = {}) {
   const params = new URLSearchParams({ path: "posts", per_page: perPage, page, _embed: 1, orderby: "date", order: "desc" });
   if (categoryId && categoryId !== "all") params.set("categories", categoryId);
+  if (search) params.set("search", search);
 
   const { data, headers } = await fetchWithRetry(`${PROXY_URL}?${params}`);
   return {

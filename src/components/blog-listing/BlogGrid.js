@@ -15,6 +15,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { formatPostDate } from "@/lib/blog-shared";
 import { fetchPostsClient } from "@/lib/wp-blog-client";
 import SwitchWord from "./SwitchWord";
+import ScrollReveal from "./ScrollReveal";
 
 function PostCard({ item }) {
   return (
@@ -22,7 +23,7 @@ function PostCard({ item }) {
       <div className="rounded-[20px] border border-theme bg-surface-2 flex flex-col h-full p-[18px] transition-shadow duration-300 hover:shadow-lg">
         <div className="relative h-[190px] rounded-[10px] overflow-hidden bg-surface flex items-center justify-center mb-4 flex-shrink-0">
           {item.image ? (
-            <Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 90vw, 400px" className="object-cover" />
+            <Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 90vw, 400px" className="object-contain" />
           ) : (
             <span className="text-3xl text-muted" style={{ fontFamily: "var(--font-editorial)", fontWeight: 800 }}>
               ABN
@@ -51,6 +52,7 @@ function SkeletonCard() {
 
 export default function BlogGrid({ categories, totalCount, initialItems, initialTotalPages }) {
   const [category, setCategory] = useState("all");
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [items, setItems] = useState(initialItems || []);
   const [totalPages, setTotalPages] = useState(initialTotalPages || 1);
@@ -61,6 +63,7 @@ export default function BlogGrid({ categories, totalCount, initialItems, initial
   const seenSlugsRef = useRef(new Set());
   const gridRef = useRef(null);
   const retryRef = useRef(null);
+  const searchDebounceRef = useRef(null);
 
   function poolCountFor(catId) {
     if (catId === "all") return totalCount;
@@ -92,18 +95,22 @@ export default function BlogGrid({ categories, totalCount, initialItems, initial
     }
   }, [items]);
 
-  async function runFetch({ mode, targetCategory, targetPage }) {
-    retryRef.current = { mode, targetCategory, targetPage };
+  async function runFetch({ mode, targetCategory, targetPage, targetSearch }) {
+    retryRef.current = { mode, targetCategory, targetPage, targetSearch };
     setStatus("loading");
     setLoadingMode(mode);
     if (mode === "replace") setAnnounce("Loading articles…");
     try {
-      const result = await fetchPostsClient({ page: targetPage, categoryId: targetCategory });
+      const result = await fetchPostsClient({ page: targetPage, categoryId: targetCategory, search: targetSearch });
       const nextItems = mode === "append" ? items.concat(result.items) : result.items;
       setTotalPages(result.totalPages);
       setItems(nextItems);
       setPage(targetPage);
-      setAnnounce(`Showing ${nextItems.length} of ${poolCountFor(targetCategory)} articles`);
+      setAnnounce(
+        targetSearch
+          ? `Showing ${nextItems.length} articles matching "${targetSearch}"`
+          : `Showing ${nextItems.length} of ${poolCountFor(targetCategory)} articles`
+      );
       setStatus("idle");
       setLoadingMode(null);
     } catch (err) {
@@ -116,12 +123,12 @@ export default function BlogGrid({ categories, totalCount, initialItems, initial
   function handleFilterClick(catId) {
     if (status === "loading") return;
     setCategory(catId);
-    runFetch({ mode: "replace", targetCategory: catId, targetPage: 1 });
+    runFetch({ mode: "replace", targetCategory: catId, targetPage: 1, targetSearch: search });
   }
 
   function handleLoadMore() {
     if (status === "loading") return;
-    runFetch({ mode: "append", targetCategory: category, targetPage: page + 1 });
+    runFetch({ mode: "append", targetCategory: category, targetPage: page + 1, targetSearch: search });
   }
 
   function handleRetry() {
@@ -129,16 +136,39 @@ export default function BlogGrid({ categories, totalCount, initialItems, initial
     runFetch(retryRef.current);
   }
 
+  // Debounced live search — matches the concept's "Search articles, topics,
+  // tools or categories..." box, but queries WP's own REST search server-side
+  // (see wp-blog.js) instead of substring-matching the concept's baked-in
+  // 66-post snapshot client-side.
+  function handleSearchChange(e) {
+    const value = e.target.value;
+    setSearch(value);
+    if (status === "loading" && loadingMode === "replace") {
+      // let the in-flight replace settle rather than racing it — the next
+      // keystroke's debounce will fire another replace shortly after anyway
+    }
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+    searchDebounceRef.current = setTimeout(() => {
+      runFetch({ mode: "replace", targetCategory: category, targetPage: 1, targetSearch: value });
+    }, 400);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+    };
+  }, []);
+
   const pills = [{ id: "all", name: "All Articles", count: totalCount }, ...(categories || [])];
 
   return (
     <section id="articles" className="pt-[50px] pb-[80px] md:pt-[70px] md:pb-[110px] border-t border-theme">
       <div className="max-w-[1320px] mx-auto px-[20px] md:px-6">
-        <div className="grid md:grid-cols-[1.4fr_1fr] gap-8 items-end mb-4">
+        <ScrollReveal as="div" className="grid md:grid-cols-[1.4fr_1fr] gap-8 items-end mb-4">
           <div>
             <span
               className="inline-flex items-center gap-3 text-[12px] uppercase"
-              style={{ fontFamily: "var(--font-editorial)", fontWeight: 800, letterSpacing: ".28em", color: "var(--accent)" }}
+              style={{ fontFamily: "var(--font-editorial)", fontWeight: 800, letterSpacing: ".28em", color: "var(--bl-cyan)" }}
             >
               <span className="w-8 h-px" style={{ background: "currentColor" }} />
               Browse all articles
@@ -153,9 +183,9 @@ export default function BlogGrid({ categories, totalCount, initialItems, initial
           <p className="text-muted" style={{ lineHeight: 1.72, fontSize: "clamp(1.02rem,1.5vw,1.18rem)" }}>
             Primary filters keep the library scannable — pick a category to narrow the list, or browse everything.
           </p>
-        </div>
+        </ScrollReveal>
 
-        <div className="flex flex-wrap gap-3 mt-7 mb-8" role="group" aria-label="Filter articles by category">
+        <ScrollReveal as="div" className="flex flex-wrap gap-3 mt-7 mb-8" role="group" aria-label="Filter articles by category">
           {pills.map((c) => {
             const pressed = category === c.id;
             return (
@@ -166,17 +196,38 @@ export default function BlogGrid({ categories, totalCount, initialItems, initial
                 disabled={status === "loading"}
                 onClick={() => handleFilterClick(c.id)}
                 className={
-                  "inline-flex items-baseline gap-2 px-[22px] py-3.5 rounded-full border font-black transition-colors disabled:cursor-not-allowed disabled:opacity-60 " +
-                  (pressed ? "bg-accent border-accent" : "bg-surface-weak border-theme text-muted hover:text-foreground")
+                  "inline-flex items-baseline gap-2 px-[22px] py-3.5 rounded-full border transition-colors disabled:cursor-not-allowed disabled:opacity-60 " +
+                  (pressed ? "bg-accent border-accent" : "border-theme text-muted hover:text-foreground")
                 }
-                style={pressed ? { color: "#0a0a0a" } : undefined}
+                style={{
+                  fontWeight: 800,
+                  ...(pressed
+                    ? { color: "#0a0a0a" }
+                    : { background: "color-mix(in srgb, var(--surface) 78%, transparent)" }),
+                }}
               >
                 {c.name}
                 <span className="opacity-65 text-[11.5px] font-semibold">{c.count}</span>
               </button>
             );
           })}
-        </div>
+        </ScrollReveal>
+
+        <ScrollReveal
+          as="div"
+          className="mt-4.5 mb-4 flex items-center gap-3.5 bg-surface border border-theme px-4 py-3 rounded-[22px]"
+        >
+          <span className="text-[12px] uppercase text-muted" style={{ fontWeight: 900, letterSpacing: ".16em" }}>
+            Search
+          </span>
+          <input
+            type="text"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder="Search articles, topics, tools or categories..."
+            className="border-0 bg-transparent outline-none text-foreground text-base w-full"
+          />
+        </ScrollReveal>
 
         <div aria-live="polite" className="sr-only">{announce}</div>
 

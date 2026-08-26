@@ -1,11 +1,18 @@
 // Final call-to-action block. Server component. Ported from the concept's
 // .final-cta (~line 1194-1202).
 import { PRIMARY_LINKS } from "@/data/navigation";
+import ScrollReveal from "./ScrollReveal";
 
 export default function FinalCTA() {
   return (
-    <section className="py-[70px] md:py-[110px] border-t border-theme bg-[radial-gradient(circle_at_50%_0%,color-mix(in_srgb,var(--accent)_10%,transparent),transparent_62%)] text-center">
-      <div className="max-w-[760px] mx-auto px-[20px] md:px-6">
+    <section
+      className="py-[70px] md:py-[110px] border-t border-theme text-center"
+      style={{
+        background:
+          "radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 62%), var(--surface)",
+      }}
+    >
+      <ScrollReveal as="div" className="max-w-[760px] mx-auto px-[20px] md:px-6">
         <h2
           className="text-foreground"
           style={{ fontFamily: "var(--font-editorial)", fontWeight: 950, letterSpacing: "-.03em", lineHeight: 1.08, fontSize: "clamp(2.2rem,4.4vw,3.6rem)" }}
@@ -23,7 +30,7 @@ export default function FinalCTA() {
         >
           Book a Strategy Call →
         </a>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

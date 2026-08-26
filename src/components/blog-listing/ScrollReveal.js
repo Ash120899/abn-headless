@@ -19,6 +19,7 @@ export default function ScrollReveal({
   duration = 0.8,
   ease = "power3.out",
   selector,
+  ...rest
 }) {
   const ref = useRef(null);
 
@@ -46,7 +47,7 @@ export default function ScrollReveal({
   }, [y, stagger, start, duration, ease, selector]);
 
   return (
-    <Tag ref={ref} className={className}>
+    <Tag ref={ref} className={className} {...rest}>
       {children}
     </Tag>
   );

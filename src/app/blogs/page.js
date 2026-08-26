@@ -73,7 +73,40 @@ export default async function BlogsPage() {
   const randomHref = randomPick ? `/blog/${randomPick.slug}` : "/blogs#articles";
 
   return (
-    <main className="bg-background text-foreground">
+    <main className="blogs-page bg-background text-foreground">
+      {/*
+        --bl-cyan is the page's "second accent" — the concept pairs its
+        orange --accent with a separate --accent-alt (cyan) for eyebrows,
+        glows and rings. This app's own --accent is already theme-reactive
+        (orange in dark mode, teal in light), but has no second token, so
+        one is defined here, page-scoped, and consumed via var(--bl-cyan) by
+        every blog-listing component instead of a hardcoded hex. The light
+        value is a deliberately darker/more saturated teal than the naive
+        "same hex in both themes" choice: the raw dark-mode cyan (#57c8f3)
+        is pale enough to fail contrast on this page's white light-mode
+        background (confirmed — it's what made "Read a random blog." nearly
+        invisible before this was added), and it would also read as barely
+        distinct from this app's own light-mode --accent (#08acc8, itself
+        already a teal).
+      */}
+      <style>{`
+        .blogs-page{--bl-cyan:#57c8f3}
+        [data-theme="light"] .blogs-page{--bl-cyan:#0e6c86}
+      `}</style>
+
+      {/* Fine noise texture over the whole page — the concept's .grain
+          (design-concepts/ABN_Blogs_V4_Magnetic_Interactive_Concept.html
+          ~line 372, ~line 100). Ported as a literal fixed overlay since it
+          applies page-wide, not to any single section. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[2] opacity-[.035] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        }}
+      />
+
       <ScrollFX />
 
       <HeroScene totalCount={totalCount} categoryCount={categories.length} />

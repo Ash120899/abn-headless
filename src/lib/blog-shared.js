@@ -4,19 +4,33 @@
 // from case-study-shared so this listing doesn't depend on another
 // feature's internals.
 
+// WP's excerpt field isn't reliably short — some posts return an
+// auto-generated ~55-word trim, but others (custom excerpt set, or no
+// excerpt support in the block) return the full first paragraph(s) of
+// content, which was overflowing the cards. Trimmed to a real "card"
+// length here rather than relying on WP to have done it.
+const CARD_DESC_MAX = 140;
+
 export function normalizeBlogPost(item) {
-  const excerpt = (item.excerpt?.rendered || "")
+  let excerpt = (item.excerpt?.rendered || "")
     .replace(/<[^>]+>/g, "")
     .replace(/&hellip;|\[&hellip;\]/g, "…")
     .trim();
+  if (excerpt.length > CARD_DESC_MAX) {
+    excerpt = excerpt.slice(0, CARD_DESC_MAX).replace(/\s+\S*$/, "") + "…";
+  }
+  // Some real posts only carry WP's default "Uncategorized" term — showing
+  // that verbatim on a card badge reads as a bug, not a real category, so
+  // it's treated the same as having no category (falls back to "Blog").
   const term = item._embedded?.["wp:term"]?.[0]?.[0];
+  const categoryLabel = term && term.name !== "Uncategorized" ? term.name.replace(/&amp;/g, "&") : null;
   return {
     slug: item.slug,
     title: (item.title?.rendered || "").replace(/&amp;/g, "&").replace(/&#8217;/g, "’"),
     desc: excerpt,
     image: item._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null,
     categories: item.categories || [],
-    categoryLabel: term ? term.name.replace(/&amp;/g, "&") : null,
+    categoryLabel,
     date: item.date,
   };
 }
@@ -53,17 +67,19 @@ export const WHY_ABN_ITEMS = [
 ];
 
 // Tool rail — static, not fetched. Content ported from the concept's tool-rail.
+// icon keys match BrandIcon.js, which ports the concept's own .tool-logo.*
+// hand-drawn pseudo-element icons — not generic single-letter badges.
 export const TOOLS_LIST = [
-  { label: "Google Ads", badge: "G", color: "#5bb8ff" },
-  { label: "Meta Ads", badge: "∞", color: "#5ba6ff" },
-  { label: "GA4 / GTM", badge: "A", color: "#f0ad54" },
-  { label: "WordPress", badge: "W", color: "#1e2f3d" },
-  { label: "Shopify", badge: "S", color: "#86c268" },
-  { label: "Search Console", badge: "G", color: "#6abcf7" },
-  { label: "Merchant Center", badge: "M", color: "#f5d3a6" },
-  { label: "Next.js", badge: "N", color: "#111111" },
-  { label: "Figma", badge: "F", color: "#7d6bff" },
-  { label: "Analytics", badge: "A", color: "#8ec8b6" },
+  { label: "Google Ads", icon: "ads" },
+  { label: "Meta Ads", icon: "meta" },
+  { label: "GA4 / GTM", icon: "ga4" },
+  { label: "WordPress", icon: "wp" },
+  { label: "Shopify", icon: "shop" },
+  { label: "Search Console", icon: "search" },
+  { label: "Merchant Center", icon: "merchant" },
+  { label: "Next.js", icon: "next" },
+  { label: "Figma", icon: "figma" },
+  { label: "Analytics", icon: "analytics" },
 ];
 
 // PLACEHOLDER fallback data, only used if the live /posts fetch fails.

@@ -29,7 +29,16 @@ export async function getCategories() {
     const { data } = await fetchWithRetry(`${WP_API_URL}/categories?per_page=50&orderby=count&order=desc`);
     return data
       .filter((c) => c.count > 0 && c.slug !== "uncategorized")
-      .map((c) => ({ id: c.id, count: c.count, name: c.name.replace(/&amp;/g, "&") }));
+      // WP's real category names are the full verbose "Short Title:
+      // long description" strings (e.g. "AI Tools & Trends: Updates, Tips,
+      // and Giveaways") — the concept's own filter pills only ever show the
+      // part before the colon (verified against every category on the live
+      // site), which is also short enough to actually fit a pill.
+      .map((c) => ({ id: c.id, count: c.count, name: c.name.replace(/&amp;/g, "&").split(":")[0].trim() }))
+      // WP's own orderby=count doesn't break ties deterministically (two
+      // categories with the same count can swap positions between requests)
+      // — sorted again here so the pill order is stable across page loads.
+      .sort((a, b) => b.count - a.count || a.id - b.id);
   } catch (err) {
     console.warn("getCategories: falling back to mock", err);
     return MOCK_CATEGORIES;
@@ -46,12 +55,17 @@ export async function getTotalCount() {
 }
 
 /**
- * @param {{page?:number, perPage?:number, categoryId?:string|number}} opts
+ * @param {{page?:number, perPage?:number, categoryId?:string|number, search?:string}} opts
  * @returns {Promise<{items: Array, totalPages: number}>}
  */
-export async function getPosts({ page = 1, perPage = 9, categoryId = "all" } = {}) {
+export async function getPosts({ page = 1, perPage = 9, categoryId = "all", search = "" } = {}) {
   const params = new URLSearchParams({ per_page: perPage, page, _embed: 1, orderby: "date", order: "desc" });
   if (categoryId && categoryId !== "all") params.set("categories", categoryId);
+  // WP's own REST search (title/content/excerpt) — real server-side search
+  // against the live post set, same as the concept's "Search articles,
+  // topics, tools or categories..." box, instead of the concept's own
+  // client-side substring match over its baked-in 66-post snapshot.
+  if (search) params.set("search", search);
 
   try {
     const { data, headers } = await fetchWithRetry(`${WP_API_URL}/posts?${params}`);
