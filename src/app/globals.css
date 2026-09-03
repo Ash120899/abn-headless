@@ -9,6 +9,7 @@
   --surface: #111111;
   --surface-2: #1a1a1a;
   --accent: #08acc8;
+  --accent-contrast: #ffffff;
   --border: rgba(0,0,0,0.08);
   --overlay: rgba(0,0,0,0.35);
   --surface-weak: rgba(0,0,0,0.04);
@@ -506,6 +507,7 @@ background-position: center;
 /* Dark theme overrides: keep the existing orange accent in dark mode */
 [data-theme="dark"] {
   --accent: #F97316; /* orange for dark mode */
+  --accent-contrast: #0a0a0a;
   --background: #050505;
   --foreground: #F5F5F5;
   --muted: #B3B3B3;
@@ -526,6 +528,7 @@ background-position: center;
   --border: rgba(0,0,0,0.08);
   --overlay: rgba(0,0,0,0.2);
   --surface-weak: rgba(0,0,0,0.04);
+  --accent-contrast: #ffffff;
 }
 
 /* Theme-aware utility classes */
@@ -680,6 +683,12 @@ background-position: center;
   --site-white: #f7fbfc;
   --site-muted: #a9b4ba;
   --site-cyan: #38c5e7;
+  /* Header CTA fill. A page can override this to take on its own accent —
+     the service pages set it per service (see ServicePageStyles.js). Kept
+     separate from --site-cyan so overriding the button does not recolour
+     every other cyan element in the chrome. */
+  --site-cta-bg: var(--site-cyan);
+  --site-cta-fg: #001116;
   --site-line: rgba(255, 255, 255, 0.11);
   --site-max: 1320px;
   --site-header-h: 76px;
@@ -793,8 +802,8 @@ background-position: center;
   min-height: 40px;
   padding: 0 16px;
   border-radius: 999px;
-  background: var(--site-cyan) !important;
-  color: #001116 !important;
+  background: var(--site-cta-bg) !important;
+  color: var(--site-cta-fg) !important;
   font-weight: 900;
   font-size: 13px;
   white-space: nowrap;

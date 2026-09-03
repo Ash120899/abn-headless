@@ -58,8 +58,8 @@ export default function InsightsSection({ posts = [], children }) {
               className="card block rounded-2xl border border-theme bg-surface-weak overflow-hidden shadow-xl hover:-translate-y-1 hover:shadow-2xl transition"
             >
               {post.image ? (
-                <div className="relative h-[150px]">
-                  <Image src={post.image} alt={post.title} fill sizes="(max-width: 768px) 90vw, 380px" className="object-cover" />
+                <div className="relative h-auto">
+                  <Image src={post.image} alt={post.title} width={380} height={150} sizes="(max-width: 768px) 90vw, 380px" className="w-full h-auto object-contain" />
                 </div>
               ) : (
                 // Solid accent block, not the concept's from-accent/to-accent-2
@@ -87,8 +87,8 @@ export default function InsightsSection({ posts = [], children }) {
         <div className="grid grid-cols-1 md:grid-cols-[1.6fr_.7fr] gap-4.5 mt-6">
           {children}
           <Link
-            href="/blog"
-            className="rounded-2xl bg-[#0d1115] border border-white/10 text-white p-6 flex flex-col justify-between items-start transition-all hover:-translate-y-1 hover:border-accent"
+            href="/blogs"
+            className="rounded-2xl bg-surface-2 border border-theme text-foreground p-6 flex flex-col justify-between items-start transition-all hover:-translate-y-1 hover:border-accent"
           >
             <strong
               className="text-[clamp(1.4rem,2.6vw,1.9rem)] leading-[1.02] uppercase"

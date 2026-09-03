@@ -190,14 +190,14 @@ export default function BlogPostClient({ slug }) {
       "wp:featuredmedia"
     ]?.[0]?.source_url;
 
-  // Main hero image has no theme variation — always the WP featured media
-  const featuredImage = lightFeaturedImage;
-
-  // Banner section image: "featured_image_dark" is the dark-mode variant of banner_image (not the hero)
-  const bannerImage =
+  // Hero image swaps to the ACF dark-mode variant when present, same as the banner section below
+  const featuredImage =
     theme === "dark"
-      ? post?.acf?.featured_image_dark || post?.acf?.banner_image
-      : post?.acf?.banner_image;
+      ? post?.acf?.featured_image_dark || lightFeaturedImage
+      : lightFeaturedImage;
+
+  // Banner section image has no dark-mode variant — always banner_image
+  const bannerImage = post?.acf?.banner_image;
 
   return (
 
@@ -235,10 +235,10 @@ export default function BlogPostClient({ slug }) {
           </div>
         )}
 
-        <div className="relative z-10 max-w-[1280px] mx-auto px-[10px] pt-[40px] pb-[40px] lg:px-10 lg:pt-16 lg:pb-24">
+        <div className="relative z-10 max-w-[1280px] mx-auto px-[10px] pt-[40px] pb-[30px] lg:px-10 lg:pt-16 lg:pb-24">
 
           {/* BREADCRUMB */}
-          <div className="text-[14px] text-muted mb-[20px] lg:mb-12">
+          <div className="text-[14px] text-muted mb-[30px] lg:mb-12">
             <span className="text-accent">Home</span>
             {" / "}
             <span className="text-accent">Blog</span>
@@ -250,7 +250,7 @@ export default function BlogPostClient({ slug }) {
           <h1 className="max-w-[980px] text-[38px] md:text-[72px] leading-[1.03] tracking-[-3px] font-[600] text-foreground" dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
 
           {/* META */}
-          <div className="flex items-center justify-between flex-wrap gap-8 mt-[20px] lg:mt-14">
+          <div className="flex items-center justify-between flex-wrap gap-8 mt-[30px] lg:mt-14">
 
             {/* AUTHOR */}
             <div className="flex items-center gap-5">
@@ -307,7 +307,8 @@ export default function BlogPostClient({ slug }) {
           px-[20px]
           lg:px-10
 
-          py-[40px]
+          pt-[50px]
+          pb-[40px]
           lg:py-[120px]
         "
       >

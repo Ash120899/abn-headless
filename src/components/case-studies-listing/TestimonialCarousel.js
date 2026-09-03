@@ -112,61 +112,63 @@ export default function TestimonialCarousel({ testimonials = [] }) {
                 <path d="M4.2 9.8V20h15.6V9.8" />
                 <path d="M9.6 20v-6.4h4.8V20" />
               </svg>
-              {/* globals.css has a blanket `h3{margin-top:1rem!important}` rule
-                  (relied on elsewhere, so not worth removing site-wide) —
-                  override it locally with matching !important specificity
-                  rather than fighting it with the m-0 utility alone. */}
-              <h3 className="google-proof-heading font-bold text-lg leading-snug text-white m-0">
-                ABN Junction — Performance Marketing Agency Chennai
-              </h3>
+              <div className="min-w-0">
+                {/* globals.css has a blanket `h3{margin-top:1rem!important}` rule
+                    (relied on elsewhere, so not worth removing site-wide) —
+                    override it locally with matching !important specificity
+                    rather than fighting it with the m-0 utility alone. */}
+                <h3 className="google-proof-heading font-bold text-lg leading-snug text-white m-0">
+                  ABN Junction — Performance Marketing Agency Chennai
+                </h3>
+                <div className="mt-6 flex items-center gap-2.5">
+                  <span
+                    className="text-[#ffa436] text-[32px] leading-none"
+                    style={{ fontFamily: "var(--font-editorial)", fontWeight: 900 }}
+                  >
+                    {GOOGLE_RATING.score}
+                  </span>
+                  <span className="text-[#ffa436] text-lg tracking-[2px]">★★★★★</span>
+                </div>
+                <div className="mt-3 text-sm text-[#c9d0d4]">{GOOGLE_RATING.count}</div>
+                <div className="mt-5 font-extrabold text-[13.5px]">
+                  powered by{" "}
+                  <span className="text-[#4285F4]">G</span>
+                  <span className="text-[#EA4335]">o</span>
+                  <span className="text-[#FBBC05]">o</span>
+                  <span className="text-[#4285F4]">g</span>
+                  <span className="text-[#34A853]">l</span>
+                  <span className="text-[#EA4335]">e</span>
+                </div>
+                <a
+                  className="mt-4 inline-flex items-center gap-2 w-max pl-4 pr-1.5 py-1.5 rounded-full bg-[#405bd7] text-white font-bold text-[13.5px] underline underline-offset-2"
+                  href={GOOGLE_RATING.reviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Review us on
+                  <span className="w-7 h-7 rounded-full bg-white grid place-items-center flex-shrink-0">
+                    <svg viewBox="0 0 48 48" className="w-4 h-4" aria-hidden="true">
+                      <path
+                        fill="#FFC107"
+                        d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+                      />
+                      <path
+                        fill="#FF3D00"
+                        d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+                      />
+                      <path
+                        fill="#4CAF50"
+                        d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+                      />
+                      <path
+                        fill="#1976D2"
+                        d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                      />
+                    </svg>
+                  </span>
+                </a>
+              </div>
             </div>
-            <div className="mt-6 flex items-center gap-2.5">
-              <span
-                className="text-[#ffa436] text-[32px] leading-none"
-                style={{ fontFamily: "var(--font-editorial)", fontWeight: 900 }}
-              >
-                {GOOGLE_RATING.score}
-              </span>
-              <span className="text-[#ffa436] text-lg tracking-[2px]">★★★★★</span>
-            </div>
-            <div className="mt-3 text-sm text-[#c9d0d4]">{GOOGLE_RATING.count}</div>
-            <div className="mt-5 font-extrabold text-[13.5px]">
-              powered by{" "}
-              <span className="text-[#4285F4]">G</span>
-              <span className="text-[#EA4335]">o</span>
-              <span className="text-[#FBBC05]">o</span>
-              <span className="text-[#4285F4]">g</span>
-              <span className="text-[#34A853]">l</span>
-              <span className="text-[#EA4335]">e</span>
-            </div>
-            <a
-              className="mt-4 inline-flex items-center gap-2 w-max pl-4 pr-1.5 py-1.5 rounded-full bg-[#405bd7] text-white font-bold text-[13.5px] underline underline-offset-2"
-              href={GOOGLE_RATING.reviewUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Review us on
-              <span className="w-7 h-7 rounded-full bg-white grid place-items-center flex-shrink-0">
-                <svg viewBox="0 0 48 48" className="w-4 h-4" aria-hidden="true">
-                  <path
-                    fill="#FFC107"
-                    d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-                  />
-                  <path
-                    fill="#FF3D00"
-                    d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-                  />
-                  <path
-                    fill="#4CAF50"
-                    d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-                  />
-                  <path
-                    fill="#1976D2"
-                    d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-                  />
-                </svg>
-              </span>
-            </a>
           </aside>
 
           {items.length === 0 ? (

@@ -98,20 +98,23 @@ export default function OtherCasesSlider({ currentSlug }) {
           {...dragHandlers}
         >
         {items.map((it) => (
-          <Link key={it.slug} href={`/case-studies/${it.slug}`} className="snap-start min-w-[260px] max-w-[320px] flex-shrink-0">
+          <Link key={it.slug} href={`/case-studies/${it.slug}`} className="snap-start min-w-[260px] max-w-[278px] flex-shrink-0">
             <article className="rounded-[20px] overflow-hidden border border-theme bg-surface p-4 h-full flex flex-col justify-start hover:shadow-lg transition">
-              <div className="h-auto w-full mb-4 rounded-md overflow-hidden bg-surface-2 flex items-center justify-center">
+              <div className="relative w-full mb-4 rounded-md overflow-hidden bg-surface-2 flex items-center justify-center" style={{ paddingTop: "66%" }}>
                 {it.featured ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={it.featured} alt={it.title} className="w-full h-auto object-contain" />
+                  <img src={it.featured} alt={it.title} className="absolute inset-0 w-full h-full object-cover" />
                 ) : (
-                  <div className="text-muted">No image</div>
+                  <div className="absolute inset-0 flex items-center justify-center text-muted">No image</div>
                 )}
               </div>
 
-              <div>
+              <div className="flex flex-col flex-1">
                 <h4 className="text-lg font-semibold text-foreground mb-2">{it.title.replace(/<[^>]+>/g, "")}</h4>
                 <p className="text-sm text-muted line-clamp-3">{it.excerpt}</p>
+                <span className="inline-flex mt-3.5 text-[13px] font-bold" style={{ color: "#F97316" }}>
+                  Read the Case Study →
+                </span>
               </div>
 
             </article>

@@ -21,11 +21,11 @@ function PostCard({ item }) {
   return (
     <Link href={`/blog/${item.slug}`} data-slug={item.slug} className="card block">
       <div className="rounded-[20px] border border-theme bg-surface-2 flex flex-col h-full p-[18px] transition-shadow duration-300 hover:shadow-lg">
-        <div className="relative h-[190px] rounded-[10px] overflow-hidden bg-surface flex items-center justify-center mb-4 flex-shrink-0">
+        <div className="relative h-auto rounded-[10px] overflow-hidden bg-surface flex items-center justify-center mb-4 flex-shrink-0">
           {item.image ? (
-            <Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 90vw, 400px" className="object-contain" />
+            <Image src={item.image} alt={item.title} width={400} height={190} sizes="(max-width: 768px) 90vw, 400px" className="w-full h-auto object-contain" />
           ) : (
-            <span className="text-3xl text-muted" style={{ fontFamily: "var(--font-editorial)", fontWeight: 800 }}>
+            <span className="text-3xl text-muted h-[190px] flex items-center justify-center w-full" style={{ fontFamily: "var(--font-editorial)", fontWeight: 800 }}>
               ABN
             </span>
           )}
@@ -33,6 +33,9 @@ function PostCard({ item }) {
         <span className="text-[11.5px] text-muted mb-1.5 block">{formatPostDate(item.date)}</span>
         <h3 className="font-bold text-[1.1rem] leading-[1.3] text-foreground">{item.title}</h3>
         <p className="text-muted text-[14px] leading-[1.6] mt-2">{item.desc}</p>
+        <span className="inline-flex mt-3.5 text-[13px] font-bold" style={{ color: "#F97316" }}>
+          Read the Article →
+        </span>
       </div>
     </Link>
   );
@@ -211,12 +214,12 @@ export default function BlogGrid({ categories, totalCount, initialItems, initial
                 onClick={() => handleFilterClick(c.id)}
                 className={
                   "shrink-0 inline-flex items-baseline gap-2 px-[22px] py-3.5 rounded-full border transition-colors disabled:cursor-not-allowed disabled:opacity-60 " +
-                  (pressed ? "bg-accent border-accent" : "border-theme text-muted hover:text-foreground")
+                  (pressed ? "bg-accent border-accent" : "border-theme text-foreground hover:text-foreground")
                 }
                 style={{
                   fontWeight: 800,
                   ...(pressed
-                    ? { color: "#0a0a0a" }
+                    ? { color: "var(--accent-contrast)" }
                     : { background: "color-mix(in srgb, var(--surface) 78%, transparent)" }),
                 }}
               >

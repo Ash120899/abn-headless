@@ -122,24 +122,23 @@ function RandomStoryCard({ href }) {
   return (
     <a
       href={href}
-      className="card block rounded-[20px] border overflow-hidden transition-colors duration-300"
-      style={{ background: "#050505", color: "#fff", borderColor: "rgba(255,255,255,.11)" }}
+      className="card block rounded-[20px] border border-theme bg-surface-2 text-foreground overflow-hidden transition-colors duration-300"
     >
       <div className="flex flex-col justify-between p-6 h-full min-h-[280px]">
         <div>
           <div
-            className="w-[42px] h-[42px] rounded-full grid place-items-center text-lg"
-            style={{ border: "1px solid rgba(255,255,255,.16)", color: "#F97316" }}
+            className="w-[42px] h-[42px] rounded-full border border-theme grid place-items-center text-lg"
+            style={{ color: "#F97316" }}
           >
             ↗
           </div>
           <strong
-            className="block uppercase mt-[34px] mb-4 text-[clamp(1.875rem,2.8vw,2.75rem)] leading-[.93]"
+            className="block uppercase mt-[34px] mb-4 text-[clamp(1.875rem,2.8vw,2.75rem)] leading-[.93] text-foreground"
             style={{ fontFamily: "var(--font-editorial)", fontWeight: 900, letterSpacing: "-0.04em" }}
           >
             Click for a random case study
           </strong>
-          <p className="text-[14px] leading-relaxed" style={{ color: "rgba(255,255,255,.65)" }}>
+          <p className="text-[14px] leading-relaxed text-muted">
             Not sure what to open first? Jump into one real ABN growth story at random.
           </p>
         </div>

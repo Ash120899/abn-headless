@@ -33,23 +33,24 @@ function PostCard({ item, big }) {
       >
         <div
           className="relative overflow-hidden bg-surface flex-shrink-0"
-          style={{ minHeight: big ? 360 : 220 }}
+          style={{ height: "auto" }}
         >
           {item.image ? (
             <Image
               src={item.image}
               alt={item.title}
-              fill
+              width={big ? 640 : 400}
+              height={big ? 360 : 220}
               sizes={big ? "(max-width: 1024px) 100vw, 640px" : "(max-width: 1024px) 100vw, 400px"}
-              className="object-cover"
+              className="w-full h-auto object-cover"
             />
           ) : (
             <div className="absolute inset-0 grid place-items-center text-muted text-3xl" style={BLOG_TITLE}>
               ABN
             </div>
           )}
-          <span className="absolute left-[18px] top-[18px] z-[2] px-3.5 py-2 rounded-full bg-black/60 backdrop-blur text-white text-[11px] font-black uppercase tracking-[.16em]">
-            {big ? `Featured${item.categoryLabel ? ` · ${item.categoryLabel}` : ""}` : item.categoryLabel || "Blog"}
+          <span className="absolute right-[18px] bottom-[18px] z-[2] px-3.5 py-2 rounded-full bg-black/60 backdrop-blur text-white text-[11px] font-black uppercase tracking-[.16em]">
+            Featured
           </span>
         </div>
         <div className="p-6 flex flex-col flex-1">
@@ -87,17 +88,17 @@ function RandomBox({ href }) {
   return (
     <a
       href={href}
-      className="h-full rounded-[30px] border border-theme bg-[#080a0d] text-white grid place-items-center text-center min-h-[260px] p-8"
+      className="h-full rounded-[30px] border border-theme bg-surface-2 text-foreground grid place-items-center text-center min-h-[260px] p-8"
     >
       <div>
         <div className="text-accent text-[12px] font-black uppercase tracking-[.24em]">Discovery Mode</div>
         <div
-          className="mt-3 uppercase mx-auto"
-          style={{ ...BLOG_TITLE, color: "#fff", fontWeight: 735, letterSpacing: "-.055em", lineHeight: 0.9, fontSize: "clamp(2.25rem,4vw,3.8rem)", maxWidth: "6.5ch" }}
+          className="mt-3 uppercase mx-auto text-foreground"
+          style={{ ...BLOG_TITLE, fontWeight: 735, letterSpacing: "-.055em", lineHeight: 0.9, fontSize: "clamp(2.25rem,4vw,3.8rem)", maxWidth: "6.5ch" }}
         >
           Read a random blog.
         </div>
-        <p className="mt-3.5 text-white/65 mx-auto" style={{ maxWidth: "22ch" }}>
+        <p className="mt-3.5 text-muted mx-auto" style={{ maxWidth: "22ch" }}>
           Not sure where to start? Let ABN pick one useful article for you.
         </p>
       </div>
@@ -176,12 +177,12 @@ function CtaSwapCard() {
           Need something more direct?
         </div>
         <div
-          className="mt-3.5 text-foreground min-h-[2.1em]"
-          style={{ ...BLOG_TITLE, fontSize: "clamp(1.8rem,2.4vw,2.7rem)", lineHeight: 1.03 }}
+          className="mt-3.5 text-foreground"
+          style={{ ...BLOG_TITLE, fontSize: "clamp(1.8rem,2.4vw,2.7rem)", lineHeight: 1.03, minHeight: "4.15em" }}
         >
           {slide.headline}
         </div>
-        <p className="text-muted mt-2.5" style={{ lineHeight: 1.7 }}>{slide.copy}</p>
+        <p className="text-muted mt-2.5" style={{ lineHeight: 1.7, minHeight: "4.9em" }}>{slide.copy}</p>
       </div>
       <div>
         <div className="flex flex-wrap gap-3 mt-5">
@@ -282,7 +283,7 @@ export default function FeaturedGrid({ items, categoriesMap, categories, randomH
       </div>
 
       <style>{`
-        .bl-featured-layout{display:grid;gap:24px;grid-template-columns:1.18fr .82fr .82fr}
+        .bl-featured-layout{display:grid;gap:24px;grid-template-columns:1.4fr 1.4fr .2fr}
         @media (max-width:1180px){
           .bl-featured-layout{grid-template-columns:1fr 1fr}
           .bl-feature-main{grid-column:1 / -1}

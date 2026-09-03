@@ -48,7 +48,7 @@ export default function Gallery({ data }) {
                 <img
                   src={img.url}
                   alt={`Screenshot ${i + 1}`}
-                  className="w-full h-auto object-cover transition duration-500 hover:scale-[1.02]"
+                  className="w-full h-auto object-cover"
                 />
 
               </div>
