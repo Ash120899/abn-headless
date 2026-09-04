@@ -194,7 +194,7 @@ export default function Testimonial({ data }) {
           </div>
 
           {/* TEXT */}
-          <p className="text-[15px] md:text-[17px] leading-8 text-foreground font-light">
+          <p className="text-[15px] md:text-[17px] leading-8 text-foreground font-normal">
             {item.text}
           </p>
 

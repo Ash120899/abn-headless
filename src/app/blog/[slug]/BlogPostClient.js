@@ -7,6 +7,7 @@ import React, {
 } from "react";
 
 import * as cheerio from "cheerio";
+import Link from "next/link";
 import OtherCasesSlider from "@/components/OtherCasesSlider";
 import OtherBlogsSlider from "@/components/OtherBlogsSlider";
 import BannerBlog from "@/components/BannerBlog";
@@ -235,19 +236,19 @@ export default function BlogPostClient({ slug }) {
           </div>
         )}
 
-        <div className="relative z-10 max-w-[1280px] mx-auto px-[10px] pt-[40px] pb-[30px] lg:px-10 lg:pt-16 lg:pb-24">
+        <div className="relative z-10 max-w-[1280px] mx-auto px-[10px] pt-[50px] pb-[50px] lg:px-10 lg:pt-[50px] lg:pb-[50px]">
 
           {/* BREADCRUMB */}
           <div className="text-[14px] text-muted mb-[30px] lg:mb-12">
-            <span className="text-accent">Home</span>
+            <Link href="/" className="text-accent hover:underline">Home</Link>
             {" / "}
-            <span className="text-accent">Blog</span>
+            <Link href="/blogs" className="text-accent hover:underline">Blog</Link>
             {" / "}
             <span dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
           </div>
 
           {/* TITLE */}
-          <h1 className="max-w-[980px] text-[38px] md:text-[72px] leading-[1.03] tracking-[-3px] font-[600] text-foreground" dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+          <h1 className="max-w-[980px] text-[45px] md:text-[65px] leading-[1.03] tracking-[-3px] font-[600] text-foreground" dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
 
           {/* META */}
           <div className="flex items-center justify-between flex-wrap gap-8 mt-[30px] lg:mt-14">
@@ -309,7 +310,8 @@ export default function BlogPostClient({ slug }) {
 
           pt-[50px]
           pb-[40px]
-          lg:py-[120px]
+          lg:pt-[50px]
+          lg:pb-[120px]
         "
       >
 
