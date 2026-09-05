@@ -1,0 +1,887 @@
+[
+  {
+    "key": "group_abn_service_page",
+    "title": "Service Page",
+    "description": "Drives the headless service pages at /services/<slug>/. Every field is optional — anything left blank falls back to the value in the Next.js app (src/lib/service-content.js), so a half-filled page still renders correctly.",
+    "location": [
+      [
+        {
+          "param": "page_parent",
+          "operator": "==",
+          "value": "1023"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "show_in_rest": 1,
+    "fields": [
+      {
+        "key": "field_svc_tab_seo",
+        "label": "SEO",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_meta_description",
+        "label": "Meta description",
+        "name": "meta_description",
+        "type": "textarea",
+        "instructions": "Used for the <meta name=\"description\"> tag and the Open Graph / Twitter cards. Aim for 150-160 characters. The page title comes from the WordPress page title, not from here.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_svc_tab_theme",
+        "label": "Theme",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_color_primary",
+        "label": "Accent colour",
+        "name": "color_primary",
+        "type": "color_picker",
+        "instructions": "The service's main brand colour. Used for the hero background, the marquee band and the large coral panels. Digital Marketing uses #f56f5d.",
+        "enable_opacity": 0,
+        "return_format": "string"
+      },
+      {
+        "key": "field_svc_color_primary_light",
+        "label": "Accent colour — light",
+        "name": "color_primary_light",
+        "type": "color_picker",
+        "instructions": "A lighter tint of the accent, roughly 10-12% toward white. Digital Marketing uses #ff856f.",
+        "enable_opacity": 0,
+        "return_format": "string"
+      },
+      {
+        "key": "field_svc_color_accent",
+        "label": "Accent colour — deep",
+        "name": "color_accent",
+        "type": "color_picker",
+        "instructions": "A darker, slightly desaturated shade. Used for eyebrows and small text on the cream and white sections, where the main accent is too light to read. Digital Marketing uses #db3f32.",
+        "enable_opacity": 0,
+        "return_format": "string"
+      },
+      {
+        "key": "field_svc_tab_hero",
+        "label": "Hero",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_hero_eyebrow",
+        "label": "Eyebrow",
+        "name": "hero_eyebrow",
+        "type": "text",
+        "instructions": "Small caps line above the headline. e.g. \"Digital Marketing · ABN Junction\""
+      },
+      {
+        "key": "field_svc_hero_heading_before",
+        "label": "Headline — part 1",
+        "name": "hero_heading_before",
+        "type": "text",
+        "instructions": "First words, in dark ink. e.g. \"WE TURN\""
+      },
+      {
+        "key": "field_svc_hero_heading_highlight",
+        "label": "Headline — part 2 (cream)",
+        "name": "hero_heading_highlight",
+        "type": "text",
+        "instructions": "Rendered in cream on its own line. e.g. \"ATTENTION\""
+      },
+      {
+        "key": "field_svc_hero_heading_after",
+        "label": "Headline — part 3",
+        "name": "hero_heading_after",
+        "type": "text",
+        "instructions": "e.g. \"INTO\""
+      },
+      {
+        "key": "field_svc_hero_heading_kinetic",
+        "label": "Headline — final word (animated)",
+        "name": "hero_heading_kinetic",
+        "type": "text",
+        "instructions": "The word that wipes in on scroll. e.g. \"GROWTH.\""
+      },
+      {
+        "key": "field_svc_hero_description",
+        "label": "Intro paragraph",
+        "name": "hero_description",
+        "type": "textarea",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_svc_hero_cta_primary_label",
+        "label": "Primary button — label",
+        "name": "hero_cta_primary_label",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_hero_cta_primary_url",
+        "label": "Primary button — URL",
+        "name": "hero_cta_primary_url",
+        "type": "url"
+      },
+      {
+        "key": "field_svc_hero_cta_secondary_label",
+        "label": "Secondary button — label",
+        "name": "hero_cta_secondary_label",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_hero_cta_secondary_url",
+        "label": "Secondary button — URL",
+        "name": "hero_cta_secondary_url",
+        "type": "url"
+      },
+      {
+        "key": "field_svc_hero_character",
+        "label": "Hero character image",
+        "name": "hero_character",
+        "type": "image",
+        "instructions": "Transparent PNG. Sits inside the orbiting tool system.",
+        "return_format": "url",
+        "preview_size": "medium",
+        "library": "all"
+      },
+      {
+        "key": "field_svc_hero_stats",
+        "label": "Hero stats",
+        "name": "hero_stats",
+        "type": "repeater",
+        "instructions": "The three pills under the buttons. Only the number counts up on scroll — the prefix and suffix stay put the whole time.",
+        "layout": "table",
+        "min": 0,
+        "max": 4,
+        "button_label": "Add stat",
+        "sub_fields": [
+          {
+            "key": "field_svc_hero_stat_prefix",
+            "label": "Prefix",
+            "name": "prefix",
+            "type": "text",
+            "instructions": "Before the number, e.g. ₹ . Leave blank if none."
+          },
+          {
+            "key": "field_svc_hero_stat_value",
+            "label": "Number",
+            "name": "value",
+            "type": "text",
+            "instructions": "Digits only, commas allowed: 13, 6,500, 7.5"
+          },
+          {
+            "key": "field_svc_hero_stat_suffix",
+            "label": "Suffix",
+            "name": "suffix",
+            "type": "text",
+            "instructions": "After the number, e.g. × , + , M+ , ° . Leave blank if none."
+          },
+          {
+            "key": "field_svc_hero_stat_label",
+            "label": "Label",
+            "name": "label",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "key": "field_svc_hero_tools",
+        "label": "Orbiting tool pills",
+        "name": "hero_tools",
+        "type": "repeater",
+        "instructions": "The pills that orbit the character and converge as you scroll. 6 works best; more than 8 gets crowded.",
+        "layout": "table",
+        "min": 0,
+        "max": 8,
+        "button_label": "Add tool",
+        "sub_fields": [
+          {
+            "key": "field_svc_hero_tool_glyph",
+            "label": "Icon glyph",
+            "name": "glyph",
+            "type": "text",
+            "instructions": "One character, e.g. G, ∞, ⌕, W",
+            "maxlength": 2
+          },
+          {
+            "key": "field_svc_hero_tool_label",
+            "label": "Label",
+            "name": "label",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "key": "field_svc_tab_journey",
+        "label": "Story scroll",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_journey_eyebrow",
+        "label": "Eyebrow",
+        "name": "journey_eyebrow",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_journey_heading_before",
+        "label": "Heading",
+        "name": "journey_heading_before",
+        "type": "text",
+        "instructions": "Text before the animated word. e.g. \"Scroll through the growth\""
+      },
+      {
+        "key": "field_svc_journey_heading_switch",
+        "label": "Heading — switching words",
+        "name": "journey_heading_switch",
+        "type": "text",
+        "instructions": "Comma-separated. These type in and out on a loop, so keep them a similar length. e.g. \"engine, system\""
+      },
+      {
+        "key": "field_svc_journey_description",
+        "label": "Intro paragraph",
+        "name": "journey_description",
+        "type": "textarea",
+        "rows": 3
+      },
+      {
+        "key": "field_svc_journey_scenes",
+        "label": "Scenes",
+        "name": "journey_scenes",
+        "type": "repeater",
+        "instructions": "One per sub-service — these are the panels the pinned story scrolls through. Use this service's own sub-services (Web Development: Website Development, CMS, App Development, Adaptive Software Development). The scroll length adapts to however many you add.",
+        "layout": "block",
+        "min": 0,
+        "button_label": "Add scene",
+        "sub_fields": [
+          {
+            "key": "field_svc_scene_num",
+            "label": "Step label",
+            "name": "num",
+            "type": "text",
+            "instructions": "e.g. \"01 · ORGANIC DEMAND\""
+          },
+          {
+            "key": "field_svc_scene_title",
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "The sub-service name, e.g. \"Content Management System\""
+          },
+          {
+            "key": "field_svc_scene_description",
+            "label": "Description",
+            "name": "description",
+            "type": "textarea",
+            "rows": 3
+          },
+          {
+            "key": "field_svc_scene_chips",
+            "label": "Chips",
+            "name": "chips",
+            "type": "text",
+            "instructions": "Comma-separated tags shown under the description."
+          },
+          {
+            "key": "field_svc_scene_link_label",
+            "label": "Link label",
+            "name": "link_label",
+            "type": "text"
+          },
+          {
+            "key": "field_svc_scene_link_url",
+            "label": "Link URL",
+            "name": "link_url",
+            "type": "url"
+          },
+          {
+            "key": "field_svc_scene_image",
+            "label": "Scene artwork",
+            "name": "image",
+            "type": "image",
+            "instructions": "Transparent PNG shown on the coral panel beside the copy.",
+            "return_format": "url",
+            "preview_size": "medium",
+            "library": "all"
+          }
+        ]
+      },
+      {
+        "key": "field_svc_tab_marquee",
+        "label": "Marquee",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_marquee_row_one",
+        "label": "Row 1 (scrolls left)",
+        "name": "marquee_row_one",
+        "type": "text",
+        "instructions": "Separate keywords with ✦ . The text is repeated automatically to fill the width — enter the list once."
+      },
+      {
+        "key": "field_svc_marquee_row_two",
+        "label": "Row 2 (scrolls right)",
+        "name": "marquee_row_two",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_tab_system",
+        "label": "System map",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_system_eyebrow",
+        "label": "Eyebrow",
+        "name": "system_eyebrow",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_system_heading_before",
+        "label": "Heading",
+        "name": "system_heading_before",
+        "type": "text",
+        "instructions": "Text before the animated word."
+      },
+      {
+        "key": "field_svc_system_heading_kinetic",
+        "label": "Heading — final phrase (animated)",
+        "name": "system_heading_kinetic",
+        "type": "text",
+        "instructions": "Wipes in on scroll. e.g. \"one system.\""
+      },
+      {
+        "key": "field_svc_system_description",
+        "label": "Intro paragraph",
+        "name": "system_description",
+        "type": "textarea",
+        "rows": 3
+      },
+      {
+        "key": "field_svc_system_nodes",
+        "label": "Nodes",
+        "name": "system_nodes",
+        "type": "repeater",
+        "instructions": "The connected steps, shown left to right with arrows between them. 5 fits the row best.",
+        "layout": "block",
+        "min": 0,
+        "max": 6,
+        "button_label": "Add node",
+        "sub_fields": [
+          {
+            "key": "field_svc_node_num",
+            "label": "Step label",
+            "name": "num",
+            "type": "text",
+            "instructions": "e.g. \"01 · ATTRACT\""
+          },
+          {
+            "key": "field_svc_node_title",
+            "label": "Title",
+            "name": "title",
+            "type": "text"
+          },
+          {
+            "key": "field_svc_node_description",
+            "label": "Description",
+            "name": "description",
+            "type": "textarea",
+            "rows": 2
+          }
+        ]
+      },
+      {
+        "key": "field_svc_tab_cinema",
+        "label": "Cinematic",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_cinema_eyebrow",
+        "label": "Eyebrow",
+        "name": "cinema_eyebrow",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_cinema_words",
+        "label": "Big words",
+        "name": "cinema_words",
+        "type": "text",
+        "instructions": "Comma-separated. Each swaps in as you scroll through the section. 4 works best. e.g. \"ATTENTION, INTENT, CONVERSION, GROWTH\""
+      },
+      {
+        "key": "field_svc_cinema_description",
+        "label": "Paragraph",
+        "name": "cinema_description",
+        "type": "textarea",
+        "rows": 3
+      },
+      {
+        "key": "field_svc_cinema_scroll_hint",
+        "label": "Scroll hint",
+        "name": "cinema_scroll_hint",
+        "type": "text",
+        "instructions": "Tiny caps line at the very bottom."
+      },
+      {
+        "key": "field_svc_cinema_depth_cards",
+        "label": "Floating cards",
+        "name": "cinema_depth_cards",
+        "type": "repeater",
+        "instructions": "Four glass cards that drift at different speeds — one per corner.",
+        "layout": "table",
+        "min": 0,
+        "max": 4,
+        "button_label": "Add card",
+        "sub_fields": [
+          {
+            "key": "field_svc_depth_label",
+            "label": "Label",
+            "name": "label",
+            "type": "text"
+          },
+          {
+            "key": "field_svc_depth_title",
+            "label": "Title",
+            "name": "title",
+            "type": "text"
+          },
+          {
+            "key": "field_svc_depth_note",
+            "label": "Note",
+            "name": "note",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "key": "field_svc_cinema_handoff",
+        "label": "Hand-off characters",
+        "name": "cinema_handoff",
+        "type": "repeater",
+        "instructions": "Three characters that enter in sequence as the signal passes between them.",
+        "layout": "block",
+        "min": 0,
+        "max": 3,
+        "button_label": "Add character",
+        "sub_fields": [
+          {
+            "key": "field_svc_handoff_image",
+            "label": "Character image",
+            "name": "image",
+            "type": "image",
+            "return_format": "url",
+            "preview_size": "medium",
+            "library": "all"
+          },
+          {
+            "key": "field_svc_handoff_role_fx",
+            "label": "Floating badge",
+            "name": "role_fx",
+            "type": "text",
+            "instructions": "Small pill above the character, e.g. \"↑ RANKS · SEO · ORGANIC\""
+          },
+          {
+            "key": "field_svc_handoff_caption",
+            "label": "Caption",
+            "name": "caption",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "key": "field_svc_tab_proof",
+        "label": "Proof numbers",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_proof_eyebrow",
+        "label": "Eyebrow",
+        "name": "proof_eyebrow",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_proof_heading_before",
+        "label": "Heading",
+        "name": "proof_heading_before",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_proof_heading_kinetic",
+        "label": "Heading — final phrase (animated)",
+        "name": "proof_heading_kinetic",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_proof_items",
+        "label": "Numbers",
+        "name": "proof_items",
+        "type": "repeater",
+        "instructions": "The four big KPI numbers. Only the number counts up on scroll — the prefix and suffix stay put the whole time.",
+        "layout": "table",
+        "min": 0,
+        "max": 4,
+        "button_label": "Add number",
+        "sub_fields": [
+          {
+            "key": "field_svc_proof_prefix",
+            "label": "Prefix",
+            "name": "prefix",
+            "type": "text",
+            "instructions": "Before the number, e.g. ₹ . Leave blank if none."
+          },
+          {
+            "key": "field_svc_proof_value",
+            "label": "Number",
+            "name": "value",
+            "type": "text",
+            "instructions": "Digits only, commas allowed: 13, 6,500, 7.5, 360"
+          },
+          {
+            "key": "field_svc_proof_suffix",
+            "label": "Suffix",
+            "name": "suffix",
+            "type": "text",
+            "instructions": "After the number, e.g. × , + , M+ , ° . Leave blank if none."
+          },
+          {
+            "key": "field_svc_proof_label",
+            "label": "Label",
+            "name": "label",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "key": "field_svc_tab_cases",
+        "label": "Case studies",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_cases_category",
+        "label": "Show case studies from",
+        "name": "cases_category",
+        "type": "taxonomy",
+        "instructions": "Pick this service's case-study category so the cards match the page — Digital Marketing shows digital-marketing studies, Web Development shows web-development ones. Leave blank to show the three most recent from any category.",
+        "taxonomy": "case_study_category",
+        "field_type": "select",
+        "allow_null": 1,
+        "add_term": 0,
+        "save_terms": 0,
+        "load_terms": 0,
+        "return_format": "id",
+        "multiple": 0
+      },
+      {
+        "key": "field_svc_cases_eyebrow",
+        "label": "Eyebrow",
+        "name": "cases_eyebrow",
+        "type": "text",
+        "instructions": "The cards themselves are pulled live from your Case Studies — this heading area and the category above are what you control here."
+      },
+      {
+        "key": "field_svc_cases_heading_before",
+        "label": "Heading",
+        "name": "cases_heading_before",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_cases_heading_switch",
+        "label": "Heading — switching words",
+        "name": "cases_heading_switch",
+        "type": "text",
+        "instructions": "Comma-separated, similar lengths. e.g. \"ideas, impact\""
+      },
+      {
+        "key": "field_svc_cases_description",
+        "label": "Paragraph",
+        "name": "cases_description",
+        "type": "textarea",
+        "rows": 3
+      },
+      {
+        "key": "field_svc_tab_method",
+        "label": "Method",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_method_eyebrow",
+        "label": "Eyebrow",
+        "name": "method_eyebrow",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_method_heading_before",
+        "label": "Heading",
+        "name": "method_heading_before",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_method_heading_switch",
+        "label": "Heading — switching words",
+        "name": "method_heading_switch",
+        "type": "text",
+        "instructions": "Comma-separated, similar lengths."
+      },
+      {
+        "key": "field_svc_method_steps",
+        "label": "Steps",
+        "name": "method_steps",
+        "type": "repeater",
+        "instructions": "Cards in the horizontal scrolling row.",
+        "layout": "block",
+        "min": 0,
+        "button_label": "Add step",
+        "sub_fields": [
+          {
+            "key": "field_svc_method_num",
+            "label": "Step label",
+            "name": "num",
+            "type": "text"
+          },
+          {
+            "key": "field_svc_method_title",
+            "label": "Title",
+            "name": "title",
+            "type": "text"
+          },
+          {
+            "key": "field_svc_method_description",
+            "label": "Description",
+            "name": "description",
+            "type": "textarea",
+            "rows": 2
+          }
+        ]
+      },
+      {
+        "key": "field_svc_tab_character",
+        "label": "Character break",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_cb_eyebrow",
+        "label": "Eyebrow",
+        "name": "cb_eyebrow",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_cb_heading_before",
+        "label": "Heading",
+        "name": "cb_heading_before",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_cb_heading_switch",
+        "label": "Heading — switching words",
+        "name": "cb_heading_switch",
+        "type": "text",
+        "instructions": "Comma-separated, similar lengths."
+      },
+      {
+        "key": "field_svc_cb_description",
+        "label": "Paragraph",
+        "name": "cb_description",
+        "type": "textarea",
+        "rows": 3
+      },
+      {
+        "key": "field_svc_cb_image",
+        "label": "Character image",
+        "name": "cb_image",
+        "type": "image",
+        "return_format": "url",
+        "preview_size": "medium",
+        "library": "all"
+      },
+      {
+        "key": "field_svc_cb_cta_label",
+        "label": "Button — label",
+        "name": "cb_cta_label",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_cb_cta_url",
+        "label": "Button — URL",
+        "name": "cb_cta_url",
+        "type": "url"
+      },
+      {
+        "key": "field_svc_cb_badges",
+        "label": "Floating badges",
+        "name": "cb_badges",
+        "type": "repeater",
+        "instructions": "Three small pills around the character, e.g. \"CPA ↑ 😬\"",
+        "layout": "table",
+        "min": 0,
+        "max": 3,
+        "button_label": "Add badge",
+        "sub_fields": [
+          {
+            "key": "field_svc_cb_badge_text",
+            "label": "Text",
+            "name": "text",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "key": "field_svc_tab_insights",
+        "label": "Insights",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_insights_eyebrow",
+        "label": "Eyebrow",
+        "name": "insights_eyebrow",
+        "type": "text",
+        "instructions": "The cards are pulled live from your blog — only this heading area is editable here."
+      },
+      {
+        "key": "field_svc_insights_heading_before",
+        "label": "Heading",
+        "name": "insights_heading_before",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_insights_heading_switch",
+        "label": "Heading — switching words",
+        "name": "insights_heading_switch",
+        "type": "text",
+        "instructions": "Comma-separated, similar lengths."
+      },
+      {
+        "key": "field_svc_tab_faq",
+        "label": "FAQ",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_faq_eyebrow",
+        "label": "Eyebrow",
+        "name": "faq_eyebrow",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_faq_heading",
+        "label": "Heading",
+        "name": "faq_heading",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_faq_intro",
+        "label": "Intro paragraph",
+        "name": "faq_intro",
+        "type": "textarea",
+        "rows": 3
+      },
+      {
+        "key": "field_svc_faq_items",
+        "label": "Questions",
+        "name": "faq_items",
+        "type": "repeater",
+        "layout": "block",
+        "min": 0,
+        "button_label": "Add question",
+        "sub_fields": [
+          {
+            "key": "field_svc_faq_q",
+            "label": "Question",
+            "name": "question",
+            "type": "text"
+          },
+          {
+            "key": "field_svc_faq_a",
+            "label": "Answer",
+            "name": "answer",
+            "type": "textarea",
+            "rows": 3
+          }
+        ]
+      },
+      {
+        "key": "field_svc_tab_final",
+        "label": "Final CTA",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_svc_final_eyebrow",
+        "label": "Eyebrow",
+        "name": "final_eyebrow",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_final_heading_before",
+        "label": "Heading",
+        "name": "final_heading_before",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_final_heading_kinetic",
+        "label": "Heading — final phrase (animated)",
+        "name": "final_heading_kinetic",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_final_description",
+        "label": "Paragraph",
+        "name": "final_description",
+        "type": "textarea",
+        "rows": 3
+      },
+      {
+        "key": "field_svc_final_cta_primary_label",
+        "label": "Primary button — label",
+        "name": "final_cta_primary_label",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_final_cta_primary_url",
+        "label": "Primary button — URL",
+        "name": "final_cta_primary_url",
+        "type": "url"
+      },
+      {
+        "key": "field_svc_final_cta_secondary_label",
+        "label": "Secondary button — label",
+        "name": "final_cta_secondary_label",
+        "type": "text"
+      },
+      {
+        "key": "field_svc_final_cta_secondary_url",
+        "label": "Secondary button — URL",
+        "name": "final_cta_secondary_url",
+        "type": "url"
+      }
+    ]
+  }
+]

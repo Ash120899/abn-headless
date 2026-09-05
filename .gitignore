@@ -39,3 +39,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local agent tooling
+.claude/skills/
+
+# Design concept sources. These are multi-MB single-file HTML mockups with
+# every image inlined as base64 — reference material for building the real
+# pages, not something the app imports. Keeping them out of history avoids
+# bloating clones.
+#
+# Note: the concepts committed before this rule (the blog/case-study
+# listings and hero-frames) stay tracked — a .gitignore entry does not
+# untrack existing files, and removing them would need a deliberate
+# `git rm --cached`.
+design-concepts.zip
+design-concepts/ABN_Digital_Marketing_V4_1_V3_Locked_Refinement.html
