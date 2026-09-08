@@ -36,6 +36,19 @@ export default function ContactPageStyles() {
   overflow-x:clip;
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
+/* Light mode. The concept shipped its own body.light palette driven by a
+   page-local toggle; that toggle was dropped in favour of the site's own
+   switch, which sets data-theme="light" on <html> (see ThemeToggle.js), so
+   the same rules hang off that instead. Only the tokens change here —
+   the per-element light overrides live beside their dark counterparts
+   further down, so the two stay together and cannot drift apart. */
+[data-theme="light"] .contact-page{
+  --ct-bg:#f4f6f6;--ct-ink:#101314;--ct-muted:#667073;
+  --ct-line:rgba(0,0,0,.11);
+  --ct-hero-bg:#f6f8f8;--ct-hero-muted:#5c676a;
+  --ct-panel:#ffffff;--ct-card-dark:#ffffff;
+}
+
 .contact-page *{box-sizing:border-box}
 .contact-page a{color:inherit;text-decoration:none}
 .contact-page button,.contact-page input,.contact-page textarea{font:inherit}
@@ -64,6 +77,9 @@ export default function ContactPageStyles() {
 .contact-page .hero{height:calc(100svh - var(--navh));min-height:0;position:sticky;top:var(--navh);overflow:hidden;background:
 radial-gradient(circle at 19% 25%,rgba(8,185,216,.10),transparent 26%),
 radial-gradient(circle at 82% 64%,rgba(255,255,255,.035),transparent 28%),#070808}
+[data-theme="light"] .contact-page .hero{background:
+radial-gradient(circle at 19% 25%,rgba(8,185,216,.11),transparent 26%),
+radial-gradient(circle at 82% 64%,rgba(0,0,0,.025),transparent 28%),var(--ct-hero-bg)}
 /* Fills the hero, which has already had the header height removed. */
 .contact-page .hero-grid{height:100%;min-height:0;display:grid;grid-template-columns:.92fr 1.08fr;align-items:center;gap:36px}
 .contact-page .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:850;color:#9ca2a5;display:flex;gap:10px;align-items:center}
@@ -78,6 +94,10 @@ radial-gradient(circle at 82% 64%,rgba(255,255,255,.035),transparent 28%),#07080
 .contact-page .btn{border-radius:999px;padding:13px 17px;border:1px solid var(--ct-line);font-weight:800;font-size:13px;transition:.25s;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;flex-shrink:0}
 .contact-page .btn.primary{background:#fff;color:#060707}
 .contact-page .btn:hover{transform:translateY(-2px)}
+/* On the light hero a white primary button would vanish, so the fill and the
+   ink swap over. */
+[data-theme="light"] .contact-page .btn.primary{background:#111;color:#fff}
+[data-theme="light"] .contact-page .btn:not(.primary){border-color:rgba(0,0,0,.14)}
 
 .contact-page .orbit-stage{height:min(68vh,610px);min-height:450px;position:relative;isolation:isolate}
 .contact-page .orbit-glow{position:absolute;left:50%;top:49%;width:310px;height:310px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(8,185,216,.13),transparent 68%);filter:blur(8px);pointer-events:none}
@@ -85,15 +105,27 @@ radial-gradient(circle at 82% 64%,rgba(255,255,255,.035),transparent 28%),#07080
 .contact-page .service-orb{position:absolute;left:50%;top:50%;z-index:8;transform:translate(-50%,-50%);will-change:transform,left,top,opacity}
 .contact-page .service-orb span{display:block;padding:9px 14px;border:1px solid color-mix(in srgb,var(--c) 72%,white 0%);border-radius:999px;background:rgba(7,8,8,.82);font-size:10px;font-weight:900;letter-spacing:.09em;white-space:nowrap;color:#e8e9e5;transition:.25s;box-shadow:0 0 0 rgba(0,0,0,0)}
 .contact-page .service-orb span:hover{color:#fff;border-color:var(--c);box-shadow:0 0 12px color-mix(in srgb,var(--c) 58%,transparent),0 0 34px color-mix(in srgb,var(--c) 26%,transparent);background:color-mix(in srgb,var(--c) 7%,#080909)}
+/* The orbs are near-black pills on the dark hero; on light they invert to a
+   pale fill with dark text, and their coloured borders darken slightly so
+   the yellow and grey ones stay visible against near-white. */
+[data-theme="light"] .contact-page .service-orb span{background:rgba(250,252,252,.9);color:#1b2021;border-color:color-mix(in srgb,var(--c) 72%,black 4%)}
+[data-theme="light"] .contact-page .service-orb span:hover{color:#111;background:color-mix(in srgb,var(--c) 9%,white)}
+[data-theme="light"] .contact-page .orbit-glow{background:radial-gradient(circle,rgba(8,185,216,.12),transparent 68%)}
+[data-theme="light"] .contact-page .orbit-guide{border-color:rgba(0,0,0,.14)}
 .contact-page .scrollhint{position:absolute;right:2px;bottom:12px;color:#7f8588;font-size:10px;letter-spacing:.16em;text-transform:uppercase;writing-mode:vertical-rl;display:flex;align-items:center;gap:8px}
 .contact-page .scrollhint:after{content:"";display:block;height:42px;width:1px;background:linear-gradient(var(--ct-cyan),transparent)}
 .contact-page .devil{position:absolute;right:-6px;bottom:-18px;width:145px;z-index:10;filter:drop-shadow(0 18px 35px rgba(0,0,0,.25));transform:rotate(-2deg)}
 .contact-page .devil-note{position:absolute;right:110px;bottom:40px;padding:8px 11px;border:1px solid var(--ct-line);border-radius:999px;background:rgba(14,16,17,.9);font-size:10px;color:#aeb3b4;z-index:9}
+[data-theme="light"] .contact-page .devil-note{background:rgba(255,255,255,.88);color:#4f5759}
+[data-theme="light"] .contact-page .scrollhint{color:#6b7477}
 .contact-page #heroParticles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.5}
 .contact-page .hero .wrap{position:relative;z-index:2}
 
 /* ---------- MARQUEE STRIP ---------- */
+/* The strip stays dark in both themes — the concept keeps it as a constant
+   band separating the hero from the form. */
 .contact-page .strip{height:64px;border-block:1px solid rgba(8,185,216,.32);background:#050606;overflow:hidden;display:flex;align-items:center}
+[data-theme="light"] .contact-page .strip{background:#0a0b0b}
 .contact-page .track{display:flex;gap:32px;align-items:center;white-space:nowrap;min-width:max-content;animation:ct-marquee 26s linear infinite;font-size:12px;font-weight:900;letter-spacing:.08em;color:#ecf9fb}
 .contact-page .track b{color:var(--ct-cyan);font-size:15px}
 @keyframes ct-marquee{to{transform:translateX(-50%)}}
@@ -151,12 +183,21 @@ radial-gradient(circle at 82% 64%,rgba(255,255,255,.035),transparent 28%),#07080
 .contact-page .channels-head{max-width:760px}
 .contact-page .channels-head p{color:#a8adae;line-height:1.55}
 .contact-page .channels .kicker{color:#7edff0}
+/* The channels band flips from near-black to a pale tint in light mode; the
+   cyan kicker needs a darker tone to stay legible on it. */
+[data-theme="light"] .contact-page .channels{background:#eef3f4;color:#111}
+[data-theme="light"] .contact-page .channels-head p{color:#5e686b}
+[data-theme="light"] .contact-page .channels .kicker{color:#0b7d95}
 .contact-page .channel-character{position:absolute;right:0;top:-36px;width:148px;z-index:3;filter:drop-shadow(0 18px 32px rgba(0,0,0,.22));transform:rotate(3deg);pointer-events:none}
 .contact-page .channel-bubble{position:absolute;right:118px;top:8px;z-index:4;padding:8px 11px;border-radius:999px;border:1px solid var(--ct-line);background:rgba(15,17,18,.88);color:#aeb4b5;font-size:10px;letter-spacing:.05em;pointer-events:none}
 .contact-page .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
 .contact-page .tab{border:1px solid var(--ct-line);background:#0f1112;color:#bbb;border-radius:999px;padding:10px 14px;font-weight:850;font-size:12px}
 .contact-page .tab.active{background:#fff;color:#080909;border-color:#fff}
+[data-theme="light"] .contact-page .channel-bubble{background:rgba(255,255,255,.92);color:#545d5f}
+[data-theme="light"] .contact-page .tab{background:#fff;color:#34393a;border-color:rgba(0,0,0,.12)}
+[data-theme="light"] .contact-page .tab.active{background:#111;color:#fff;border-color:#111}
 .contact-page .tab-progress{height:2px;background:rgba(255,255,255,.08);margin-top:10px;border-radius:999px;overflow:hidden}
+[data-theme="light"] .contact-page .tab-progress{background:rgba(0,0,0,.08)}
 .contact-page .tab-progress span{display:block;height:100%;width:0;background:var(--ct-cyan)}
 .contact-page .tab-progress span.run{animation:ct-tabTimer 5s linear forwards}
 @keyframes ct-tabTimer{from{width:0}to{width:100%}}
@@ -173,6 +214,10 @@ radial-gradient(circle at 82% 64%,rgba(255,255,255,.035),transparent 28%),#07080
 .contact-page .calendar-card small{display:block;color:#777;margin-top:7px}
 .contact-page .simple-pane{padding:36px;align-items:center;grid-template-columns:1fr auto;gap:28px}
 .contact-page .simple-pane .action{padding:14px 17px;border-radius:999px;background:#fff;color:#111;font-weight:900;white-space:nowrap}
+[data-theme="light"] .contact-page .tabpane{background:#fff;border-color:rgba(0,0,0,.11);color:#111}
+[data-theme="light"] .contact-page .cal-copy{border-right-color:rgba(0,0,0,.11)}
+[data-theme="light"] .contact-page .cal-copy p,[data-theme="light"] .contact-page .simple-pane p{color:#626b6d}
+[data-theme="light"] .contact-page .simple-pane .action{background:#111;color:#fff}
 
 /* ---------- FINAL CTA ---------- */
 .contact-page .final{padding:95px 0;background:#050606;border-top:1px solid rgba(8,185,216,.24)}
@@ -180,6 +225,10 @@ radial-gradient(circle at 82% 64%,rgba(255,255,255,.035),transparent 28%),#07080
 .contact-page .final h2{font-size:clamp(36px,4vw,58px);letter-spacing:-.05em;line-height:1;margin:10px 0}
 .contact-page .final p{color:#a9adae;max-width:700px}
 .contact-page .final .kicker{color:#7edff0}
+[data-theme="light"] .contact-page .final{background:#f4f7f7;color:#111;border-top-color:rgba(8,185,216,.26)}
+[data-theme="light"] .contact-page .finalbox{background:linear-gradient(120deg,rgba(8,185,216,.09),rgba(0,0,0,.018));border-color:rgba(0,0,0,.1)}
+[data-theme="light"] .contact-page .final p{color:#626c6f}
+[data-theme="light"] .contact-page .final .kicker{color:#0b7d95}
 
 /* The site-wide reduced-motion guard in globals.css zeroes every animation
    with !important. This page's marquee and tab timer are content, not

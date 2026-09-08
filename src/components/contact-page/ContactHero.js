@@ -121,6 +121,11 @@ export default function ContactHero({ hero }) {
     function draw() {
       const rect = canvas.getBoundingClientRect();
       ctx.clearRect(0, 0, rect.width, rect.height);
+      // Particles are painted on canvas, so they cannot inherit the theme
+      // from CSS. Bright cyan disappears against the light hero, so read the
+      // current theme each frame and switch to a darker teal — the concept
+      // does the same in its own draw loop.
+      const light = document.documentElement.getAttribute("data-theme") === "light";
       particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
@@ -132,7 +137,7 @@ export default function ContactHero({ hero }) {
         if (p.x > rect.width + 4) p.x = -4;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(95,225,245,${p.a})`;
+        ctx.fillStyle = light ? `rgba(8,145,170,${p.a})` : `rgba(95,225,245,${p.a})`;
         ctx.fill();
       });
       rafId = requestAnimationFrame(draw);
