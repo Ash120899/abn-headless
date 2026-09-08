@@ -71,7 +71,11 @@ radial-gradient(circle at 82% 64%,rgba(255,255,255,.035),transparent 28%),#07080
 .contact-page .hero h1{font-size:clamp(48px,5.6vw,82px);line-height:.92;letter-spacing:-.057em;margin:17px 0;max-width:720px}
 .contact-page .hero-copy p{font-size:clamp(16px,1.45vw,19px);line-height:1.5;color:var(--ct-hero-muted);max-width:610px;margin:0}
 .contact-page .ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
-.contact-page .btn{border-radius:999px;padding:13px 17px;border:1px solid var(--ct-line);font-weight:800;font-size:13px;transition:.25s;display:inline-flex;align-items:center;gap:8px}
+/* nowrap keeps the trailing arrow on the same line as the label: they are
+   separate text nodes, so a narrow button would otherwise drop the arrow
+   underneath. flex-shrink:0 stops the button being squeezed below its
+   content width when it sits in a flex row (the final CTA band). */
+.contact-page .btn{border-radius:999px;padding:13px 17px;border:1px solid var(--ct-line);font-weight:800;font-size:13px;transition:.25s;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;flex-shrink:0}
 .contact-page .btn.primary{background:#fff;color:#060707}
 .contact-page .btn:hover{transform:translateY(-2px)}
 
@@ -118,7 +122,9 @@ radial-gradient(circle at 82% 64%,rgba(255,255,255,.035),transparent 28%),#07080
 .contact-page textarea{min-height:125px;resize:vertical}
 .contact-page .form-bottom{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:15px}
 .contact-page .micro{font-size:11px;color:#8a8c88;max-width:350px}
-.contact-page .submit{border:0;border-radius:999px;background:#101111;color:white;padding:13px 18px;font-weight:900;transition:.2s}
+/* nowrap for the same reason as .btn: "Send Enquiry →" must not drop its
+   arrow onto a second line when the form column is narrow. */
+.contact-page .submit{border:0;border-radius:999px;background:#101111;color:white;padding:13px 18px;font-weight:900;transition:.2s;white-space:nowrap}
 .contact-page .submit:disabled{opacity:.55;cursor:not-allowed}
 
 /* Validation + submission feedback. Not in the concept (its form was inert),
@@ -210,7 +216,10 @@ radial-gradient(circle at 82% 64%,rgba(255,255,255,.035),transparent 28%),#07080
  /* Two per row rather than stacked: both labels are short enough to fit
     side by side even at 320px, and stacking pushed the orbit stage off
     the fold. */
- .contact-page .ctas .btn{flex:1 1 auto;justify-content:center;padding:12px 14px;font-size:12.5px}
+ /* The two hero CTAs share the row and may shrink to fit (overriding the
+    base flex-shrink:0); nowrap still keeps each label and its arrow on one
+    line, and they wrap to separate rows rather than breaking mid-label. */
+ .contact-page .ctas .btn{flex:1 1 auto;min-width:max-content;justify-content:center;padding:12px 14px;font-size:12.5px}
  .contact-page .orbit-stage{min-height:180px}
  .contact-page .center-logo{width:min(188px,50%)}
  .contact-page .service-orb span{font-size:8px;padding:7px 9px}
