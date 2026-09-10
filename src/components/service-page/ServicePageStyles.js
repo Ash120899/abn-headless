@@ -246,18 +246,28 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .depth-card small{display:block;color:var(--coral);font-weight:900;letter-spacing:.16em;font-size:9px}
 .svc-page .depth-card b{display:block;font-size:20px;margin:7px 0}
 .svc-page .depth-card span{color:#8f9aa0;font-size:12px}
-.svc-page .d1{left:4vw;top:34vh}
-.svc-page .d2{right:5vw;top:32vh}
-.svc-page .d3{left:8vw;bottom:11vh}
-.svc-page .d4{right:8vw;bottom:12vh}
+/* Top row starts below the intro paragraph. At 32-34vh the concept's cards
+   sat level with the copy block, so on wide screens they crowded the text. */
+.svc-page .d1{left:4vw;top:44vh}
+.svc-page .d2{right:5vw;top:42vh}
+/* Bottom row hugs the edges: the handoff characters occupy the middle
+   ~86vw, and at 8vw these cards sat on top of the outer two figures. */
+.svc-page .d3{left:1.5vw;bottom:11vh}
+.svc-page .d4{right:1.5vw;bottom:12vh}
 .svc-page .handoff-team{position:absolute;z-index:8;left:50%;bottom:5vh;transform:translateX(-50%);width:min(1120px,86vw);height:42vh;min-height:300px}
-.svc-page .handoff-char{position:absolute;bottom:0;width:29%;max-width:330px;display:flex;flex-direction:column;align-items:center;transition:opacity .2s}
+/* padding-top reserves room for the role pill, which is absolutely
+   positioned against this column's top edge — without it the pill would sit
+   outside the character's box and could be clipped by the stage. */
+.svc-page .handoff-char{position:absolute;bottom:0;width:29%;max-width:330px;display:flex;flex-direction:column;align-items:center;transition:opacity .2s;padding-top:34px}
 .svc-page .handoff-char img{max-height:34vh;width:auto;object-fit:contain;filter:drop-shadow(0 20px 28px rgba(0,0,0,.3));transform-origin:bottom center;will-change:transform,filter}
 .svc-page .handoff-char span{font-size:9px;letter-spacing:.17em;color:#88939a;font-weight:950;margin-top:4px}
 .svc-page .hc1{left:0}
 .svc-page .hc2{left:50%;transform:translateX(-50%)}
 .svc-page .hc3{right:0}
-.svc-page .role-fx{position:absolute;left:50%;top:8%;transform:translate(-50%,10px);font-style:normal;font-size:9px;letter-spacing:.11em;font-weight:950;white-space:nowrap;color:#fff;background:rgba(10,12,14,.72);border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:7px 10px;opacity:0;box-shadow:0 12px 26px rgba(0,0,0,.22);backdrop-filter:blur(10px);will-change:transform,opacity}
+/* The pill sits ABOVE the character, not on top of it. The concept anchored
+   it at top:8% of the column, which lands over the artwork's head; bottom:100%
+   with a small gap puts it clear of the image entirely. */
+.svc-page .role-fx{position:absolute;left:50%;top:0;bottom:auto;transform:translate(-50%,10px);font-style:normal;font-size:9px;letter-spacing:.11em;font-weight:950;white-space:nowrap;color:#fff;background:rgba(10,12,14,.72);border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:7px 10px;opacity:0;box-shadow:0 12px 26px rgba(0,0,0,.22);backdrop-filter:blur(10px);will-change:transform,opacity}
 .svc-page .hc1 .role-fx{color:#bcefff}
 .svc-page .hc2 .role-fx{color:#ffd4ca}
 .svc-page .hc3 .role-fx{color:#ffe2a8}
@@ -493,7 +503,9 @@ body:has(.svc-page) .btn-slide{display:none !important}
   .svc-page .insights-top{gap:16px;margin-bottom:28px}
   .svc-page .system-map{grid-template-columns:1fr;gap:10px}
   .svc-page .node{min-height:0}
-  .svc-page .node:after{content:"↓";right:24px;top:auto;bottom:-22px}
+  /* Centred: the cards stack vertically on mobile, so an arrow pinned to the
+     right edge pointed down from a corner rather than between the cards. */
+  .svc-page .node:after{content:"↓";right:auto;left:50%;transform:translateX(-50%);top:auto;bottom:-20px}
 
   .svc-page .cinema-track{height:300vh}
   .svc-page .cinema-sticky{min-height:620px}

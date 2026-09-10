@@ -11,7 +11,49 @@ function clamp(v, a, b) {
   return Math.max(a, Math.min(b, v));
 }
 
+// Catmull-Rom spline through the orb waypoints: each segment is shaped by
+// its neighbours, so the wave flows continuously instead of changing
+// direction sharply at every point. Endpoints are duplicated so the first
+// and last segments have something to lean on.
+function catmullRom(pts, t) {
+  const segs = pts.length - 1;
+  const scaled = clamp(t, 0, 1) * segs;
+  const i = Math.min(segs - 1, Math.floor(scaled));
+  const u = scaled - i;
+  const p0 = pts[Math.max(0, i - 1)];
+  const p1 = pts[i];
+  const p2 = pts[i + 1];
+  const p3 = pts[Math.min(pts.length - 1, i + 2)];
+  const u2 = u * u;
+  const u3 = u2 * u;
+  const axis = (a, b, c, d) =>
+    0.5 * (2 * b + (-a + c) * u + (2 * a - 5 * b + 4 * c - d) * u2 + (-a + 3 * b - 3 * c + d) * u3);
+  return { x: axis(p0.x, p1.x, p2.x, p3.x), y: axis(p0.y, p1.y, p2.y, p3.y) };
+}
+
 const DEPTH = [54, 38, 72, 46];
+
+// Waypoints for the signal orb, as percentages of the sticky stage.
+//
+// The route is a broad U. It starts high on the left, tucked against the
+// "high-intent query" / "intent matched" cards, drops down past the first
+// character, runs along the bottom beneath all three characters, then climbs
+// the right-hand side past "signal returned" to finish at "message + visual".
+//
+// Interpolation is Catmull-Rom (see catmullRom below) so the corners round
+// off into one continuous curve rather than the straight segments a plain
+// lerp would give.
+const ORB_PATH = [
+  { x: 23, y: 46 }, // start · high, beside high-intent query
+  { x: 22, y: 62 }, // drop down the left, past intent matched
+  { x: 26, y: 80 }, // round the bottom-left corner
+  { x: 42, y: 86 }, // along the bottom, under character 1
+  { x: 58, y: 84 }, // under character 2
+  { x: 74, y: 85 }, // under character 3
+  { x: 84, y: 78 }, // round the bottom-right corner
+  { x: 87, y: 58 }, // climb the right edge, past signal returned
+  { x: 86, y: 40 }, // finish · message + visual
+];
 const ENTER_STARTS = [0, 0.24, 0.5];
 const ENTER_ENDS = [0.42, 0.69, 0.96];
 
@@ -39,7 +81,10 @@ export default function CinemaJourney({ cinema }) {
         card.style.transform = `translate3d(${dir * (p - 0.5) * DEPTH[i]}px,${
           (p - 0.5) * (i < 2 ? -34 : 30)
         }px,0) scale(${1 + (i % 2 ? 0.018 : 0.03) * Math.sin(p * Math.PI)})`;
-        card.style.opacity = (0.34 + Math.sin(clamp(p * 1.2, 0, 1) * Math.PI) * 0.66).toFixed(2);
+        // Fade in and stay. The concept used sin(p·π), which peaks mid-scroll
+        // and returns to near-zero at the end, so the cards faded out again
+        // on the last frame. Ramp up over the first third and hold at 1.
+        card.style.opacity = clamp(0.34 + (p / 0.33) * 0.66, 0.34, 1).toFixed(2);
       });
 
       charRefs.current.forEach((el, i) => {
@@ -70,11 +115,16 @@ export default function CinemaJourney({ cinema }) {
       });
 
       if (orbRef.current) {
-        const x = 10 + p * 78;
-        const y = 53 + Math.sin(p * Math.PI * 2) * -12 + (p > 0.48 ? 6 : 0);
-        orbRef.current.style.left = `${x}%`;
-        orbRef.current.style.top = `${y}%`;
-        orbRef.current.style.transform = `scale(${0.86 + Math.sin(p * Math.PI * 3) * 0.16})`;
+        // The signal visits the four depth cards in narrative order:
+        //   search (top-left) → landing (bottom-left)
+        //   → measurement (bottom-right) → creative (top-right)
+        // Percentages are of the sticky stage and are kept just inside each
+        // card so the orb reads as arriving at it rather than covering it.
+        const pos = catmullRom(ORB_PATH, p);
+        orbRef.current.style.left = `${pos.x}%`;
+        orbRef.current.style.top = `${pos.y}%`;
+        // Gentle pulse as it travels, independent of the path itself.
+        orbRef.current.style.transform = `scale(${0.9 + Math.sin(p * Math.PI * 6) * 0.12})`;
       }
     }
 
