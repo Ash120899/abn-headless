@@ -76,8 +76,12 @@ export default function JourneyStory({ journey }) {
                   <div className="num">{scene.num}</div>
                   <h3>{scene.title}</h3>
                   <p>{scene.description}</p>
+                  {/* Three chips only. A fourth wraps to a second row, which
+                      pushes the link down into the character art on mobile —
+                      capping here rather than trimming the content files
+                      keeps it true for ACF-supplied chips too. */}
                   <div className="chips">
-                    {scene.chips.map((chip) => (
+                    {scene.chips.slice(0, 3).map((chip) => (
                       <span className="chip" key={chip}>
                         {chip}
                       </span>

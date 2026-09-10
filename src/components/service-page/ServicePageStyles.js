@@ -208,7 +208,14 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .marquee-row.two{margin-top:20px;animation-direction:reverse;animation-duration:34s;color:var(--coral)}
 
 /* ---------- SYSTEM ---------- */
-.svc-page .system{padding:125px 0;background:var(--cream);overflow:hidden}
+/* One vertical rhythm for every full-width band. The concept set these
+   individually (100 / 110 / 115 / 125px), which read as uneven gaps between
+   sections; mobile already collapsed them all to a single value further
+   down, so this does the same for desktop. */
+.svc-page .system,.svc-page .proof,.svc-page .cards-section,.svc-page .method,
+.svc-page .insights,.svc-page .faq,.svc-page .final{padding:115px 0}
+
+.svc-page .system{background:var(--cream);overflow:hidden}
 .svc-page .system-intro{display:grid;grid-template-columns:1.15fr .85fr;gap:50px;align-items:end}
 .svc-page .system-intro p{font-size:20px;line-height:1.65;color:#5d646a;max-width:600px}
 .svc-page .system-map{margin-top:70px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;position:relative}
@@ -259,7 +266,7 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .cinema-scroll{position:absolute;z-index:21;bottom:18px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.2em;color:#778087}
 
 /* ---------- PROOF ---------- */
-.svc-page .proof{background:var(--coral);padding:100px 0}
+.svc-page .proof{background:var(--coral)}
 .svc-page .proof-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(0,0,0,.18);border-bottom:1px solid rgba(0,0,0,.18);margin-top:48px}
 .svc-page .proof-item{padding:42px 28px;border-right:1px solid rgba(0,0,0,.18);position:relative;overflow:hidden}
 .svc-page .proof-item:last-child{border-right:0}
@@ -276,23 +283,34 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .proof-item.in-view:after{transform:none}
 
 /* ---------- CASES ---------- */
-.svc-page .cards-section{background:#0b0d0f;color:#fff;padding:115px 0}
+.svc-page .cards-section{background:#0b0d0f;color:#fff}
 .svc-page .section-top{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:42px}
 .svc-page .section-top h2{font-size:clamp(45px,5.7vw,84px);line-height:.92;letter-spacing:-.052em;margin:7px 0}
 .svc-page .section-top p{max-width:510px;color:#adb5bb;font-size:18px;line-height:1.6}
 .svc-page .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 /* Card shape matched to the blog listing's connected-proof band rather than
    the concept's gradient art tiles, since these now carry real WP data. */
-.svc-page .case{background:#12171a;border:1px solid #2a3034;border-radius:24px;overflow:hidden;transition:.25s;display:block}
-.svc-page .case:hover{transform:translateY(-7px);border-color:var(--coral)}
-.svc-page .case-body{padding:22px}
+/* Card shape follows the case-studies listing (ExploreGrid.js): 20px radius,
+   an 18px frame around a rounded image block, then the text. */
+.svc-page .case{background:#12171a;border:1px solid #2a3034;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;padding:18px;
+  transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease}
+/* Hover: scale up, and outline in this service's accent. The outline is a
+   box-shadow ring rather than a thicker border so the card does not shift by
+   a pixel as the ring appears. */
+.svc-page .case:hover{transform:scale(1.03);border-color:var(--coral);box-shadow:0 0 0 1px var(--coral),0 18px 40px rgba(0,0,0,.45)}
+.svc-page .case:focus-visible{outline:none;border-color:var(--coral);box-shadow:0 0 0 2px var(--coral)}
+
+.svc-page .case-media{position:relative;height:200px;border-radius:10px;overflow:hidden;background:#0d1113;display:flex;align-items:center;justify-content:center;margin-bottom:16px;flex-shrink:0}
+.svc-page .case-media img{width:100%;height:100%;object-fit:cover;display:block}
+.svc-page .case-media-fallback{font-family:var(--font-editorial);font-weight:800;font-size:2.25rem;color:var(--muted)}
+
+.svc-page .case-body{padding:0;display:flex;flex-direction:column;flex:1}
 .svc-page .case small{color:var(--muted);letter-spacing:.12em;font-weight:800;font-size:11px;text-transform:uppercase}
 .svc-page .case h3{font-family:var(--font-editorial);font-size:1.5rem;font-weight:900;line-height:1.15;margin:14px 0 0}
-.svc-page .case-metric{font-family:var(--font-editorial);font-weight:950;font-size:2rem;color:var(--coral);margin-top:8px;line-height:1.05}
 .svc-page .case p{color:#aeb7bd;line-height:1.6;margin:10px 0 0;font-size:15px}
 
 /* ---------- METHOD ---------- */
-.svc-page .method{padding:125px 0;background:#f8f2ec;overflow:hidden}
+.svc-page .method{background:#f8f2ec;overflow:hidden}
 /* The scroll container the concept was missing — see MethodTrack.js. The
    negative/positive padding pair lets cards bleed to the container edge
    while still leaving room for their shadows. */
@@ -317,16 +335,20 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .character-copy p{font-size:19px;line-height:1.65;max-width:600px}
 
 /* ---------- INSIGHTS ---------- */
-.svc-page .insights{background:#fff;padding:115px 0}
+.svc-page .insights{background:#fff}
 /* Two-column head to match the case-studies page's insights block. */
 .svc-page .insights-top{display:grid;grid-template-columns:1.1fr .7fr;gap:32px;align-items:end;margin-bottom:40px}
 .svc-page .insights-top p{color:#697179;font-size:16px;line-height:1.6;margin:0}
 .svc-page .blogcards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .svc-page .blogcard{border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;background:#fff;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
 .svc-page .blogcard:hover{transform:translateY(-4px);box-shadow:0 20px 45px rgba(0,0,0,.09);border-color:color-mix(in srgb,var(--red) 40%,transparent)}
-.svc-page .blogcard-media{position:relative;height:180px;background:#f3ece7;flex-shrink:0}
-.svc-page .blogcard-media--empty{background:var(--red)}
-.svc-page .blogcard-img{object-fit:cover}
+/* height:auto, no positioning context: the image sizes itself from its own
+   aspect ratio and is shown whole (contain) rather than cropped to a fixed
+   band. The empty variant still needs a height, since it has no image to
+   give it one. */
+.svc-page .blogcard-media{height:auto;background:#f3ece7;flex-shrink:0}
+.svc-page .blogcard-media--empty{background:var(--red);height:180px}
+.svc-page .blogcard-img{display:block;width:100%;height:auto;object-fit:contain}
 .svc-page .blogcard-body{padding:22px;display:flex;flex-direction:column;flex:1}
 .svc-page .blogcard small{color:var(--red);font-weight:900;letter-spacing:.12em;font-size:11px;text-transform:uppercase;line-height:1.4}
 .svc-page .blogcard h3{font-family:var(--font-editorial);font-size:1.15rem;font-weight:800;line-height:1.3;margin:12px 0 0;letter-spacing:-.01em}
@@ -334,7 +356,7 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .blogcard .blog-link{margin-top:auto;padding-top:16px;font-weight:900;color:var(--red);font-size:13px}
 
 /* ---------- FAQ ---------- */
-.svc-page .faq{background:#0b0d0f;color:#fff;padding:115px 0}
+.svc-page .faq{background:#0b0d0f;color:#fff}
 .svc-page .faqgrid{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;margin-top:45px}
 .svc-page .faqintro p{color:#adb5bb;font-size:18px;line-height:1.65}
 .svc-page details{border-top:1px solid #2a3034;padding:20px 0}
@@ -363,7 +385,7 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page details p{color:#abb4bb;line-height:1.65;max-width:720px;margin:12px 0 0}
 
 /* ---------- FINAL ---------- */
-.svc-page .final{background:var(--coral);padding:110px 0;text-align:center}
+.svc-page .final{background:var(--coral);text-align:center}
 /* 700: like the other headings here, the concept declares no weight and
    Tailwind's Preflight resets it to inherit (400), which reads far too thin
    at 112px. */
@@ -445,15 +467,25 @@ body:has(.svc-page) .btn-slide{display:none !important}
      (the concept's 620vh / 6 scenes = ~87vh each) since the stacked
      layout has more to read per scene. */
   .svc-page .story-zone{height:calc(100vh + (var(--scene-count,6) * 87vh))}
-  .svc-page .story-grid{grid-template-columns:1fr}
-  .svc-page .story-copy{padding:7vh 7vw 40vh;background:transparent;color:var(--ink);z-index:8}
-  .svc-page .story-visual{position:absolute;inset:0;z-index:2;background:radial-gradient(circle at 50% 76%,rgba(255,255,255,.18),transparent 30%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0))}
-  .svc-page .scene{inset:auto 7vw;top:8vh}
-  .svc-page .scene h3{font-size:clamp(38px,12vw,58px)}
-  .svc-page .scene p{font-size:14px;line-height:1.55;color:rgba(11,13,15,.78)}
-  .svc-page .chips{margin:10px 0}
+  /* Text above, art below — two real rows rather than the desktop's
+     side-by-side columns. The concept stacked the visual as a full-bleed
+     absolute layer BEHIND the copy, which made the character overlap the
+     chips and link. Rows keep both readable while still fitting one fold:
+     the copy takes what it needs, the image gets the rest. */
+  .svc-page .story-grid{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
+  .svc-page .story-copy{padding:4vh 7vw 2vh;background:transparent;color:var(--ink);z-index:8;align-items:flex-start}
+  .svc-page .story-visual{position:relative;inset:auto;z-index:2;min-height:0;background:radial-gradient(circle at 50% 76%,rgba(255,255,255,.18),transparent 30%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0))}
+  /* Scenes stay stacked on top of each other (only one is visible at a
+     time), but are now positioned within the copy row rather than the
+     whole stage. */
+  .svc-page .scene{inset:auto 7vw;top:0;position:relative;grid-area:1/1}
+  .svc-page .story-copy{display:grid}
+  .svc-page .scene h3{font-size:clamp(30px,8.5vw,44px)}
+  .svc-page .scene p{font-size:14px;line-height:1.5;color:rgba(11,13,15,.78)}
+  .svc-page .chips{margin:8px 0}
   .svc-page .chip{font-size:9px;padding:5px 8px}
-  .svc-page .scene-img{width:min(390px,70vw);bottom:4vh;top:auto;max-height:34vh;z-index:7}
+  .svc-page .scene-img{position:absolute;width:min(390px,66vw);left:50%;top:50%;transform:translate(-50%,-50%) translateX(60px) scale(.92);max-height:100%;z-index:7}
+  .svc-page .scene-img.active{transform:translate(-50%,-50%)}
   .svc-page .growth-line{right:10px;top:10%;bottom:10%}
 
   .svc-page .system,.svc-page .proof,.svc-page .cards-section,.svc-page .method,.svc-page .insights,.svc-page .faq,.svc-page .final{padding:80px 0}

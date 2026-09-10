@@ -1,38 +1,34 @@
-// Case studies pulled live from WordPress, laid out like the blog
-// listing's "connected proof" band (CaseBridge.js) rather than the
-// concept's gradient art tiles — same card shape, same per-card metric
-// variety (leads → reach → CPL), but on this page's red accent.
+// Case studies pulled live from WordPress, using the same card design as the
+// case-studies listing (ExploreGrid.js): featured image on top, then the
+// category-style label, title and excerpt. Hover outlines and scales the card
+// in this service's accent colour.
+//
+// No metric line: the featured artwork already carries the headline figure
+// ("1M+ Revenue Generated" and so on), so printing it again under the title
+// duplicated it.
 //
 // Falls back to the authored copy in service-content.js if the live fetch
 // returns nothing, so the section never renders empty.
 import Link from "next/link";
 import SwitchWord from "./SwitchWord";
-import { findMetric } from "@/lib/case-study-shared";
-
-const METRIC_PRIORITY = [["lead"], ["reach"], ["cpl"]];
-
-function displayMetric(item, i) {
-  const found = findMetric(item, METRIC_PRIORITY[i] || []) || item.metrics?.[0];
-  return found ? `${found.value} ${found.label}` : null;
-}
 
 export default function CaseCards({ cases, studies = [] }) {
   const live = studies.length > 0;
 
   const items = live
-    ? studies.slice(0, 3).map((s, i) => ({
+    ? studies.slice(0, 3).map((s) => ({
         key: s.slug,
         href: `/case-studies/${s.slug}`,
         title: s.title,
-        metric: displayMetric(s, i),
         description: s.desc,
+        image: s.image,
       }))
     : cases.items.map((item) => ({
         key: item.title,
         href: item.href,
         title: item.title,
-        metric: item.art,
         description: item.description,
+        image: null,
       }));
 
   return (
@@ -53,10 +49,20 @@ export default function CaseCards({ cases, studies = [] }) {
         <div className="cards">
           {items.map((item) => (
             <Link className="case" key={item.key} href={item.href}>
+              {/* Featured image on top, matching the case-studies listing
+                  card. Falls back to the title's initial when a study has no
+                  featured media, as that listing does. */}
+              <div className="case-media">
+                {item.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={item.image} alt="" loading="lazy" />
+                ) : (
+                  <span className="case-media-fallback">{item.title.charAt(0)}</span>
+                )}
+              </div>
               <div className="case-body">
                 <small>Case Study</small>
                 <h3>{item.title}</h3>
-                {item.metric ? <div className="case-metric">{item.metric}</div> : null}
                 <p>{item.description}</p>
               </div>
             </Link>

@@ -60,7 +60,19 @@ export default function InsightCards({ insights, posts = [] }) {
             <Link className="blogcard" key={item.key} href={item.href}>
               {item.image ? (
                 <div className="blogcard-media">
-                  <Image src={item.image} alt={item.title} fill sizes="(max-width: 900px) 90vw, 380px" className="blogcard-img" />
+                  {/* width/height rather than `fill`: fill forces
+                      position:absolute and height:100% inline, which fights
+                      the object-fit:contain + height:auto wanted here. The
+                      numbers are only an intrinsic ratio hint — CSS sets the
+                      rendered size. */}
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    width={760}
+                    height={430}
+                    sizes="(max-width: 900px) 90vw, 380px"
+                    className="blogcard-img"
+                  />
                 </div>
               ) : (
                 <div className="blogcard-media blogcard-media--empty" />
