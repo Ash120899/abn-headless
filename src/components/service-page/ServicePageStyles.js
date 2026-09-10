@@ -320,11 +320,29 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .case p{color:#aeb7bd;line-height:1.6;margin:10px 0 0;font-size:15px}
 
 /* ---------- METHOD ---------- */
-.svc-page .method{background:#f8f2ec;overflow:hidden}
+/* clip, not hidden: overflow:hidden makes this a scroll container, which
+   stops the .method-pin child from sticking to the viewport. Same trap as
+   the hero — clip contains the row's horizontal overflow without creating
+   a scroll container. */
+.svc-page .method{background:#f8f2ec;overflow:clip}
 /* The scroll container the concept was missing — see MethodTrack.js. The
    negative/positive padding pair lets cards bleed to the container edge
    while still leaving room for their shadows. */
-.svc-page .method-scroller{margin-top:60px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:6px 2px 14px}
+/* The pinned panel. Its height is the viewport minus the header, so the
+   whole row plus its heading stays on screen while the page scroll drives
+   the row sideways. Only applied when the component measures real overflow
+   (desktop); otherwise the section keeps its natural height. */
+.svc-page .method-pin{position:sticky;top:var(--navh);min-height:calc(100svh - var(--navh));display:flex;flex-direction:column;justify-content:center}
+
+/* Accent progress bar for the horizontal row: scaleX is driven from the
+   component, transform-origin left so it fills rightwards. */
+.svc-page .method-progress{height:3px;border-radius:999px;background:rgba(11,13,15,.10);overflow:hidden;margin-top:26px}
+.svc-page .method-progress span{display:block;height:100%;width:100%;background:var(--red);border-radius:999px;transform:scaleX(0);transform-origin:left center}
+
+/* scroll-behavior must stay auto: the component writes scrollLeft on every
+   scroll frame, and smooth scrolling would animate toward a target that has
+   already moved, which reads as lag and stutter. */
+.svc-page .method-scroller{margin-top:60px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:6px 2px 14px;scroll-behavior:auto}
 .svc-page .method-scroller::-webkit-scrollbar{display:none}
 .svc-page .method-track{display:flex;gap:18px;width:max-content}
 .svc-page .method-card{width:360px;min-height:290px;background:#fff;border:1px solid var(--line);border-radius:28px;padding:30px;box-shadow:0 18px 45px rgba(0,0,0,.04);flex:0 0 auto}
@@ -470,7 +488,9 @@ body:has(.svc-page) .btn-slide{display:none !important}
   .svc-page .hero-zone{height:168svh}
   .svc-page .hero-zone .hero{height:calc(100svh - var(--navh));min-height:0}
 
-  .svc-page .journey{padding-top:52px;background:var(--coral)}
+  /* 80px, matching every other band on mobile — 52px made the gap after the
+     marquee visibly tighter than the gaps further down the page. */
+  .svc-page .journey{padding-top:80px;background:var(--coral)}
   .svc-page .journey-head{grid-template-columns:1fr;gap:18px;margin-bottom:32px}
   .svc-page .journey-head p{justify-self:start;font-size:16px}
   /* Same formula as desktop, but mobile gives each scene more travel
