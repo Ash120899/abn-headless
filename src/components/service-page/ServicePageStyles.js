@@ -339,8 +339,27 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .faqintro p{color:#adb5bb;font-size:18px;line-height:1.65}
 .svc-page details{border-top:1px solid #2a3034;padding:20px 0}
 .svc-page details:last-child{border-bottom:1px solid #2a3034}
-.svc-page summary{font-weight:900;font-size:20px;cursor:pointer;list-style:none}
+/* The question sits left, the +/- indicator right, with a gap so a long
+   question never runs into the icon. */
+.svc-page summary{position:relative;font-weight:900;font-size:20px;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:20px}
 .svc-page summary::-webkit-details-marker{display:none}
+
+/* The indicator is two bars built from one box: ::after is the horizontal
+   bar, its ::before child the vertical one. Rotating the vertical bar to 0deg
+   when open turns the plus into a minus, which animates rather than swapping
+   glyphs. currentColor keeps it in step with the summary text. */
+.svc-page summary::after{
+  content:"";flex:0 0 auto;position:relative;width:16px;height:2px;
+  background:currentColor;border-radius:2px;transition:transform .28s ease;
+}
+.svc-page summary::before{
+  content:"";position:absolute;right:0;width:16px;height:2px;
+  background:currentColor;border-radius:2px;
+  transform:rotate(90deg);transition:transform .28s ease;
+}
+.svc-page details[open] > summary::before{transform:rotate(0deg)}
+.svc-page details[open] > summary::after{transform:rotate(180deg)}
+
 .svc-page details p{color:#abb4bb;line-height:1.65;max-width:720px;margin:12px 0 0}
 
 /* ---------- FINAL ---------- */
