@@ -189,7 +189,10 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .scene{position:absolute;inset:auto 6vw;opacity:0;transform:translateY(54px);transition:opacity .35s,transform .35s;pointer-events:none}
 .svc-page .scene.active{opacity:1;transform:none;pointer-events:auto}
 .svc-page .scene .num{font-size:12px;letter-spacing:.2em;color:rgba(11,13,15,.66);font-weight:950}
-.svc-page .scene h3{font-size:clamp(44px,5vw,78px);line-height:.94;letter-spacing:-.05em;margin:10px 0 14px}
+/* 500, not the browser default bold: the concept declares no weight here, and
+   Tailwind's Preflight resets headings to inherit (400), which read too thin
+   at this size. 500 adds body without turning the title bold. */
+.svc-page .scene h3{font-size:clamp(44px,5vw,78px);line-height:.94;letter-spacing:-.05em;margin:10px 0 14px;font-weight:500}
 .svc-page .scene p{max-width:620px;color:rgba(11,13,15,.78);font-size:17px;line-height:1.65}
 .svc-page .chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
 .svc-page .chip{border:1px solid rgba(11,13,15,.22);border-radius:999px;padding:7px 10px;font-size:11px;font-weight:850;color:var(--ink);background:rgba(255,255,255,.12)}
@@ -339,7 +342,10 @@ body:has(.svc-page) .btn-slide{display:none !important}
 
 /* ---------- FINAL ---------- */
 .svc-page .final{background:var(--coral);padding:110px 0;text-align:center}
-.svc-page .final h2{font-size:clamp(54px,7.4vw,112px);line-height:.86;letter-spacing:-.065em;margin:10px auto 24px;max-width:1200px}
+/* 700: like the other headings here, the concept declares no weight and
+   Tailwind's Preflight resets it to inherit (400), which reads far too thin
+   at 112px. */
+.svc-page .final h2{font-size:clamp(54px,7.4vw,112px);line-height:.86;letter-spacing:-.065em;margin:10px auto 24px;max-width:1200px;font-weight:700}
 .svc-page .final p{font-size:20px;max-width:720px;margin:auto;line-height:1.6}
 
 /* ---------- HERO PIN ZONE (V4.1) ---------- */
