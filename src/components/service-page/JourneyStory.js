@@ -48,7 +48,11 @@ export default function JourneyStory({ journey }) {
     <section className="journey">
       <div className="container journey-head">
         <div>
-          <div className="eyebrow" style={{ color: "var(--coral)" }}>
+          {/* --ink, not --coral: this section's background IS the accent, so
+              a coral eyebrow was the same colour as the panel behind it and
+              invisible. Every other accent-backed section (hero, proof,
+              character break, final CTA) already uses ink here. */}
+          <div className="eyebrow" style={{ color: "var(--ink)" }}>
             {journey.eyebrow}
           </div>
           <h2>
