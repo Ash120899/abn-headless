@@ -47,10 +47,40 @@ function list(value, fallback) {
 // An ACF image set to return_format "url" is already a string. Guard against
 // installs configured to return an object or a bare attachment ID instead,
 // so a mis-set field degrades to the default rather than rendering [object].
-function imageUrl(value, fallback) {
+// ACF image fields come back in one of three shapes depending on the field's
+// Return Format: a URL string, an object with .url, or a bare attachment ID.
+// All three are accepted so the page renders whatever the field group is set
+// to — an ID needs `media` (see collectAttachmentIds / resolveAttachments in
+// wp-service.js) to look up, and falls back if it hasn't been resolved.
+function imageUrl(value, fallback, media) {
   if (typeof value === "string" && value.trim() !== "") return value;
   if (value && typeof value === "object" && typeof value.url === "string") return value.url;
+  const id = Number(value);
+  if (Number.isFinite(id) && id > 0) return media?.[id] ?? fallback;
   return fallback;
+}
+
+/**
+ * Walks an ACF payload and returns every attachment ID used by an image
+ * field, so they can all be resolved in a single media request rather than
+ * one per image.
+ */
+export function collectAttachmentIds(acf) {
+  if (!acf || typeof acf !== "object") return [];
+  const ids = new Set();
+  const add = (v) => {
+    const n = Number(v);
+    // Guard against strings that merely start with digits, and against the
+    // objects/URLs that need no lookup.
+    if (typeof v !== "object" && Number.isFinite(n) && n > 0 && String(v).trim() === String(n)) ids.add(n);
+  };
+
+  add(acf.hero_character);
+  add(acf.cb_image);
+  for (const row of rows(acf.journey_scenes)) add(row?.image);
+  for (const row of rows(acf.cinema_handoff)) add(row?.image);
+
+  return [...ids];
 }
 
 function link(label, url, fallback) {
@@ -72,7 +102,7 @@ function mapRows(value, fallback, mapRow) {
  * Exported separately from the fetch so it can be reasoned about (and
  * tested) without the network.
  */
-export function mergeServiceContent(base, acf) {
+export function mergeServiceContent(base, acf, media) {
   if (!acf || typeof acf !== "object") return base;
 
   const theme = {
@@ -97,7 +127,7 @@ export function mergeServiceContent(base, acf) {
       description: pick(acf.hero_description, base.hero.description),
       ctaPrimary: link(acf.hero_cta_primary_label, acf.hero_cta_primary_url, base.hero.ctaPrimary),
       ctaSecondary: link(acf.hero_cta_secondary_label, acf.hero_cta_secondary_url, base.hero.ctaSecondary),
-      character: imageUrl(acf.hero_character, base.hero.character),
+      character: imageUrl(acf.hero_character, base.hero.character, media),
       stats: mapRows(acf.hero_stats, base.hero.stats, (r, d) => ({
         prefix: affix(r, "prefix", d.prefix ?? ""),
         value: pick(r.value, d.value ?? ""),
@@ -122,7 +152,7 @@ export function mergeServiceContent(base, acf) {
         description: pick(r.description, d.description ?? ""),
         chips: list(r.chips, d.chips ?? []),
         link: link(r.link_label, r.link_url, d.link || { label: "", href: "#" }),
-        image: imageUrl(r.image, d.image ?? null),
+        image: imageUrl(r.image, d.image ?? null, media),
       })),
     },
 
@@ -156,7 +186,7 @@ export function mergeServiceContent(base, acf) {
         note: pick(r.note, d.note ?? ""),
       })),
       handoff: mapRows(acf.cinema_handoff, base.cinema.handoff, (r, d) => ({
-        image: imageUrl(r.image, d.image ?? null),
+        image: imageUrl(r.image, d.image ?? null, media),
         roleFx: pick(r.role_fx, d.roleFx ?? ""),
         caption: pick(r.caption, d.caption ?? ""),
       })),
@@ -208,7 +238,7 @@ export function mergeServiceContent(base, acf) {
       headingBefore: pick(acf.cb_heading_before, base.characterBreak.headingBefore),
       headingSwitch: list(acf.cb_heading_switch, base.characterBreak.headingSwitch),
       description: pick(acf.cb_description, base.characterBreak.description),
-      image: imageUrl(acf.cb_image, base.characterBreak.image),
+      image: imageUrl(acf.cb_image, base.characterBreak.image, media),
       cta: link(acf.cb_cta_label, acf.cb_cta_url, base.characterBreak.cta),
       badges: (() => {
         const list = rows(acf.cb_badges).map((r) => r.text).filter((t) => typeof t === "string" && t.trim());
