@@ -263,7 +263,10 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .proof-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(0,0,0,.18);border-bottom:1px solid rgba(0,0,0,.18);margin-top:48px}
 .svc-page .proof-item{padding:42px 28px;border-right:1px solid rgba(0,0,0,.18);position:relative;overflow:hidden}
 .svc-page .proof-item:last-child{border-right:0}
-.svc-page .proof-item b{font-size:56px;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+/* Matched to the case-studies listing's "By The Numbers" strip
+   (NumbersBar.js) so the same figures read identically on both pages:
+   editorial family, weight 900, -.03em tracking and the same clamp. */
+.svc-page .proof-item b{font-family:var(--font-editorial);font-size:clamp(2.625rem,4vw,3.875rem);font-weight:900;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 /* Direct child only: the counter renders its own nested spans inside the
    <b> (prefix / animating number / suffix). A bare descendant selector here
    caught those too, shrinking the number to the 11px label size and making
@@ -467,7 +470,9 @@ body:has(.svc-page) .btn-slide{display:none !important}
   .svc-page .proof-grid{grid-template-columns:1fr 1fr}
   .svc-page .proof-item:nth-child(2){border-right:0}
   .svc-page .proof-item{padding:26px 18px;border-bottom:1px solid rgba(0,0,0,.18)}
-  .svc-page .proof-item b{font-size:42px}
+  /* No font-size override here: the clamp above already floors at 2.625rem
+     (42px), which is exactly what this breakpoint used to hardcode, and
+     keeping it would break the match with the case-studies strip. */
   .svc-page .section-top{display:block}
   .svc-page .cards,.svc-page .blogcards{grid-template-columns:1fr}
   .svc-page .method-scroller{margin-top:34px;scroll-snap-type:x mandatory}
