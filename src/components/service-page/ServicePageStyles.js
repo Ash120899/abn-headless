@@ -510,8 +510,13 @@ body:has(.svc-page) .btn-slide{display:none !important}
   /* padding-bottom is what actually separates the stats from the marquee:
      .hero-grid is align-content:center inside this fixed-height box, so its
      own bottom padding lands mid-box rather than at the edge that meets the
-     marquee band. */
-  .svc-page .hero-zone .hero{height:calc(100svh - var(--navh));min-height:0;overflow:hidden;padding:14px 0 26px}
+     marquee band.
+     The target is 80px, matching .journey's padding-top on the far side of
+     the marquee so the band sits with equal space above and below. It is
+     clamped against viewport height because a flat 80px overflows a short
+     phone (360x640) by ~2px and leaves an iPhone SE with almost no artwork:
+     below ~700px tall the gap eases back rather than eating the hero. */
+  .svc-page .hero-zone .hero{height:calc(100svh - var(--navh));min-height:0;overflow:hidden;padding:14px 0 clamp(40px,9svh,80px)}
   /* Row 1 (artwork) absorbs slack; row 2 (copy, CTAs, stats) is auto so it
      always gets the height it needs. */
   .svc-page .hero-zone .hero-grid{grid-template-rows:minmax(0,1fr) auto;align-content:stretch}
@@ -527,7 +532,10 @@ body:has(.svc-page) .btn-slide{display:none !important}
 
   /* 80px, matching every other band on mobile — 52px made the gap after the
      marquee visibly tighter than the gaps further down the page. */
-  .svc-page .journey{padding-top:80px;background:var(--coral)}
+  /* Same clamp as the hero's padding-bottom on the other side of the
+     marquee, so the band keeps equal space above and below at every
+     viewport height. */
+  .svc-page .journey{padding-top:clamp(40px,9svh,80px);background:var(--coral)}
   .svc-page .journey-head{grid-template-columns:1fr;gap:18px;margin-bottom:32px}
   .svc-page .journey-head p{justify-self:start;font-size:16px}
   /* Same formula as desktop, but mobile gives each scene more travel
