@@ -476,10 +476,7 @@ body:has(.svc-page) .btn-slide{display:none !important}
      side padding — leaving the hero headline and body copy flush against
      the screen edge on mobile. Vertical values kept as authored; the side
      padding is restored. */
-  /* Bottom padding raised from the concept's 4px to 18px so the stats row
-     has real breathing room before the marquee band, rather than sitting
-     flush against the edge of the hero. */
-  .svc-page .hero-grid{grid-template-columns:1fr;gap:2px;padding:6px 20px 18px;align-content:center}
+  .svc-page .hero-grid{grid-template-columns:1fr;gap:2px;padding:6px 20px 4px;align-content:center}
   .svc-page .hero-copy{order:1}
   .svc-page .hero h1{font-size:clamp(42px,12vw,64px);line-height:.87;margin:6px 0 10px;max-width:720px}
   .svc-page .hero p{font-size:15px;line-height:1.45}
@@ -502,17 +499,19 @@ body:has(.svc-page) .btn-slide{display:none !important}
   .svc-page .stat{min-width:0;padding:10px}
   .svc-page .stat b{font-size:22px}
   .svc-page .stat small{font-size:8px}
-  /* The pinned hero must never clip on a phone.
-     The hero sets overflow:hidden, so anything taller than the pin height
-     is simply cut off — which is what iOS Safari produced: svh is the SMALL
-     viewport height (URL bar expanded), so a stack sized to fit svh still
-     overflowed once the real available height shrank, and the character and
-     CTA were sliced.
-     Two changes: the pin tracks the DYNAMIC viewport (dvh) so it matches
-     whatever Safari is actually showing, and the grid is allowed to shrink
-     rather than being forced to a fixed height. */
+  /* The pinned hero is sized in svh, deliberately.
+     dvh was tried and is wrong here: it tracks the viewport CONTINUOUSLY as
+     Safari's URL bar collapses, so the pin grew mid-scroll and the stats
+     popped into view once past the character. svh is the small (URL bar
+     expanded) height — the worst case — so the layout is sized once for the
+     tightest condition and never changes as you scroll. Any extra room the
+     collapsing bar frees up simply becomes margin. */
   .svc-page .hero-zone{height:168svh}
-  .svc-page .hero-zone .hero{height:calc(100dvh - var(--navh));min-height:0;overflow:hidden}
+  /* padding-bottom is what actually separates the stats from the marquee:
+     .hero-grid is align-content:center inside this fixed-height box, so its
+     own bottom padding lands mid-box rather than at the edge that meets the
+     marquee band. */
+  .svc-page .hero-zone .hero{height:calc(100svh - var(--navh));min-height:0;overflow:hidden;padding:14px 0 26px}
   /* Row 1 (artwork) absorbs slack; row 2 (copy, CTAs, stats) is auto so it
      always gets the height it needs. */
   .svc-page .hero-zone .hero-grid{grid-template-rows:minmax(0,1fr) auto;align-content:stretch}
@@ -520,10 +519,11 @@ body:has(.svc-page) .btn-slide{display:none !important}
      on its row, so the grid overflowed the pin under pressure and the stats
      were the part that got cut. The artwork now shrinks freely; the image
      inside keeps its own sensible floor. */
-  .svc-page .hero-visual{height:auto;min-height:0;max-height:32dvh}
-  .svc-page .hero-char{width:min(214px,38dvh)}
+  /* svh here too, for the same reason: a dvh cap would resize the artwork
+     continuously while scrolling, reflowing the rows underneath it. */
+  .svc-page .hero-visual{height:auto;min-height:0;max-height:32svh}
+  .svc-page .hero-char{width:min(214px,38svh)}
   .svc-page .hero-copy{display:flex;flex-direction:column;justify-content:center}
-  .svc-page .hero-char{width:min(214px,42dvh)}
 
   /* 80px, matching every other band on mobile — 52px made the gap after the
      marquee visibly tighter than the gaps further down the page. */
