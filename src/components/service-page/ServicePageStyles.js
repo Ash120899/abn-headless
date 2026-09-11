@@ -242,6 +242,13 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .cinema-word.active{opacity:1;transform:none;filter:none}
 .svc-page .cinema-word:last-child{color:var(--coral)}
 .svc-page .cinema-copy p{margin:0 auto;max-width:760px;color:#abb3b9;font-size:17px;line-height:1.6}
+/* On desktop the wrapper must not exist as far as layout is concerned: the
+   cards inside it position themselves absolutely against the sticky stage,
+   and .cinema-sticky is a centring grid, so a real wrapper element would
+   take a grid cell and push the copy off-centre. display:contents hands
+   the children straight to the grid. It becomes a real 2x2 grid at mobile
+   widths, where the cards are laid out in flow instead. */
+.svc-page .cinema-depth{display:contents}
 .svc-page .depth-card{position:absolute;z-index:3;width:230px;padding:18px 20px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:rgba(17,21,24,.58);backdrop-filter:blur(12px);box-shadow:0 18px 50px rgba(0,0,0,.24);will-change:transform}
 .svc-page .depth-card small{display:block;color:var(--coral);font-weight:900;letter-spacing:.16em;font-size:9px}
 .svc-page .depth-card b{display:block;font-size:20px;margin:7px 0}
@@ -473,8 +480,11 @@ body:has(.svc-page) .btn-slide{display:none !important}
   .svc-page .hero-copy{order:1}
   .svc-page .hero h1{font-size:clamp(42px,12vw,64px);line-height:.87;margin:6px 0 10px;max-width:720px}
   .svc-page .hero p{font-size:15px;line-height:1.45}
-  .svc-page .hero-visual{height:286px;min-height:286px;order:0;margin-bottom:0}
-  .svc-page .hero-char{width:214px}
+  /* Height is deliberately fluid, not the fixed 286px the concept used: on
+     a phone the artwork has to be the element that gives way when vertical
+     space is tight, or the pinned hero clips. Bounds are set with the pin
+     rule further down. */
+  .svc-page .hero-visual{order:0;margin-bottom:0}
   .svc-page .halo{width:202px;height:202px}
   .svc-page .orbit-guide{width:min(82vw,315px)}
   .svc-page .tool{font-size:8.5px;padding:6px 8px}
@@ -485,8 +495,24 @@ body:has(.svc-page) .btn-slide{display:none !important}
   .svc-page .stat{min-width:0;padding:10px}
   .svc-page .stat b{font-size:22px}
   .svc-page .stat small{font-size:8px}
+  /* The pinned hero must never clip on a phone.
+     The hero sets overflow:hidden, so anything taller than the pin height
+     is simply cut off — which is what iOS Safari produced: svh is the SMALL
+     viewport height (URL bar expanded), so a stack sized to fit svh still
+     overflowed once the real available height shrank, and the character and
+     CTA were sliced.
+     Two changes: the pin tracks the DYNAMIC viewport (dvh) so it matches
+     whatever Safari is actually showing, and the grid is allowed to shrink
+     rather than being forced to a fixed height. */
   .svc-page .hero-zone{height:168svh}
-  .svc-page .hero-zone .hero{height:calc(100svh - var(--navh));min-height:0}
+  .svc-page .hero-zone .hero{height:calc(100dvh - var(--navh));min-height:0;overflow:hidden}
+  /* minmax(0,auto) lets the two rows give back space under pressure instead
+     of overflowing the pin. */
+  .svc-page .hero-zone .hero-grid{grid-template-rows:minmax(0,auto) minmax(0,auto);align-content:center}
+  /* The artwork is the flexible element: it shrinks first, because the
+     headline and CTA carry the message. */
+  .svc-page .hero-visual{height:auto;min-height:0;max-height:34dvh}
+  .svc-page .hero-char{width:min(214px,42dvh)}
 
   /* 80px, matching every other band on mobile — 52px made the gap after the
      marquee visibly tighter than the gaps further down the page. */
@@ -527,28 +553,38 @@ body:has(.svc-page) .btn-slide{display:none !important}
      right edge pointed down from a corner rather than between the cards. */
   .svc-page .node:after{content:"↓";right:auto;left:50%;transform:translateX(-50%);top:auto;bottom:-20px}
 
+  /* ---------- CINEMA (mobile) ----------
+     Desktop scatters the four depth cards around the characters with
+     absolute positioning tuned to a wide stage. At phone widths there is no
+     room for that: the cards landed on the copy, on each other and on the
+     artwork. Mobile therefore uses an explicit vertical stack — copy, then a
+     2x2 card grid, then the characters — so nothing can overlap regardless
+     of how the text wraps. */
   .svc-page .cinema-track{height:300vh}
-  .svc-page .cinema-sticky{min-height:620px}
-  .svc-page .cinema-copy{top:7vh;width:90vw}
-  .svc-page .cinema-words{font-size:clamp(52px,15vw,80px);height:1.9em;line-height:.88}
-  .svc-page .cinema-copy p{font-size:13px;max-width:90%}
-  .svc-page .depth-card{width:145px;padding:11px 12px;border-radius:14px}
-  .svc-page .depth-card b{font-size:13px}
+  .svc-page .cinema-sticky{min-height:0;height:calc(100svh - var(--navh));display:block}
+  .svc-page .cinema-copy{position:static;transform:none;width:auto;padding:16px 20px 0;text-align:center}
+  .svc-page .cinema-words{font-size:clamp(40px,12vw,62px);height:1.06em;line-height:.9;margin:8px 0 10px}
+  .svc-page .cinema-copy p{font-size:12.5px;line-height:1.5;max-width:none}
+  .svc-page .cinema-copy .eyebrow{font-size:9px;justify-content:center}
+
+  /* Cards become a real grid under the copy: no absolute placement, so they
+     cannot collide with the paragraph or with each other. */
+  .svc-page .cinema-depth{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 20px 0}
+  .svc-page .depth-card{position:static;width:auto;padding:10px 12px;border-radius:14px;transform:none !important;opacity:1 !important}
+  .svc-page .depth-card b{font-size:13px;margin:4px 0}
+  .svc-page .depth-card small{font-size:8px}
   .svc-page .depth-card span{font-size:9px}
-  .svc-page .d1{left:3vw;top:37vh}
-  .svc-page .d2{right:3vw;top:39vh}
-  .svc-page .d3{left:4vw;bottom:20vh}
-  .svc-page .d4{right:4vw;bottom:19vh}
-  .svc-page .handoff-team{width:94vw;height:31vh;bottom:4vh}
-  .svc-page .handoff-char{width:35%}
-  .svc-page .handoff-char img{max-height:23vh}
-  .svc-page .hc1{left:-3%}
-  .svc-page .hc2{left:50%}
-  .svc-page .hc3{right:-3%}
+
+  /* Characters sit in the remaining space below the grid, in normal flow. */
+  .svc-page .handoff-team{position:static;transform:none;width:auto;height:auto;min-height:0;padding:14px 12px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:6px}
+  .svc-page .handoff-char{position:static;width:auto;flex:1 1 0;min-width:0;padding-top:26px}
+  .svc-page .hc1,.svc-page .hc2,.svc-page .hc3{left:auto;right:auto;transform:none !important}
+  .svc-page .handoff-char img{max-height:18vh;width:auto;max-width:100%}
   .svc-page .handoff-char span{display:none}
-  .svc-page .role-fx{font-size:7px;padding:5px 7px;top:12%}
-  .svc-page .signal-orb{width:20px;height:20px}
-  .svc-page .cinema-scroll{font-size:7px}
+  /* The pill is centred over its own column and clear of the artwork. */
+  .svc-page .role-fx{font-size:6.5px;padding:4px 6px;letter-spacing:.06em;top:0;bottom:auto}
+  .svc-page .signal-orb{display:none}
+  .svc-page .cinema-scroll{font-size:7px;bottom:8px}
 
   .svc-page .proof-grid{grid-template-columns:1fr 1fr}
   .svc-page .proof-item:nth-child(2){border-right:0}

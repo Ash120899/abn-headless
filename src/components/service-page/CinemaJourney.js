@@ -160,19 +160,24 @@ export default function CinemaJourney({ cinema }) {
             <p>{cinema.description}</p>
           </div>
 
-          {cinema.depthCards.map((card, i) => (
-            <div
-              className={`depth-card d${i + 1}`}
-              key={card.label}
-              ref={(el) => {
-                cardRefs.current[i] = el;
-              }}
-            >
-              <small>{card.label}</small>
-              <b>{card.title}</b>
-              <span>{card.note}</span>
-            </div>
-          ))}
+          {/* Wrapper is inert on desktop (the cards position themselves
+              absolutely against the stage) but becomes the 2x2 grid on
+              mobile, where absolute placement has no room to work. */}
+          <div className="cinema-depth">
+            {cinema.depthCards.map((card, i) => (
+              <div
+                className={`depth-card d${i + 1}`}
+                key={card.label}
+                ref={(el) => {
+                  cardRefs.current[i] = el;
+                }}
+              >
+                <small>{card.label}</small>
+                <b>{card.title}</b>
+                <span>{card.note}</span>
+              </div>
+            ))}
+          </div>
 
           <div className="handoff-team" aria-hidden="true">
             {cinema.handoff.map((char, i) => (
