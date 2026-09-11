@@ -491,7 +491,11 @@ body:has(.svc-page) .btn-slide{display:none !important}
   .svc-page .tool b{font-size:10px}
   .svc-page .tool i{width:18px;height:18px;font-size:9px}
   .svc-page .hero-visual.system-locked .tool b{opacity:0;max-width:0}
-  .svc-page .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
+  /* The three stats are the last thing in the hero, so they are what gets
+     clipped when the pin runs out of room — which is why they appeared on
+     some loads and not others. margin-bottom guarantees a gap between them
+     and the marquee band that follows, matching the space above them. */
+  .svc-page .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:14px 0 14px}
   .svc-page .stat{min-width:0;padding:10px}
   .svc-page .stat b{font-size:22px}
   .svc-page .stat small{font-size:8px}
@@ -506,12 +510,14 @@ body:has(.svc-page) .btn-slide{display:none !important}
      rather than being forced to a fixed height. */
   .svc-page .hero-zone{height:168svh}
   .svc-page .hero-zone .hero{height:calc(100dvh - var(--navh));min-height:0;overflow:hidden}
-  /* minmax(0,auto) lets the two rows give back space under pressure instead
-     of overflowing the pin. */
-  .svc-page .hero-zone .hero-grid{grid-template-rows:minmax(0,auto) minmax(0,auto);align-content:center}
-  /* The artwork is the flexible element: it shrinks first, because the
-     headline and CTA carry the message. */
-  .svc-page .hero-visual{height:auto;min-height:0;max-height:34dvh}
+  /* Row 1 (artwork) is the only flexible row: minmax(0,1fr) lets it absorb
+     whatever is left. Row 2 (copy, CTAs, stats) is auto, so it always gets
+     the height it needs and the stats can never be cut off. */
+  .svc-page .hero-zone .hero-grid{grid-template-rows:minmax(0,1fr) auto;align-content:stretch}
+  /* The artwork gives way first, because the headline, CTAs and stats carry
+     the message. It also has a floor so it never collapses to nothing. */
+  .svc-page .hero-visual{height:auto;min-height:150px;max-height:32dvh}
+  .svc-page .hero-copy{display:flex;flex-direction:column;justify-content:center}
   .svc-page .hero-char{width:min(214px,42dvh)}
 
   /* 80px, matching every other band on mobile — 52px made the gap after the
@@ -554,37 +560,38 @@ body:has(.svc-page) .btn-slide{display:none !important}
   .svc-page .node:after{content:"↓";right:auto;left:50%;transform:translateX(-50%);top:auto;bottom:-20px}
 
   /* ---------- CINEMA (mobile) ----------
-     Desktop scatters the four depth cards around the characters with
-     absolute positioning tuned to a wide stage. At phone widths there is no
-     room for that: the cards landed on the copy, on each other and on the
-     artwork. Mobile therefore uses an explicit vertical stack — copy, then a
-     2x2 card grid, then the characters — so nothing can overlap regardless
-     of how the text wraps. */
+     Keeps the concept's scattered composition — cards placed around the
+     characters — rather than collapsing to a stack. The tuning below is
+     what stops the pieces colliding at phone widths: cards are narrower and
+     pinned nearer the edges, the copy block is capped so the paragraph
+     cannot grow down into the top row, and the character band is anchored
+     to the bottom with the cards' vertical bands kept clear of it. */
   .svc-page .cinema-track{height:300vh}
-  .svc-page .cinema-sticky{min-height:0;height:calc(100svh - var(--navh));display:block}
-  .svc-page .cinema-copy{position:static;transform:none;width:auto;padding:16px 20px 0;text-align:center}
-  .svc-page .cinema-words{font-size:clamp(40px,12vw,62px);height:1.06em;line-height:.9;margin:8px 0 10px}
-  .svc-page .cinema-copy p{font-size:12.5px;line-height:1.5;max-width:none}
-  .svc-page .cinema-copy .eyebrow{font-size:9px;justify-content:center}
-
-  /* Cards become a real grid under the copy: no absolute placement, so they
-     cannot collide with the paragraph or with each other. */
-  .svc-page .cinema-depth{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 20px 0}
-  .svc-page .depth-card{position:static;width:auto;padding:10px 12px;border-radius:14px;transform:none !important;opacity:1 !important}
-  .svc-page .depth-card b{font-size:13px;margin:4px 0}
-  .svc-page .depth-card small{font-size:8px}
-  .svc-page .depth-card span{font-size:9px}
-
-  /* Characters sit in the remaining space below the grid, in normal flow. */
-  .svc-page .handoff-team{position:static;transform:none;width:auto;height:auto;min-height:0;padding:14px 12px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:6px}
-  .svc-page .handoff-char{position:static;width:auto;flex:1 1 0;min-width:0;padding-top:26px}
-  .svc-page .hc1,.svc-page .hc2,.svc-page .hc3{left:auto;right:auto;transform:none !important}
-  .svc-page .handoff-char img{max-height:18vh;width:auto;max-width:100%}
+  .svc-page .cinema-sticky{min-height:620px}
+  .svc-page .cinema-copy{top:6vh;width:92vw}
+  .svc-page .cinema-words{font-size:clamp(46px,13vw,70px);height:1.06em;line-height:.9;margin:10px 0 12px}
+  .svc-page .cinema-copy p{font-size:12.5px;line-height:1.5;max-width:88%}
+  .svc-page .depth-card{width:min(43vw,158px);padding:10px 11px;border-radius:14px}
+  .svc-page .depth-card small{font-size:8px;letter-spacing:.12em}
+  .svc-page .depth-card b{font-size:12.5px;margin:5px 0}
+  .svc-page .depth-card span{font-size:8.5px;line-height:1.35}
+  /* Top pair sits below the copy; bottom pair above the character band. */
+  .svc-page .d1{left:2.5vw;top:34vh}
+  .svc-page .d2{right:2.5vw;top:34vh}
+  .svc-page .d3{left:2.5vw;bottom:23vh}
+  .svc-page .d4{right:2.5vw;bottom:23vh}
+  /* The characters occupy the middle channel between the card columns, so
+     they never sit underneath one. */
+  .svc-page .handoff-team{width:100vw;height:26vh;bottom:5vh}
+  .svc-page .handoff-char{width:30%}
+  .svc-page .handoff-char img{max-height:19vh}
+  .svc-page .hc1{left:2%}
+  .svc-page .hc2{left:50%}
+  .svc-page .hc3{right:2%}
   .svc-page .handoff-char span{display:none}
-  /* The pill is centred over its own column and clear of the artwork. */
-  .svc-page .role-fx{font-size:6.5px;padding:4px 6px;letter-spacing:.06em;top:0;bottom:auto}
-  .svc-page .signal-orb{display:none}
-  .svc-page .cinema-scroll{font-size:7px;bottom:8px}
+  .svc-page .role-fx{font-size:6.5px;padding:4px 6px;letter-spacing:.05em;top:0;bottom:auto}
+  .svc-page .signal-orb{width:18px;height:18px}
+  .svc-page .cinema-scroll{font-size:7px;bottom:10px}
 
   .svc-page .proof-grid{grid-template-columns:1fr 1fr}
   .svc-page .proof-item:nth-child(2){border-right:0}
