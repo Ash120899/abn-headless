@@ -571,25 +571,37 @@ body:has(.svc-page) .btn-slide{display:none !important}
   .svc-page .cinema-copy{top:6vh;width:92vw}
   .svc-page .cinema-words{font-size:clamp(46px,13vw,70px);height:1.06em;line-height:.9;margin:10px 0 12px}
   .svc-page .cinema-copy p{font-size:12.5px;line-height:1.5;max-width:88%}
-  .svc-page .depth-card{width:min(43vw,158px);padding:10px 11px;border-radius:14px}
-  .svc-page .depth-card small{font-size:8px;letter-spacing:.12em}
-  .svc-page .depth-card b{font-size:12.5px;margin:5px 0}
-  .svc-page .depth-card span{font-size:8.5px;line-height:1.35}
+  /* 41vw a side at 3vw inset leaves a 12vw channel down the middle, so the
+     two cards in a row read as a pair rather than touching. */
+  .svc-page .depth-card{width:min(41vw,150px);padding:9px 10px;border-radius:13px}
+  .svc-page .depth-card small{font-size:7.5px;letter-spacing:.11em}
+  .svc-page .depth-card b{font-size:12px;margin:4px 0;line-height:1.2}
+  .svc-page .depth-card span{font-size:8px;line-height:1.3}
   /* Top pair sits below the copy; bottom pair above the character band. */
-  .svc-page .d1{left:2.5vw;top:34vh}
-  .svc-page .d2{right:2.5vw;top:34vh}
-  .svc-page .d3{left:2.5vw;bottom:23vh}
-  .svc-page .d4{right:2.5vw;bottom:23vh}
+  .svc-page .d1{left:3vw;top:33vh}
+  .svc-page .d2{right:3vw;top:33vh}
+  /* Bottom pair sits above the character band: the band occupies the lower
+     33vh (29vh tall at bottom:4vh), so 34vh keeps these cards and the role
+     pills beneath them from colliding. */
+  .svc-page .d3{left:3vw;bottom:34vh}
+  .svc-page .d4{right:3vw;bottom:34vh}
   /* The characters occupy the middle channel between the card columns, so
      they never sit underneath one. */
-  .svc-page .handoff-team{width:100vw;height:26vh;bottom:5vh}
-  .svc-page .handoff-char{width:30%}
-  .svc-page .handoff-char img{max-height:19vh}
+  /* Taller band now that the card rows are tighter: the artwork gets the
+     space the dead channel between them used to waste. */
+  .svc-page .handoff-team{width:100vw;height:29vh;bottom:4vh}
+  /* padding-top reserves the pill's own row above each figure, so the label
+     sits over clear background instead of across the character's head. */
+  .svc-page .handoff-char{width:31%;padding-top:20px}
+  .svc-page .handoff-char img{max-height:23vh}
   .svc-page .hc1{left:2%}
   .svc-page .hc2{left:50%}
   .svc-page .hc3{right:2%}
   .svc-page .handoff-char span{display:none}
-  .svc-page .role-fx{font-size:6.5px;padding:4px 6px;letter-spacing:.05em;top:0;bottom:auto}
+  /* Each pill is capped to its own column and centred in it. Without the
+     max-width the three labels grew past their characters and ran into one
+     another; nowrap plus the smaller type keeps each on one line. */
+  .svc-page .role-fx{font-size:6px;padding:3px 5px;letter-spacing:.03em;top:0;bottom:auto;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .svc-page .signal-orb{width:18px;height:18px}
   .svc-page .cinema-scroll{font-size:7px;bottom:10px}
 
