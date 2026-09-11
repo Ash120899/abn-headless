@@ -567,33 +567,43 @@ body:has(.svc-page) .btn-slide{display:none !important}
      cannot grow down into the top row, and the character band is anchored
      to the bottom with the cards' vertical bands kept clear of it. */
   .svc-page .cinema-track{height:300vh}
-  .svc-page .cinema-sticky{min-height:620px}
+  /* --card-gap drives the 2x2 card block below: the same value is used for
+     the screen-edge inset, the gap between the two columns and the gap
+     between the rows, so the four cards sit on an even grid. */
+  .svc-page .cinema-sticky{min-height:620px;--card-gap:14px}
   .svc-page .cinema-copy{top:6vh;width:92vw}
   .svc-page .cinema-words{font-size:clamp(46px,13vw,70px);height:1.06em;line-height:.9;margin:10px 0 12px}
   .svc-page .cinema-copy p{font-size:12.5px;line-height:1.5;max-width:88%}
-  /* 41vw a side at 3vw inset leaves a 12vw channel down the middle, so the
-     two cards in a row read as a pair rather than touching. */
-  .svc-page .depth-card{width:min(41vw,150px);padding:9px 10px;border-radius:13px}
+  /* One gap value drives the whole 2x2 block, so the spacing between the
+     two columns matches the spacing to the screen edges and between the
+     rows. Card width is derived from it rather than guessed, which is what
+     keeps the four cards reading as an even grid. */
+  /* Fixed height, not auto: row 2 is positioned a card-height below row 1,
+     so the four cards only stay on an even grid if every card is the same
+     height. 96px fits the longest of the four titles at this size. */
+  .svc-page .depth-card{width:calc((100vw - var(--card-gap) * 3) / 2);max-width:none;height:96px;padding:10px 11px;border-radius:13px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
   .svc-page .depth-card small{font-size:7.5px;letter-spacing:.11em}
-  .svc-page .depth-card b{font-size:12px;margin:4px 0;line-height:1.2}
+  .svc-page .depth-card b{font-size:12.5px;margin:4px 0;line-height:1.2}
   .svc-page .depth-card span{font-size:8px;line-height:1.3}
   /* Top pair sits below the copy; bottom pair above the character band. */
-  .svc-page .d1{left:3vw;top:33vh}
-  .svc-page .d2{right:3vw;top:33vh}
-  /* Bottom pair sits above the character band: the band occupies the lower
-     33vh (29vh tall at bottom:4vh), so 34vh keeps these cards and the role
-     pills beneath them from colliding. */
-  .svc-page .d3{left:3vw;bottom:34vh}
-  .svc-page .d4{right:3vw;bottom:34vh}
+  /* Left/right insets use the same --card-gap as the centre channel, so the
+     horizontal rhythm is even: edge · card · gap · card · edge. */
+  .svc-page .d1{left:var(--card-gap);right:auto;top:32vh}
+  .svc-page .d2{right:var(--card-gap);left:auto;top:32vh}
+  /* Row 2 is offset from row 1 by the card height plus the same gap, so the
+     vertical spacing matches the horizontal. Card height is bounded by the
+     copy in it; 96px covers the tallest of the four. */
+  .svc-page .d3{left:var(--card-gap);right:auto;top:calc(32vh + 96px + var(--card-gap));bottom:auto}
+  .svc-page .d4{right:var(--card-gap);left:auto;top:calc(32vh + 96px + var(--card-gap));bottom:auto}
   /* The characters occupy the middle channel between the card columns, so
      they never sit underneath one. */
-  /* Taller band now that the card rows are tighter: the artwork gets the
-     space the dead channel between them used to waste. */
-  .svc-page .handoff-team{width:100vw;height:29vh;bottom:4vh}
+  /* The tightened card grid leaves 67-120px of clear space above the
+     characters, so the artwork takes it: taller band, bigger figures. */
+  .svc-page .handoff-team{width:100vw;height:33vh;bottom:4vh}
   /* padding-top reserves the pill's own row above each figure, so the label
      sits over clear background instead of across the character's head. */
-  .svc-page .handoff-char{width:31%;padding-top:20px}
-  .svc-page .handoff-char img{max-height:23vh}
+  .svc-page .handoff-char{width:32%;padding-top:20px}
+  .svc-page .handoff-char img{max-height:27vh}
   .svc-page .hc1{left:2%}
   .svc-page .hc2{left:50%}
   .svc-page .hc3{right:2%}
@@ -603,7 +613,9 @@ body:has(.svc-page) .btn-slide{display:none !important}
      another; nowrap plus the smaller type keeps each on one line. */
   .svc-page .role-fx{font-size:6px;padding:3px 5px;letter-spacing:.03em;top:0;bottom:auto;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .svc-page .signal-orb{width:18px;height:18px}
-  .svc-page .cinema-scroll{font-size:7px;bottom:10px}
+  /* nowrap with tighter tracking: at .2em the label was wider than the
+     screen and broke onto a second line. */
+  .svc-page .cinema-scroll{font-size:6.5px;bottom:10px;white-space:nowrap;letter-spacing:.12em}
 
   .svc-page .proof-grid{grid-template-columns:1fr 1fr}
   .svc-page .proof-item:nth-child(2){border-right:0}

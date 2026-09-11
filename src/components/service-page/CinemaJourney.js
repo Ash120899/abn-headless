@@ -75,12 +75,21 @@ export default function CinemaJourney({ cinema }) {
 
       setStep(Math.min(3, Math.floor(p * 4)));
 
+      // The parallax drift is desktop-only. On a phone the four cards sit in
+      // a tight 2x2 grid, and a horizontal drift of up to ±72px closed the
+      // gap between each pair — by the end of the scroll the cards in a row
+      // were overlapping. Vertical drift is dropped too, so the rows stay
+      // evenly spaced; the cards still fade in and scale.
+      const narrow = window.innerWidth <= 900;
+
       cardRefs.current.forEach((card, i) => {
         if (!card) return;
         const dir = i % 2 ? -1 : 1;
-        card.style.transform = `translate3d(${dir * (p - 0.5) * DEPTH[i]}px,${
-          (p - 0.5) * (i < 2 ? -34 : 30)
-        }px,0) scale(${1 + (i % 2 ? 0.018 : 0.03) * Math.sin(p * Math.PI)})`;
+        const dx = narrow ? 0 : dir * (p - 0.5) * DEPTH[i];
+        const dy = narrow ? 0 : (p - 0.5) * (i < 2 ? -34 : 30);
+        card.style.transform = `translate3d(${dx}px,${dy}px,0) scale(${
+          1 + (i % 2 ? 0.018 : 0.03) * Math.sin(p * Math.PI)
+        })`;
         // Fade in and stay. The concept used sin(p·π), which peaks mid-scroll
         // and returns to near-zero at the end, so the cards faded out again
         // on the last frame. Ramp up over the first third and hold at 1.
