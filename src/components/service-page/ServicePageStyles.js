@@ -476,7 +476,10 @@ body:has(.svc-page) .btn-slide{display:none !important}
      side padding — leaving the hero headline and body copy flush against
      the screen edge on mobile. Vertical values kept as authored; the side
      padding is restored. */
-  .svc-page .hero-grid{grid-template-columns:1fr;gap:2px;padding:6px 20px 4px;align-content:center}
+  /* Bottom padding raised from the concept's 4px to 18px so the stats row
+     has real breathing room before the marquee band, rather than sitting
+     flush against the edge of the hero. */
+  .svc-page .hero-grid{grid-template-columns:1fr;gap:2px;padding:6px 20px 18px;align-content:center}
   .svc-page .hero-copy{order:1}
   .svc-page .hero h1{font-size:clamp(42px,12vw,64px);line-height:.87;margin:6px 0 10px;max-width:720px}
   .svc-page .hero p{font-size:15px;line-height:1.45}
@@ -510,13 +513,15 @@ body:has(.svc-page) .btn-slide{display:none !important}
      rather than being forced to a fixed height. */
   .svc-page .hero-zone{height:168svh}
   .svc-page .hero-zone .hero{height:calc(100dvh - var(--navh));min-height:0;overflow:hidden}
-  /* Row 1 (artwork) is the only flexible row: minmax(0,1fr) lets it absorb
-     whatever is left. Row 2 (copy, CTAs, stats) is auto, so it always gets
-     the height it needs and the stats can never be cut off. */
+  /* Row 1 (artwork) absorbs slack; row 2 (copy, CTAs, stats) is auto so it
+     always gets the height it needs. */
   .svc-page .hero-zone .hero-grid{grid-template-rows:minmax(0,1fr) auto;align-content:stretch}
-  /* The artwork gives way first, because the headline, CTAs and stats carry
-     the message. It also has a floor so it never collapses to nothing. */
-  .svc-page .hero-visual{height:auto;min-height:150px;max-height:32dvh}
+  /* No min-height here: a floor on the grid ITEM defeats the minmax(0,1fr)
+     on its row, so the grid overflowed the pin under pressure and the stats
+     were the part that got cut. The artwork now shrinks freely; the image
+     inside keeps its own sensible floor. */
+  .svc-page .hero-visual{height:auto;min-height:0;max-height:32dvh}
+  .svc-page .hero-char{width:min(214px,38dvh)}
   .svc-page .hero-copy{display:flex;flex-direction:column;justify-content:center}
   .svc-page .hero-char{width:min(214px,42dvh)}
 
