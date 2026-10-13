@@ -296,8 +296,7 @@ body:has(.svc-page) .btn-slide{display:none !important}
    caught those too, shrinking the number to the 11px label size and making
    display:block push the suffix onto its own line. */
 .svc-page .proof-item > span{display:block;text-transform:uppercase;font-size:11px;letter-spacing:.17em;font-weight:950;margin-top:7px}
-.svc-page .proof-item:after{content:"";position:absolute;left:18px;right:18px;bottom:16px;height:30px;background:linear-gradient(135deg,transparent 0 18%,rgba(11,13,15,.10) 18% 20%,transparent 20% 36%,rgba(11,13,15,.16) 36% 38%,transparent 38% 56%,rgba(11,13,15,.20) 56% 58%,transparent 58% 72%,rgba(11,13,15,.26) 72% 74%,transparent 74%);opacity:.55;transform:translateY(30px);transition:.7s}
-.svc-page .proof-item.in-view:after{transform:none}
+
 
 /* ---------- CASES ---------- */
 .svc-page .cards-section{background:#0b0d0f;color:#fff}
