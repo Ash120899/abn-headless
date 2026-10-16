@@ -42,12 +42,14 @@ export default function CharacterBreak({ characterBreak }) {
       <div className="container">
         <div className="char-wrap">
           {characterBreak.badges.map((badge, i) => (
-            <span className={`float-badge fb${i + 1}`} key={badge}>
+            <span className={`float-badge fb${i + 1}`} key={`${i}-${badge}`}>
               {badge}
             </span>
           ))}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img ref={imgRef} src={characterBreak.image} alt="" />
+          {characterBreak.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img ref={imgRef} src={characterBreak.image} alt="" />
+          ) : null}
         </div>
         <div className="character-copy">
           <div className="eyebrow">{characterBreak.eyebrow}</div>
@@ -55,11 +57,13 @@ export default function CharacterBreak({ characterBreak }) {
             {characterBreak.headingBefore} <SwitchWord words={characterBreak.headingSwitch} />
           </h2>
           <p>{characterBreak.description}</p>
-          <div className="actions">
-            <a className="btn dark" href={characterBreak.cta.href}>
-              {characterBreak.cta.label}
-            </a>
-          </div>
+          {characterBreak.cta.label ? (
+            <div className="actions">
+              <a className="btn dark" href={characterBreak.cta.href || undefined}>
+                {characterBreak.cta.label}
+              </a>
+            </div>
+          ) : null}
         </div>
       </div>
     </section>

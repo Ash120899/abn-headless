@@ -7,29 +7,21 @@
 // ("1M+ Revenue Generated" and so on), so printing it again under the title
 // duplicated it.
 //
-// Falls back to the authored copy in service-content.js if the live fetch
-// returns nothing, so the section never renders empty.
+// Only real case studies are shown. If WordPress returns none, the section
+// isn't rendered at all.
 import Link from "next/link";
 import SwitchWord from "./SwitchWord";
 
 export default function CaseCards({ cases, studies = [] }) {
-  const live = studies.length > 0;
+  const items = studies.slice(0, 3).map((s) => ({
+    key: s.slug,
+    href: `/case-studies/${s.slug}`,
+    title: s.title,
+    description: s.desc,
+    image: s.image,
+  }));
 
-  const items = live
-    ? studies.slice(0, 3).map((s) => ({
-        key: s.slug,
-        href: `/case-studies/${s.slug}`,
-        title: s.title,
-        description: s.desc,
-        image: s.image,
-      }))
-    : cases.items.map((item) => ({
-        key: item.title,
-        href: item.href,
-        title: item.title,
-        description: item.description,
-        image: null,
-      }));
+  if (!items.length) return null;
 
   return (
     <section className="cards-section">
@@ -50,15 +42,13 @@ export default function CaseCards({ cases, studies = [] }) {
           {items.map((item) => (
             <Link className="case" key={item.key} href={item.href}>
               {/* Featured image on top, matching the case-studies listing
-                  card. Falls back to the title's initial when a study has no
-                  featured media, as that listing does. */}
+                  card. A study with no featured media keeps the empty frame
+                  so the row stays aligned. */}
               <div className="case-media">
                 {item.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={item.image} alt="" loading="lazy" />
-                ) : (
-                  <span className="case-media-fallback">{item.title.charAt(0)}</span>
-                )}
+                ) : null}
               </div>
               <div className="case-body">
                 <small>Case Study</small>

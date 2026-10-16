@@ -41,8 +41,8 @@ export default function ProofCounters({ proof }) {
           {proof.headingBefore} <KineticWord>{proof.headingKinetic}</KineticWord>
         </h2>
         <div className="proof-grid">
-          {proof.items.map((item) => (
-            <div className={`proof-item${inView ? " in-view" : ""}`} key={item.label}>
+          {proof.items.map((item, i) => (
+            <div className={`proof-item${inView ? " in-view" : ""}`} key={`${i}-${item.label}`}>
               <b>
                 <Counter value={item.value} prefix={item.prefix} suffix={item.suffix} />
               </b>

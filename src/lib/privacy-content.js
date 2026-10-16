@@ -8,8 +8,7 @@
 // inventing wording for a legal document is not an option, so they are
 // surfaced honestly rather than papered over.
 //
-// Shaped as one plain data object, matching src/lib/contact-content.js and
-// src/lib/service-content.js.
+// Shaped as one plain data object, matching src/lib/contact-content.js.
 
 const SITE = "https://abnjunction.com";
 

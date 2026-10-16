@@ -111,7 +111,7 @@ export default function CinemaJourney({ cinema }) {
           const roleFloat = Math.sin((p * 7 + i) * Math.PI) * 3 * enter;
           const roleTilt = (i === 0 ? -2 : i === 2 ? 2 : 0) * Math.sin(p * Math.PI) * enter;
           im.style.transform = `scale(${0.86 + enter * 0.14}) translate(${shift * 0.18}px,${roleFloat}px) rotate(${roleTilt}deg)`;
-          im.style.filter = `drop-shadow(0 20px 28px rgba(0,0,0,.30)) drop-shadow(0 0 ${8 + enter * 12}px rgba(245,111,93,.10))`;
+          im.style.filter = `drop-shadow(0 20px 28px rgba(0,0,0,.30)) drop-shadow(0 0 ${8 + enter * 12}px color-mix(in srgb, var(--coral) 10%, transparent))`;
         }
 
         const fx = el.querySelector(".role-fx");
@@ -161,7 +161,7 @@ export default function CinemaJourney({ cinema }) {
             <div className="eyebrow">{cinema.eyebrow}</div>
             <div className="cinema-words" aria-label={cinema.words.join(". ")}>
               {cinema.words.map((word, i) => (
-                <span className={`cinema-word${i === step ? " active" : ""}`} key={word}>
+                <span className={`cinema-word${i === step ? " active" : ""}`} key={`${i}-${word}`}>
                   {word}
                 </span>
               ))}
@@ -176,7 +176,7 @@ export default function CinemaJourney({ cinema }) {
             {cinema.depthCards.map((card, i) => (
               <div
                 className={`depth-card d${i + 1}`}
-                key={card.label}
+                key={`${i}-${card.label}`}
                 ref={(el) => {
                   cardRefs.current[i] = el;
                 }}
@@ -192,13 +192,15 @@ export default function CinemaJourney({ cinema }) {
             {cinema.handoff.map((char, i) => (
               <div
                 className={`handoff-char hc${i + 1}`}
-                key={char.caption}
+                key={`${i}-${char.caption}`}
                 ref={(el) => {
                   charRefs.current[i] = el;
                 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={char.image} alt="" />
+                {char.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={char.image} alt="" />
+                ) : null}
                 <i className="role-fx">{char.roleFx}</i>
                 <span>{char.caption}</span>
               </div>

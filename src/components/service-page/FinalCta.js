@@ -12,12 +12,16 @@ export default function FinalCta({ finalCta }) {
         </h2>
         <p>{finalCta.description}</p>
         <div className="actions" style={{ justifyContent: "center" }}>
-          <a className="btn dark" href={finalCta.ctaPrimary.href}>
-            {finalCta.ctaPrimary.label}
-          </a>
-          <a className="btn ghost" href={finalCta.ctaSecondary.href}>
-            {finalCta.ctaSecondary.label}
-          </a>
+          {finalCta.ctaPrimary.label ? (
+            <a className="btn dark" href={finalCta.ctaPrimary.href || undefined}>
+              {finalCta.ctaPrimary.label}
+            </a>
+          ) : null}
+          {finalCta.ctaSecondary.label ? (
+            <a className="btn ghost" href={finalCta.ctaSecondary.href || undefined}>
+              {finalCta.ctaSecondary.label}
+            </a>
+          ) : null}
         </div>
       </div>
     </section>

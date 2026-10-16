@@ -194,6 +194,8 @@ export const acf = {
   insights_eyebrow: "From the people doing the build work",
   insights_heading_before: "What we’re learning from the",
   insights_heading_switch: "platforms, codebases",
+  insights_description:
+    "Case studies show what changed. Our blog explains the thinking, experiments and lessons behind the work.",
 
   faq_eyebrow: "Web Development FAQs",
   faq_heading: "Questions worth answering before you build",

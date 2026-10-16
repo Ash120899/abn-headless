@@ -76,7 +76,7 @@ export default function JourneyStory({ journey }) {
           <div className="story-grid">
             <div className="story-copy">
               {journey.scenes.map((scene, i) => (
-                <div className={`scene${i === active ? " active" : ""}`} key={scene.title}>
+                <div className={`scene${i === active ? " active" : ""}`} key={`${i}-${scene.title}`}>
                   <div className="num">{scene.num}</div>
                   <h3>{scene.title}</h3>
                   <p>{scene.description}</p>
@@ -91,21 +91,23 @@ export default function JourneyStory({ journey }) {
                       </span>
                     ))}
                   </div>
-                  <a href={scene.link.href}>{scene.link.label}</a>
+                  {scene.link.label ? <a href={scene.link.href || undefined}>{scene.link.label}</a> : null}
                 </div>
               ))}
             </div>
 
             <div className="story-visual">
-              {journey.scenes.map((scene, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={scene.title}
-                  className={`scene-img${i === active ? " active" : ""}`}
-                  src={scene.image}
-                  alt=""
-                />
-              ))}
+              {journey.scenes.map((scene, i) =>
+                scene.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={`${i}-${scene.title}`}
+                    className={`scene-img${i === active ? " active" : ""}`}
+                    src={scene.image}
+                    alt=""
+                  />
+                ) : null
+              )}
               <div className="growth-line">
                 <i ref={fillRef} />
               </div>

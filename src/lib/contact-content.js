@@ -2,8 +2,9 @@
 // C:\Users\ashuu\Downloads\ABN_Contact_2026_V3.html.
 //
 // Shaped as one plain data object rather than being inlined into the
-// components, matching src/lib/service-content.js — so if this page ever
-// becomes ACF-driven, only a merge layer is needed and no component changes.
+// components, the same shape the service pages build from ACF (see
+// src/lib/service-acf.js) — so if this page ever becomes ACF-driven, only a
+// mapping layer is needed and no component changes.
 
 const SITE = "https://abnjunction.com";
 

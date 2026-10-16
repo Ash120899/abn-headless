@@ -34,9 +34,9 @@ export default function ServicePageStyles({ theme }) {
           the nearest common ancestor of both. Emitted per service rather
           than living in the static sheet below because the value changes
           with the palette. */}
-      {theme ? (
+      {theme?.primary ? (
         <style>{`
-body:has(.svc-page){--site-cta-bg:${theme.primary};--site-cta-fg:${theme.ink}}
+body:has(.svc-page){--site-cta-bg:${theme.primary};--site-cta-fg:#0b0d0f}
 `}</style>
       ) : null}
       <style>{`
@@ -48,8 +48,10 @@ body:has(.svc-page){--site-cta-bg:${theme.primary};--site-cta-fg:${theme.ink}}
 @keyframes svc-kineticWipe{0%{--svc-wipe:0%;transform:translateY(.12em);filter:blur(3px)}55%{filter:blur(0)}100%{--svc-wipe:100%;transform:none}}
 @keyframes svc-orbPulse{50%{transform:scale(1.35);opacity:.15}}
 
+/* --coral / --coral2 / --red are deliberately not declared here: they come
+   only from the page's ACF colour pickers, set inline on .svc-page. */
 .svc-page{
-  --coral:#f56f5d;--coral2:#ff856f;--red:#db3f32;--ink:#0b0d0f;
+  --ink:#0b0d0f;
   --cream:#fff6ef;--paper:#fffaf6;--cyan:#52c5e8;--muted:#6f777e;
   --line:rgba(11,13,15,.14);--card:rgba(255,255,255,.88);
   --navh:var(--site-header-h,76px);
@@ -229,11 +231,11 @@ body:has(.svc-page) .btn-slide{display:none !important}
 /* ---------- CINEMA ---------- */
 .svc-page .cinema{background:#090b0d;color:#fff;position:relative;overflow:clip}
 .svc-page .cinema-track{height:330vh;position:relative}
-.svc-page .cinema-sticky{height:100svh;min-height:680px;position:sticky;top:0;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,rgba(245,111,93,.14),transparent 28%),radial-gradient(circle at 15% 75%,rgba(82,197,232,.10),transparent 25%),#090b0d}
+.svc-page .cinema-sticky{height:100svh;min-height:680px;position:sticky;top:0;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--coral) 14%,transparent),transparent 28%),radial-gradient(circle at 15% 75%,rgba(82,197,232,.10),transparent 25%),#090b0d}
 .svc-page .cinema-sticky:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#090b0d 0%,transparent 9%,transparent 91%,#090b0d 100%);pointer-events:none;z-index:20}
 .svc-page .cinema-atmosphere{position:absolute;inset:0;z-index:0;opacity:.55}
 .svc-page .cinema-atmosphere i{position:absolute;border:1px solid rgba(255,255,255,.08);border-radius:50%;width:42vw;height:42vw;left:29vw;top:10vh;transform:rotate(12deg)}
-.svc-page .cinema-atmosphere i:nth-child(2){width:32vw;height:32vw;left:34vw;top:18vh;border-color:rgba(245,111,93,.19)}
+.svc-page .cinema-atmosphere i:nth-child(2){width:32vw;height:32vw;left:34vw;top:18vh;border-color:color-mix(in srgb,var(--coral) 19%,transparent)}
 .svc-page .cinema-atmosphere i:nth-child(3){width:18vw;height:18vw;left:41vw;top:30vh;border-color:rgba(82,197,232,.16)}
 .svc-page .cinema-copy{position:absolute;z-index:12;top:8vh;left:50%;transform:translateX(-50%);text-align:center;width:min(1040px,90vw)}
 .svc-page .cinema-copy .eyebrow{color:var(--coral)}
@@ -278,7 +280,7 @@ body:has(.svc-page) .btn-slide{display:none !important}
 .svc-page .hc1 .role-fx{color:#bcefff}
 .svc-page .hc2 .role-fx{color:#ffd4ca}
 .svc-page .hc3 .role-fx{color:#ffe2a8}
-.svc-page .signal-orb{position:absolute;left:10%;top:53%;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 10%,#ffd8cd 22%,var(--coral) 52%,#d9362e 100%);box-shadow:0 0 0 8px rgba(245,111,93,.10),0 0 28px rgba(245,111,93,.7);z-index:10;will-change:transform}
+.svc-page .signal-orb{position:absolute;left:10%;top:53%;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 10%,color-mix(in srgb,var(--coral2) 30%,#fff) 22%,var(--coral) 52%,var(--red) 100%);box-shadow:0 0 0 8px color-mix(in srgb,var(--coral) 10%,transparent),0 0 28px color-mix(in srgb,var(--coral) 70%,transparent);z-index:10;will-change:transform}
 .svc-page .signal-orb i{position:absolute;inset:-9px;border:1px solid rgba(255,255,255,.38);border-radius:50%;animation:svc-orbPulse 1.6s ease-in-out infinite}
 .svc-page .cinema-scroll{position:absolute;z-index:21;bottom:18px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.2em;color:#778087}
 
@@ -318,7 +320,6 @@ body:has(.svc-page) .btn-slide{display:none !important}
 
 .svc-page .case-media{position:relative;height:200px;border-radius:10px;overflow:hidden;background:#0d1113;display:flex;align-items:center;justify-content:center;margin-bottom:16px;flex-shrink:0}
 .svc-page .case-media img{width:100%;height:100%;object-fit:cover;display:block}
-.svc-page .case-media-fallback{font-family:var(--font-editorial);font-weight:800;font-size:2.25rem;color:var(--muted)}
 
 .svc-page .case-body{padding:0;display:flex;flex-direction:column;flex:1}
 .svc-page .case small{color:var(--muted);letter-spacing:.12em;font-weight:800;font-size:11px;text-transform:uppercase}

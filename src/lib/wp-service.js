@@ -1,12 +1,16 @@
 // Server-only data layer for the service pages: fetches the WP page for a
-// slug and folds its ACF values over the code defaults in
-// service-content.js.
+// slug and builds the page content from its ACF fields.
 //
-// The merge itself lives in acf-merge.js, shared with service-content.js.
-import { getServiceContent } from "./service-content";
-import { mergeServiceContent, collectAttachmentIds } from "./acf-merge";
+// WordPress is the only source of content, artwork and colour — there is no
+// built-in copy behind it. The ACF-to-content mapping lives in
+// service-acf.js.
+import { buildServiceContent, collectAttachmentIds } from "./service-acf";
 
 const WP_API_URL = "https://abnjunction.com/wp-json/wp/v2";
+
+// The "Services" page. Every service page is a child of it, and the ACF
+// field group's location rule is `page_parent == 1023`.
+const SERVICES_PARENT_ID = 1023;
 
 async function fetchWithRetry(url, { tries = 2, timeoutMs = 5000, backoffMs = 400, revalidate = 300 } = {}) {
   let lastErr;
@@ -24,6 +28,7 @@ async function fetchWithRetry(url, { tries = 2, timeoutMs = 5000, backoffMs = 40
   }
   throw lastErr;
 }
+
 /**
  * Turns attachment IDs into URLs, in one request for the whole page.
  *
@@ -32,8 +37,8 @@ async function fetchWithRetry(url, { tries = 2, timeoutMs = 5000, backoffMs = 40
  * configured. Resolving here means the page renders uploaded artwork either
  * way, without depending on a setting in the WP admin staying put.
  *
- * Returns {} on failure so images fall back to the built-in art rather than
- * taking the page down.
+ * Returns {} on failure, so the page still renders its copy with the images
+ * left out rather than going down.
  */
 async function resolveAttachments(ids) {
   if (!ids.length) return {};
@@ -46,32 +51,49 @@ async function resolveAttachments(ids) {
       media.filter((m) => m?.id && m?.source_url).map((m) => [m.id, m.source_url])
     );
   } catch (err) {
-    console.warn("resolveAttachments: falling back to built-in artwork", err);
+    console.warn("resolveAttachments: rendering without artwork", err);
     return {};
   }
 }
 
+// WP titles arrive HTML-escaped ("Web &amp; Data Security").
+function decodeTitle(value) {
+  return (value || "")
+    .replace(/&amp;/g, "&")
+    .replace(/&#8217;/g, "’")
+    .replace(/&#8211;/g, "–")
+    .replace(/&#038;/g, "&");
+}
+
 /**
- * Content for one service page: code defaults, with this page's ACF folded
- * over the top. Returns null for a slug that isn't a known service.
+ * Content for one service page, built entirely from WordPress. Returns null
+ * when no service page (a child of the Services page with the ACF field
+ * group filled in) exists for the slug.
  *
- * A WP failure is not fatal — the defaults render on their own, which keeps
- * the page up if the API is slow or down.
+ * A WP failure throws rather than returning null, so an API outage shows
+ * the error page instead of being cached as a 404.
  */
 export async function getServicePage(slug) {
-  const base = getServiceContent(slug);
-  if (!base) return null;
+  const pages = await fetchWithRetry(
+    `${WP_API_URL}/pages?slug=${encodeURIComponent(slug)}&parent=${SERVICES_PARENT_ID}&_fields=id,slug,title,acf,aioseo_head_json`
+  );
+  const page = Array.isArray(pages) ? pages.find((p) => p.slug === slug) : null;
+  // An empty ACF payload comes back as [], not {}.
+  if (!page?.acf || Array.isArray(page.acf)) return null;
 
-  try {
-    const pages = await fetchWithRetry(
-      `${WP_API_URL}/pages?slug=${encodeURIComponent(slug)}&_fields=id,slug,acf`
-    );
-    const page = Array.isArray(pages) ? pages.find((p) => p.slug === slug) : null;
-    if (!page?.acf) return base;
-    const media = await resolveAttachments(collectAttachmentIds(page.acf));
-    return mergeServiceContent(base, page.acf, media);
-  } catch (err) {
-    console.warn(`getServicePage(${slug}): falling back to built-in content`, err);
-    return base;
-  }
+  const media = await resolveAttachments(collectAttachmentIds(page.acf));
+  const content = buildServiceContent(page.acf, media);
+  const seo = page.aioseo_head_json || {};
+
+  return {
+    slug: page.slug,
+    title: decodeTitle(page.title?.rendered),
+    seo: {
+      title: seo.title || "",
+      description: seo.description || content.metaDescription,
+      canonical: seo.canonical_url || "",
+      image: seo["og:image"] || content.hero.character,
+    },
+    ...content,
+  };
 }

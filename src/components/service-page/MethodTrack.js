@@ -109,8 +109,8 @@ export default function MethodTrack({ method }) {
 
           <div className="method-scroller" ref={scrollerRef}>
             <div className="method-track">
-              {method.steps.map((step) => (
-                <div className="method-card" key={step.num}>
+              {method.steps.map((step, i) => (
+                <div className="method-card" key={`${i}-${step.num}`}>
                   <b>{step.num}</b>
                   <h3>{step.title}</h3>
                   <p>{step.description}</p>

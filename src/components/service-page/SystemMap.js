@@ -17,8 +17,8 @@ export default function SystemMap({ system }) {
           <p>{system.description}</p>
         </div>
         <div className="system-map">
-          {system.nodes.map((node) => (
-            <div className="node" key={node.num}>
+          {system.nodes.map((node, i) => (
+            <div className="node" key={`${i}-${node.num}`}>
               <small>{node.num}</small>
               <h3>{node.title}</h3>
               <p>{node.description}</p>

@@ -183,16 +183,20 @@ export default function HeroZone({ hero }) {
             </h1>
             <p>{hero.description}</p>
             <div className="actions">
-              <a className="btn dark" href={hero.ctaPrimary.href}>
-                {hero.ctaPrimary.label}
-              </a>
-              <a className="btn ghost" href={hero.ctaSecondary.href}>
-                {hero.ctaSecondary.label}
-              </a>
+              {hero.ctaPrimary.label ? (
+                <a className="btn dark" href={hero.ctaPrimary.href || undefined}>
+                  {hero.ctaPrimary.label}
+                </a>
+              ) : null}
+              {hero.ctaSecondary.label ? (
+                <a className="btn ghost" href={hero.ctaSecondary.href || undefined}>
+                  {hero.ctaSecondary.label}
+                </a>
+              ) : null}
             </div>
             <div className="hero-stats">
-              {hero.stats.map((s) => (
-                <div className="stat" key={s.label}>
+              {hero.stats.map((s, i) => (
+                <div className="stat" key={`${i}-${s.label}`}>
                   <b>
                     <Counter value={s.value} prefix={s.prefix} suffix={s.suffix} />
                   </b>
@@ -213,10 +217,12 @@ export default function HeroZone({ hero }) {
               <span className="halo-core" />
             </div>
             <div className="growth-tail" ref={growthTailRef} />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="hero-char" src={hero.character} alt="" />
-            {hero.tools.map((tool) => (
-              <span className="tool" key={tool.label}>
+            {hero.character ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className="hero-char" src={hero.character} alt="" />
+            ) : null}
+            {hero.tools.map((tool, i) => (
+              <span className="tool" key={`${i}-${tool.label}`}>
                 <i>{tool.glyph}</i>
                 <b>{tool.label}</b>
               </span>

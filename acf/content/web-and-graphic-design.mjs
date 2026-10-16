@@ -246,6 +246,8 @@ export const acf = {
   insights_eyebrow: "From the people doing the design work",
   insights_heading_before: "What we’re learning from interfaces, brands and creative",
   insights_heading_switch: "systems, projects",
+  insights_description:
+    "Case studies show what changed. Our blog explains the thinking, experiments and lessons behind the work.",
 
   faq_eyebrow: "Web & Graphic Design FAQs",
   faq_heading: "Questions worth answering before the first pixel",

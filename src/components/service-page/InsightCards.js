@@ -3,8 +3,8 @@
 // "Insights Behind The Results" block (featured image on top, category
 // eyebrow, title, excerpt, read link) on this page's red accent.
 //
-// Falls back to the authored copy in service-content.js when the live
-// fetch returns nothing.
+// Only real posts are shown. If WordPress returns none, the section isn't
+// rendered at all.
 import Link from "next/link";
 import Image from "next/image";
 import SwitchWord from "./SwitchWord";
@@ -15,30 +15,21 @@ import SwitchWord from "./SwitchWord";
 // before the colon; same treatment here so a category label still fits on a
 // card.
 function cleanCategory(label) {
-  if (!label) return "Blog";
+  if (!label) return "";
   return label.replace(/&amp;/g, "&").split(":")[0].trim();
 }
 
 export default function InsightCards({ insights, posts = [] }) {
-  const live = posts.length > 0;
+  const items = posts.slice(0, 3).map((p) => ({
+    key: p.href,
+    href: p.href,
+    category: cleanCategory(p.label),
+    title: p.title,
+    description: p.desc,
+    image: p.image || null,
+  }));
 
-  const items = live
-    ? posts.slice(0, 3).map((p) => ({
-        key: p.href,
-        href: p.href,
-        category: cleanCategory(p.label),
-        title: p.title,
-        description: p.desc,
-        image: p.image || null,
-      }))
-    : insights.items.map((item) => ({
-        key: item.title,
-        href: item.href,
-        category: item.category,
-        title: item.title,
-        description: item.description,
-        image: null,
-      }));
+  if (!items.length) return null;
 
   return (
     <section className="insights">
@@ -50,9 +41,7 @@ export default function InsightCards({ insights, posts = [] }) {
               {insights.headingBefore} <SwitchWord words={insights.headingSwitch} />
             </h2>
           </div>
-          <p>
-            Case studies show what changed. Our blog explains the thinking, experiments and lessons behind the work.
-          </p>
+          {insights.description ? <p>{insights.description}</p> : null}
         </div>
 
         <div className="blogcards">

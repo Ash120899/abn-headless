@@ -19,10 +19,11 @@ function Row({ text, className }) {
 }
 
 export default function ServiceMarquee({ marquee }) {
+  if (!marquee.rowOne && !marquee.rowTwo) return null;
   return (
     <section className="marquee">
-      <Row text={marquee.rowOne} className="marquee-row" />
-      <Row text={marquee.rowTwo} className="marquee-row two" />
+      {marquee.rowOne ? <Row text={marquee.rowOne} className="marquee-row" /> : null}
+      {marquee.rowTwo ? <Row text={marquee.rowTwo} className="marquee-row two" /> : null}
     </section>
   );
 }

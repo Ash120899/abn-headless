@@ -104,13 +104,13 @@ src/
   lib/
     blog-shared.js  wp-blog.js  wp-blog-client.js
     case-study-shared.js  wp-case-studies.js
-    service-content.js           service copy + palettes (code defaults)
-    wp-service.js                ACF fetch + merge for service pages
+    service-acf.js               ACF payload -> service-page content object
+    wp-service.js                WP page + media fetch for service pages
     wp-proxy-client.js
   data/
     navigation.js                nav/menu hierarchy (single source of truth)
 acf/
-  service-page-fields.json       importable ACF field group (71 fields)
+  service-page-fields.json       importable ACF field group (72 fields)
   seed.mjs                       pushes local copy into WP
   content/<slug>.mjs             per-service copy, one file each
 ```
@@ -120,31 +120,38 @@ acf/
 ## 4. The service pages (most recent work)
 
 Five service pages share **one layout** and differ only in accent colour,
-copy, and character artwork:
+copy, and character artwork — **all three of which come from WordPress
+only** (see the content pipeline below):
 
-| Slug | WP page | Accent | Case-study term |
-|---|---|---|---|
-| `digital-marketing` | 4399 | `#f56f5d` | 14 |
-| `web-and-graphic-design` | 4681 | `#f4c928` | 15 |
-| `web-development` | 4692 | `#4c8dff` | 16 |
-| `video-production` | 4698 | `#a66bff` | none yet |
-| `web-data-security` | 4700 | `#2fbf9f` | none yet |
+| Slug | WP page | Case-study term |
+|---|---|---|
+| `digital-marketing` | 4399 | 14 |
+| `web-and-graphic-design` | 4681 | 15 |
+| `web-development` | 4692 | 16 |
+| `video-production` | 4698 | none yet |
+| `web-data-security` | 4700 | none yet |
 
 All five are children of WP page **1023**, which is what the ACF field group's
-location rule keys off (`page_parent == 1023`).
+location rule keys off (`page_parent == 1023`). The route serves any child of
+1023 whose ACF is filled in, and 404s everything else — there is no slug list
+in code.
 
 ### Accent colour rule
 
-Each service starts from one brand colour. Three values are derived:
+Each service has three ACF colour pickers. When picking them, start from one
+brand colour and derive the other two:
 
-| Token | Rule | Digital Marketing | Web & Graphic Design |
-|---|---|---|---|
-| `--coral` (`primary`) | brand colour unchanged | `#f56f5d` | `#f4c928` |
-| `--coral2` (`primaryLight`) | ~10–12% toward white | `#ff856f` | `#ffdc55` |
-| `--red` (`accent`) | darker/desaturated, for contrast on cream | `#db3f32` | `#c79a0d` |
+| Token | ACF field | Rule |
+|---|---|---|
+| `--coral` (`primary`) | `color_primary` | brand colour unchanged |
+| `--coral2` (`primaryLight`) | `color_primary_light` | ~10–12% toward white |
+| `--red` (`accent`) | `color_accent` | darker/desaturated, for contrast on cream |
 
 Set inline as CSS custom properties on the page root, so one layout recolours
-completely without touching the stylesheet.
+completely without touching the stylesheet. **The stylesheet declares no
+fallback for these three** — a blank picker leaves its accent unset. Only the
+shared neutrals (`--ink`, `--cream`, `--paper`, `--cyan`, `--muted`) are
+defined in `ServicePageStyles.js`.
 
 **Recolouring the global header.** `SiteHeader` is a *sibling* of the page in
 [src/app/layout.js](../src/app/layout.js), so variables set on `.svc-page`
@@ -169,34 +176,31 @@ empty black strip at the top of `.journey`; moving it fills that seam.
 ### Content pipeline
 
 ```
-acf/content/<slug>.mjs ─────────────────┐  local copy, lives in git
-        │  node acf/seed.mjs <slug>     │
-        ▼                               │ imported directly
-WordPress ACF fields                    │
-        │  getServicePage(slug)         ▼
-        │                        service-content.js
-        │                        (per-service defaults,
-        │                         built via the same merge)
-        ▼                               │
-mergeServiceContent()  ◀────────────────┘
-        │  ACF folded over defaults, per field
+acf/content/<slug>.mjs        seed source only, lives in git
+        │  node acf/seed.mjs <slug>
+        ▼
+WordPress ACF fields + media library + AIOSEO
+        │  getServicePage(slug)        src/lib/wp-service.js
+        ▼
+buildServiceContent(acf, media)  src/lib/service-acf.js
         ▼
 rendered page
 ```
 
-The content files are used **twice**, deliberately: seeded into WordPress,
-and imported directly by `service-content.js` to build the code defaults.
-Both paths run through the same `mergeServiceContent()` in
-[src/lib/acf-merge.js](../src/lib/acf-merge.js), so there is only one copy of
-the content and one merge implementation.
+**WordPress is the only source** of copy, artwork, colours and SEO. There are
+no code defaults, no built-in artwork and no fallback palette (removed
+2026-10-17; the old `service-content.js`, `acf-merge.js` and
+`public/services/` art are gone). The `acf/content/*.mjs` files are **not**
+imported by the app — they only feed the seeder.
 
-That matters because it means a service page renders **its own copy even
-before WordPress is seeded** — and if WP is ever slow or down.
-
-**Every field is optional at every layer.** A blank ACF field falls back to
-`service-content.js`; a WP outage falls back to the same. A half-filled page
-in WordPress still renders a complete page on the site. This is what made it
-safe to import the field group before any content existed.
+- A blank ACF field renders nothing: no image, no button, no row. Empty
+  repeater rows are dropped.
+- The case-study and insight bands show live WP posts only, and are hidden if
+  WP returns none.
+- SEO: AIOSEO title / description / canonical first, then the WP page title
+  and the ACF `meta_description`. OG image is AIOSEO's, else the hero art.
+- A WP outage **throws** (error page) instead of rendering defaults or caching
+  a 404.
 
 ---
 
@@ -204,9 +208,9 @@ safe to import the field group before any content existed.
 
 ### Content shaped as data, not JSX
 
-`service-content.js` holds one plain object per service. Components take that
-object as props and render it. This is why adding ACF later required **zero
-component rewrites** — only a new merge layer.
+`buildServiceContent()` produces one plain object per page. Components take
+that object as props and render it, which is why moving the content into ACF
+required **zero component rewrites** — only a mapping layer.
 
 ### Numbers split into prefix / value / suffix
 
@@ -214,11 +218,9 @@ Counters animate the digits only. `₹7.5M+` is stored as
 `{prefix: "₹", value: "7.5", suffix: "M+"}` so the symbols stay fixed while
 the number counts up, and each part is independently editable in ACF.
 
-**Subtlety worth knowing:** an *empty* prefix is meaningful. Standard fallback
-logic treated `""` as "unset" and inherited the previous service's `×` or `₹`,
-so Web & Graphic Design rendered `5×` instead of `5`. `wp-service.js` has a
-separate `affix()` helper: for prefix/suffix, a row that supplies the key at
-all wins, even when blank.
+**Subtlety worth knowing:** an *empty* prefix is meaningful (`5`, not `5×`).
+`service-acf.js` reads prefix/suffix with a separate `affix()` helper that
+keeps them untrimmed and never treats `""` as missing.
 
 ### Switch-word headings
 
@@ -240,9 +242,10 @@ instead of a viewport and a half of dead scrolling.
 
 ### Case studies filter per service
 
-Each service names a `case_study_category` term, so the Digital Marketing page
-shows digital-marketing work. Services with no term yet fall back to the most
-recent studies from any category rather than rendering an empty band.
+Each service page picks a `case_study_category` term in its ACF "Show case
+studies from" field, so the Digital Marketing page shows digital-marketing
+work. Pages with no term picked show the most recent studies from any
+category.
 
 ---
 
@@ -282,24 +285,19 @@ listing insights block.**
 gradient was ported from the concept with its three coral hex values intact,
 so it stayed coral on all five services while everything around it recoloured.
 Anything accent-tinted has to derive from `--coral` / `--coral2` / `--red`
-(`color-mix` works well for intermediate stops). Neutrals and the three
-handoff-character labels are deliberately fixed and should stay literal.
-
-**A shared "defaults" object can silently mean "Digital Marketing's copy".**
-`service-content.js` originally spread `DIGITAL_MARKETING` for every service
-and swapped only the palette, so all five pages showed SEO cards until the
-content files were wired in as per-service defaults. If a page shows the wrong
-service's copy, check whether WordPress is seeded **and** what the code
-default actually resolves to.
+(`color-mix` works well for intermediate stops and tints, e.g.
+`color-mix(in srgb,var(--coral) 14%,transparent)` instead of a coral `rgba`).
+Neutrals and the three handoff-character labels are deliberately fixed and
+should stay literal.
 
 **ACF returns inconsistent shapes.** An untouched repeater can be `false`, an
 empty one `""` or `[]`; a taxonomy field can be a scalar or an array; an image
-can be a URL string, an object, or a bare attachment ID. `wp-service.js`
+can be a URL string, an object, or a bare attachment ID. `service-acf.js`
 normalises all of these.
 
 **Empty ACF is an array, not an object.** Before the field group is imported,
 `post.acf` is `[]` — truthy, `typeof "object"`, and every lookup is
-`undefined`. The merge handles it correctly by falling through on every field.
+`undefined`. `getServicePage()` treats it as "no service page" and 404s.
 
 ---
 
@@ -312,8 +310,9 @@ normalises all of these.
 2. WP Admin → **Users → Profile → Application Passwords** → generate one
 
 The field group cannot be created over the REST API — importing JSON or
-registering via PHP are the only options. 71 fields across 14 tabs, all
-optional, `show_in_rest: 1`.
+registering via PHP are the only options. 72 fields across 14 tabs, all
+optional, `show_in_rest: 1`. Re-import the JSON after adding a field
+(`insights_description` was added 2026-10-17).
 
 ### Pushing copy into WordPress
 
@@ -343,10 +342,10 @@ of truth for anything seeded from them.
 
 ### Images are deliberately not seeded
 
-ACF image fields store a **media-library attachment ID**. The artwork lives in
-`public/services/` in this repo, not in WP. Uploading and picking images is a
-manual step. Until then the pages fall back to the local files, so nothing is
-blocked — all five services currently share the Digital Marketing artwork.
+ACF image fields store a **media-library attachment ID**, so artwork is
+uploaded and picked in WP Admin by hand. All five services have their own
+artwork in WP. There is no local copy: an image field left blank shows no
+image.
 
 ---
 
@@ -371,12 +370,14 @@ Watch out for two real typos **in WordPress**, not in this code:
 
 **Blocking for the service pages going live**
 - [ ] Add a `/services/*` rule to the Cloudflare Worker (dashboard)
-- [ ] Seed the three newest services (`node acf/seed.mjs all`)
+- [x] Seed all five services (verified 2026-10-17: every field filled in WP)
 - [ ] Commit and push the service-page work
+- [ ] Re-import `acf/service-page-fields.json` and fill the new
+      **Insights → Description** field on all five pages (the insights
+      paragraph is hidden until then)
 
 **Content and polish**
-- [ ] Upload per-service artwork to WP and select it in ACF (all five
-      currently share Digital Marketing's images)
+- [x] Per-service artwork uploaded to WP and selected in ACF
 - [ ] Create `case_study_category` terms for video production and security,
       then set `cases_category` in their content files
 - [ ] Fix the double-escaped category labels on the case-studies listing

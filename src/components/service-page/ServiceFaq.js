@@ -52,7 +52,7 @@ export default function ServiceFaq({ faq }) {
               // defaultOpen on the first item only. Using the `open` attribute
               // directly (not React state) keeps this uncontrolled, so the
               // browser's own toggling still works if JS never runs.
-              <details key={item.q} open={i === 0}>
+              <details key={`${i}-${item.q}`} open={i === 0}>
                 <summary>{item.q}</summary>
                 <p>{item.a}</p>
               </details>

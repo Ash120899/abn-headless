@@ -2,7 +2,7 @@
   {
     "key": "group_abn_service_page",
     "title": "Service Page",
-    "description": "Drives the headless service pages at /services/<slug>/. Every field is optional — anything left blank falls back to the value in the Next.js app (src/lib/service-content.js), so a half-filled page still renders correctly.",
+    "description": "Drives the headless service pages at /services/<slug>/. These fields are the page's only content source — the Next.js app has no built-in copy, artwork or colours. Anything left blank is simply not shown.",
     "location": [
       [
         {
@@ -33,7 +33,7 @@
         "label": "Meta description",
         "name": "meta_description",
         "type": "textarea",
-        "instructions": "Used for the <meta name=\"description\"> tag and the Open Graph / Twitter cards. Aim for 150-160 characters. The page title comes from the WordPress page title, not from here.",
+        "instructions": "Used for the <meta name=\"description\"> tag and the Open Graph / Twitter cards. Aim for 150-160 characters. Only used when the page has no AIOSEO description. The page title comes from AIOSEO (or the WordPress page title), not from here.",
         "rows": 3,
         "new_lines": ""
       },
@@ -775,6 +775,14 @@
         "name": "insights_heading_switch",
         "type": "text",
         "instructions": "Comma-separated, similar lengths."
+      },
+      {
+        "key": "field_svc_insights_description",
+        "label": "Description",
+        "name": "insights_description",
+        "type": "textarea",
+        "rows": 2,
+        "new_lines": ""
       },
       {
         "key": "field_svc_tab_faq",

@@ -1,7 +1,6 @@
 export const runtime = "edge";
 
 import { notFound } from "next/navigation";
-import { getServiceContent } from "@/lib/service-content";
 import { getServicePage } from "@/lib/wp-service";
 import { getCaseStudies, getInsightsPosts } from "@/lib/wp-case-studies";
 
@@ -24,59 +23,56 @@ const SITE_URL = "https://abnjunction.com";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  // Same fetch as the page body — Next dedupes it, so the SEO copy can be
-  // ACF-driven without a second round trip.
+  // Same fetch as the page body — Next dedupes it. SEO comes from the page's
+  // AIOSEO data, as on the blog and case-study singles, with the WP title and
+  // the ACF meta description behind it.
   const service = await getServicePage(slug);
 
-  if (!service) {
-    return { title: "Services - ABN Junction", description: "Explore ABN Junction's services" };
-  }
+  if (!service) return {};
 
-  const title = `${service.title} - ABN Junction`;
-  const url = `${SITE_URL}/services/${slug}`;
+  const title = service.seo.title || `${service.title} - ABN Junction`;
+  const description = service.seo.description;
+  const url = service.seo.canonical || `${SITE_URL}/services/${slug}/`;
+  const images = service.seo.image ? [service.seo.image] : [];
 
   return {
     title,
-    description: service.metaDescription,
+    description,
     alternates: { canonical: url },
     openGraph: {
       title,
-      description: service.metaDescription,
+      description,
       url,
       siteName: "ABN Junction",
-      images: [{ url: `${SITE_URL}/wp-content/uploads/2026/08/favicon-mark.png` }],
+      images: images.map((src) => ({ url: src })),
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description: service.metaDescription,
-      images: [`${SITE_URL}/wp-content/uploads/2026/08/favicon-mark.png`],
+      description,
+      images,
     },
   };
 }
 
 export default async function ServicePage({ params }) {
   const { slug } = await params;
-  // Built-in content from service-content.js with this page's ACF folded
-  // over the top, per field. Editing a field in WP changes the page; leaving
-  // it blank keeps the authored default, so the page is never half-empty.
+  // Everything on the page comes from this WP page's ACF fields. A field
+  // left blank in WP renders nothing; there is no built-in copy behind it.
   const service = await getServicePage(slug);
 
-  // Any slug that isn't one of the five services (plus the alternate
-  // spelling of the security one) 404s rather than rendering an empty
-  // shell — see SERVICE_SLUGS in src/lib/service-content.js.
+  // A slug with no matching child of the Services page 404s rather than
+  // rendering an empty shell.
   if (!service) notFound();
 
   // Real WP content for the case-study and insight bands, matching how the
-  // listing pages source theirs. Case studies are filtered to this service's
-  // own category so the Digital Marketing page shows digital-marketing work
-  // and Web Development shows web-development work.
+  // listing pages source theirs. Case studies are filtered to the category
+  // picked in the page's "Show case studies from" field.
   //
   // Two services have no categorised case studies yet (video production,
-  // security), so those fall back to the most recent from any category
-  // rather than rendering an empty band. Everything also falls back again
-  // inside the components to the authored copy in service-content.js.
+  // security), so those show the most recent from any category rather than
+  // an empty band.
   const categoryId = service.cases.categoryId;
   const [studies, posts] = await Promise.all([
     getCaseStudies({ page: 1, perPage: 3, categoryId: categoryId ?? "all" })
@@ -96,20 +92,16 @@ export default async function ServicePage({ params }) {
   const t = service.theme;
 
   return (
-    // The theme's three variable colours are set inline so each service can
-    // recolour the whole page without touching CSS; everything else lives
-    // in the scoped stylesheet. When these move to ACF, this is the only
-    // place that changes.
+    // The three accent colours come from the page's ACF colour pickers and
+    // are set inline so each service recolours the whole page. The
+    // stylesheet has no fallback for them. The shared neutrals (ink, cream,
+    // paper, cyan) live in the scoped stylesheet.
     <main
       className="svc-page"
       style={{
         "--coral": t.primary,
         "--coral2": t.primaryLight,
         "--red": t.accent,
-        "--cyan": t.secondary,
-        "--ink": t.ink,
-        "--cream": t.cream,
-        "--paper": t.paper,
       }}
     >
       <ServicePageStyles theme={t} />
