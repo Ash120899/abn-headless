@@ -1,5 +1,7 @@
 export const runtime = "edge";
 
+import { wpEdgeCache } from "@/lib/wp-edge-cache";
+
 const WP_API_URL = "https://abnjunction.com/wp-json/wp/v2";
 
 export async function GET(request) {
@@ -20,7 +22,10 @@ export async function GET(request) {
   const targetUrl = `${WP_API_URL}/${path}${query ? `?${query}` : ""}`;
 
   try {
-    const res = await fetch(targetUrl, { cache: "no-store" });
+    // Edge-cached rather than no-store: every client slider and "load more"
+    // goes through here, and uncached they pushed WP into rate-limiting the
+    // app (see src/lib/wp-edge-cache.js). Content can lag WP by up to 5 min.
+    const res = await fetch(targetUrl, wpEdgeCache);
     const body = await res.text();
 
     const headers = {

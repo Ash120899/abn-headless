@@ -4,6 +4,7 @@
 // case_study's ACF-heavy payload, so there's no per-request size cap to
 // respect here.
 import { normalizeBlogPost, MOCK_CATEGORIES, MOCK_POSTS } from "./blog-shared";
+import { wpEdgeCache } from "./wp-edge-cache";
 
 export const WP_API_URL = "https://abnjunction.com/wp-json/wp/v2";
 
@@ -11,13 +12,15 @@ async function fetchWithRetry(url, { tries = 2, timeoutMs = 5000, backoffMs = 50
   let lastErr;
   for (let attempt = 0; attempt < tries; attempt++) {
     try {
-      const res = await fetch(url, { next: { revalidate }, signal: AbortSignal.timeout(timeoutMs) });
-      if (!res.ok) throw new Error(`status ${res.status}`);
+      const res = await fetch(url, { ...wpEdgeCache, next: { revalidate }, signal: AbortSignal.timeout(timeoutMs) });
+      if (!res.ok) throw Object.assign(new Error(`status ${res.status}`), { status: res.status });
       const text = await res.text();
       if (!text) throw new Error("empty body");
       return { data: JSON.parse(text), headers: res.headers };
     } catch (err) {
       lastErr = err;
+      // Retrying a rate limit only adds to it.
+      if (err.status === 429) break;
       if (attempt < tries - 1) await new Promise((r) => setTimeout(r, backoffMs));
     }
   }

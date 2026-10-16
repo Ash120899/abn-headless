@@ -5,6 +5,7 @@
 // built-in copy behind it. The ACF-to-content mapping lives in
 // service-acf.js.
 import { buildServiceContent, collectAttachmentIds } from "./service-acf";
+import { wpEdgeCache } from "./wp-edge-cache";
 
 const WP_API_URL = "https://abnjunction.com/wp-json/wp/v2";
 
@@ -16,13 +17,15 @@ async function fetchWithRetry(url, { tries = 2, timeoutMs = 5000, backoffMs = 40
   let lastErr;
   for (let attempt = 0; attempt < tries; attempt++) {
     try {
-      const res = await fetch(url, { next: { revalidate }, signal: AbortSignal.timeout(timeoutMs) });
-      if (!res.ok) throw new Error(`status ${res.status}`);
+      const res = await fetch(url, { ...wpEdgeCache, next: { revalidate }, signal: AbortSignal.timeout(timeoutMs) });
+      if (!res.ok) throw Object.assign(new Error(`status ${res.status}`), { status: res.status });
       const text = await res.text();
       if (!text) throw new Error("empty body");
       return JSON.parse(text);
     } catch (err) {
       lastErr = err;
+      // Retrying a rate limit only adds to it.
+      if (err.status === 429) break;
       if (attempt < tries - 1) await new Promise((r) => setTimeout(r, backoffMs));
     }
   }
