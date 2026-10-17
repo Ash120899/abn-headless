@@ -39,6 +39,17 @@ export async function GET(request) {
     if (total !== null) headers["X-WP-Total"] = total;
     if (totalPages !== null) headers["X-WP-TotalPages"] = totalPages;
 
+    // Diagnostics for failed upstream responses: shows which layer produced
+    // an error (e.g. a 429 with `server: LiteSpeed` came from the Hostinger
+    // origin; `server: cloudflare` with no origin headers came from
+    // Cloudflare). Only on non-2xx, so normal responses are unchanged.
+    if (!res.ok) {
+      for (const name of ["server", "retry-after", "platform", "x-litespeed-cache", "cf-mitigated", "cf-ray", "x-powered-by"]) {
+        const value = res.headers.get(name);
+        if (value !== null) headers[`X-Upstream-${name}`] = value;
+      }
+    }
+
     return new Response(body, { status: res.status, headers });
   } catch (err) {
     return new Response(JSON.stringify({ error: "Failed to reach WordPress API", details: String(err) }), {
