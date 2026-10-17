@@ -4,6 +4,7 @@
 // WordPress is the only source of content, artwork and colour — there is no
 // built-in copy behind it. The ACF-to-content mapping lives in
 // service-acf.js.
+import { cache } from "react";
 import { buildServiceContent, collectAttachmentIds } from "./service-acf";
 import { wpEdgeCache } from "./wp-edge-cache";
 
@@ -75,8 +76,12 @@ function decodeTitle(value) {
  *
  * A WP failure throws rather than returning null, so an API outage shows
  * the error page instead of being cached as a 404.
+ *
+ * Wrapped in React `cache()` so generateMetadata and the page body share
+ * one result per request. Next's fetch dedupe doesn't hold on the Pages
+ * runtime, and without this every view made the page + media calls twice.
  */
-export async function getServicePage(slug) {
+export const getServicePage = cache(async function getServicePage(slug) {
   const pages = await fetchWithRetry(
     `${WP_API_URL}/pages?slug=${encodeURIComponent(slug)}&parent=${SERVICES_PARENT_ID}&_fields=id,slug,title,acf,aioseo_head_json`
   );
@@ -99,4 +104,4 @@ export async function getServicePage(slug) {
     },
     ...content,
   };
-}
+});
