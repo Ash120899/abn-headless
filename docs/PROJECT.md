@@ -32,7 +32,7 @@ Next.js, and a visitor cannot tell which is which.
 | Framework | Next.js 16.2.4, App Router, Turbopack |
 | Runtime | `export const runtime = "edge"` on every dynamic route |
 | Hosting | Cloudflare Pages |
-| Routing | Cloudflare Worker, path-based (**not in this repo**) |
+| Routing | Cloudflare Worker, path-based (source in `cloudflare/router-worker.js`, deployed via dashboard) |
 | CMS | WordPress REST API (`/wp-json/wp/v2/`) |
 | Structured content | ACF, exposed via `show_in_rest` |
 | Styling | Scoped CSS-in-JS style blocks per feature, plus Tailwind |
@@ -65,9 +65,23 @@ Next.js, and a visitor cannot tell which is which.
 The Worker holds a list of migrated paths. Anything on the list goes to the
 Next.js app; everything else falls through to WordPress untouched.
 
-> **The Worker lives in the Cloudflare dashboard, not in this repo.** A new
-> page is not live until its route is added there. This is the single most
-> common reason a finished page appears to "not work".
+> **The Worker (`falling-flower-b107`, route `abnjunction.com/*`) is deployed
+> from the Cloudflare dashboard.** Its source is version-controlled at
+> [cloudflare/router-worker.js](../cloudflare/router-worker.js). Edit it there,
+> then paste it into Workers & Pages → falling-flower-b107 → Edit code →
+> Deploy. A new page is not live until its route is added. This is the single
+> most common reason a finished page appears to "not work".
+
+**The Worker also caches `/wp-json` GETs (added 2026-10-17).** Hostinger
+throttles each client IP at about 30 requests per 30 s, before PHP runs
+(429, empty body, `platform: hostinger`). Every server-side WP call from
+the app arrives from the same Cloudflare IP, so a few page views in a row
+used to 500 every WP-backed page. The Worker now serves anonymous REST
+GETs from `caches.default`: fresh for 5 min, then the last good copy if
+WordPress returns 429/5xx. Responses carry `X-Edge-Cache: HIT|MISS|STALE`.
+Side effect: WP edits take up to 5 min to show. Security Analytics can't
+show any of this, because Worker subrequests are excluded. Use Workers →
+falling-flower-b107 → Observability instead.
 
 ### Two ways the app reads WordPress
 
@@ -369,7 +383,7 @@ Watch out for two real typos **in WordPress**, not in this code:
 ## 9. Outstanding work
 
 **Blocking for the service pages going live**
-- [ ] Add a `/services/*` rule to the Cloudflare Worker (dashboard)
+- [x] Add a `/services/*` rule to the Cloudflare Worker (dashboard)
 - [x] Seed all five services (verified 2026-10-17: every field filled in WP)
 - [ ] Commit and push the service-page work
 - [ ] Re-import `acf/service-page-fields.json` and fill the new
