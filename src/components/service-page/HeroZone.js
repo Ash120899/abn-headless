@@ -47,22 +47,24 @@ export default function HeroZone({ hero }) {
 
     const pointer = { x: 0, y: 0 };
     let rafId = null;
-    let pinned = true;
-    function readPinned() {
-      pinned = !heroEl || getComputedStyle(heroEl).position === "sticky";
+    // Mobile sizes its pin from the content (see the max-width:900px block
+    // in ServicePageStyles): the artwork box takes whatever height the copy
+    // leaves, and the zone's height is derived from the measured hero.
+    // These two variables feed that CSS; desktop never reads them.
+    const copyEl = heroEl ? heroEl.querySelector(".hero-copy") : null;
+    function measure() {
+      if (copyEl) zone.style.setProperty("--svc-copy-h", `${copyEl.offsetHeight}px`);
+      if (heroEl) zone.style.setProperty("--svc-hero-h", `${heroEl.offsetHeight}px`);
     }
-    readPinned();
+    measure();
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    if (ro) {
+      if (copyEl) ro.observe(copyEl);
+      if (heroEl) ro.observe(heroEl);
+    }
 
     function heroProgress() {
       const r = zone.getBoundingClientRect();
-      // Mobile drops the pin (see the max-width:900px block in
-      // ServicePageStyles), so the zone is no taller than the hero and the
-      // pinned formula would jump straight to 1 on the first scrolled pixel.
-      // Unpinned, the convergence plays out over the first half of the
-      // hero scrolling away instead.
-      if (heroEl && !pinned) {
-        return clamp(-r.top / Math.max(1, heroEl.offsetHeight * 0.5), 0, 1);
-      }
       const stickyH = heroEl ? heroEl.offsetHeight : window.innerHeight;
       const total = Math.max(1, zone.offsetHeight - stickyH);
       return clamp(-r.top / total, 0, 1);
@@ -186,13 +188,14 @@ export default function HeroZone({ hero }) {
 
     hv.addEventListener("pointermove", onPointerMove);
     hv.addEventListener("pointerleave", onPointerLeave);
-    window.addEventListener("resize", readPinned, { passive: true });
+    window.addEventListener("resize", measure, { passive: true });
     rafId = requestAnimationFrame(render);
 
     return () => {
       hv.removeEventListener("pointermove", onPointerMove);
       hv.removeEventListener("pointerleave", onPointerLeave);
-      window.removeEventListener("resize", readPinned);
+      window.removeEventListener("resize", measure);
+      if (ro) ro.disconnect();
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);

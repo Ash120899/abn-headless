@@ -508,23 +508,33 @@ body:has(.svc-page) .btn-slide{display:none !important}
      expanded) height — the worst case — so the layout is sized once for the
      tightest condition and never changes as you scroll. Any extra room the
      collapsing bar frees up simply becomes margin. */
-  /* No pin on mobile. A pinned hero has to fit the artwork, headline, copy,
-     both CTAs and the stats into one viewport, and on real phones (short
-     svh, browser chrome, enlarged system text) it did not: the overflow
-     clipped the second CTA and the whole stats row, and squeezing the
-     artwork row made the character spill over the eyebrow. The hero now
-     takes its natural height and scrolls normally; HeroZone.js detects the
-     missing pin and drives the orbit convergence from the hero scrolling
-     away instead.
+  /* The pin is sized from the content, not forced to one viewport. A
+     fixed-height pin has to fit the artwork, headline, copy, both CTAs and
+     the stats, and on real phones (short svh, browser chrome, enlarged
+     system text) it did not: overflow:hidden clipped the second CTA and the
+     whole stats row, and squeezing the art made the character spill over
+     the eyebrow.
+     HeroZone.js measures the copy (--svc-copy-h) and the hero
+     (--svc-hero-h). The artwork box takes the height the copy leaves, so
+     the hero is one screen tall and pins at the header as before. On a
+     phone where even the 200px artwork floor does not fit, the hero is
+     simply taller than the pin: the overflow is usually just its bottom
+     padding, and since its height is auto nothing is clipped - the rest
+     scrolls into view when the pin releases. The zone adds the same scroll
+     travel as the old 168svh zone did.
+     svh throughout, not dvh: dvh tracks the viewport continuously as the
+     mobile URL bar collapses, which would resize the pin mid-scroll.
      padding-bottom matches .journey's padding-top on the far side of the
      marquee, so the band sits with equal space above and below. */
-  .svc-page .hero-zone{height:auto}
-  .svc-page .hero-zone .hero{position:relative;top:auto;height:auto;min-height:0;overflow:hidden;padding:14px 0 clamp(40px,9svh,80px)}
+  .svc-page .hero-zone{height:calc(var(--svc-hero-h,calc(100svh - var(--navh))) + 68svh + var(--navh))}
+  .svc-page .hero-zone .hero{position:sticky;top:var(--navh);height:auto;min-height:calc(100svh - var(--navh));overflow:hidden;padding:14px 0 clamp(40px,9svh,80px)}
   .svc-page .hero-zone .hero-grid{grid-template-rows:auto auto;align-content:start}
   /* A real, definite height for the artwork box: the orbit radii in
      HeroZone.js are derived from it, and the character is capped well
-     inside it so the top pills orbit above the head, not across the face. */
-  .svc-page .hero-visual{height:clamp(270px,80vw,340px);min-height:0;max-height:none}
+     inside it so the top pills orbit above the head, not across the face.
+     The middle term is the room left once the header, the copy, the hero's
+     own padding and the grid's padding and gap (26px) are taken out. */
+  .svc-page .hero-visual{height:clamp(200px,calc(100svh - var(--navh) - var(--svc-copy-h,400px) - 26px - clamp(40px,9svh,80px)),min(340px,80vw));min-height:0;max-height:none}
   .svc-page .hero-char{width:auto;max-width:min(230px,60vw);max-height:calc(100% - 66px);object-fit:contain}
   .svc-page .hero-copy{display:flex;flex-direction:column;justify-content:center}
   .svc-page .hero .eyebrow{line-height:1.5}
