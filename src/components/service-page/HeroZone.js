@@ -47,9 +47,22 @@ export default function HeroZone({ hero }) {
 
     const pointer = { x: 0, y: 0 };
     let rafId = null;
+    let pinned = true;
+    function readPinned() {
+      pinned = !heroEl || getComputedStyle(heroEl).position === "sticky";
+    }
+    readPinned();
 
     function heroProgress() {
       const r = zone.getBoundingClientRect();
+      // Mobile drops the pin (see the max-width:900px block in
+      // ServicePageStyles), so the zone is no taller than the hero and the
+      // pinned formula would jump straight to 1 on the first scrolled pixel.
+      // Unpinned, the convergence plays out over the first half of the
+      // hero scrolling away instead.
+      if (heroEl && !pinned) {
+        return clamp(-r.top / Math.max(1, heroEl.offsetHeight * 0.5), 0, 1);
+      }
       const stickyH = heroEl ? heroEl.offsetHeight : window.innerHeight;
       const total = Math.max(1, zone.offsetHeight - stickyH);
       return clamp(-r.top / total, 0, 1);
@@ -63,10 +76,14 @@ export default function HeroZone({ hero }) {
       const mobile = window.innerWidth < 900;
       const p = heroProgress();
       const ease = p * p * (3 - 2 * p);
-      const wideX = mobile ? 135 : 255;
-      const wideY = mobile ? 95 : 175;
-      const lockX = mobile ? 100 : 150;
-      const lockY = mobile ? 76 : 112;
+      // Mobile radii follow the visual's own box: the vertical radius
+      // reaches out to its top and bottom edges so the top pills orbit
+      // above the character's head rather than across its face, and the
+      // horizontal one is capped so side pills stay on narrow screens.
+      const wideX = mobile ? Math.min(135, cx - 26) : 255;
+      const wideY = mobile ? Math.max(95, cy - 18) : 175;
+      const lockX = mobile ? Math.min(130, cx - 24) : 150;
+      const lockY = mobile ? Math.max(76, cy - 26) : 112;
 
       if (net) {
         net.setAttribute("viewBox", `0 0 ${r.width} ${r.height}`);
@@ -82,8 +99,15 @@ export default function HeroZone({ hero }) {
         const a = idleA * (1 - ease) + base * ease;
         const rx = wideX * (1 - ease) + lockX * ease;
         const ry = wideY * (1 - ease) + lockY * ease;
-        const x = cx + Math.cos(a) * rx;
+        let x = cx + Math.cos(a) * rx;
         const y = cy + Math.sin(a) * ry;
+        // On a phone a wide pill (e.g. "Google Ads") at the side of the
+        // orbit would poke past the screen edge; keep it within the visual
+        // plus the container's 20px gutter.
+        if (mobile) {
+          const half = el.offsetWidth / 2;
+          x = clamp(x, half - 14, r.width - half + 14);
+        }
         pts.push([x, y]);
 
         const px = fine ? pointer.x * 5 * (1 - ease) : 0;
@@ -162,11 +186,13 @@ export default function HeroZone({ hero }) {
 
     hv.addEventListener("pointermove", onPointerMove);
     hv.addEventListener("pointerleave", onPointerLeave);
+    window.addEventListener("resize", readPinned, { passive: true });
     rafId = requestAnimationFrame(render);
 
     return () => {
       hv.removeEventListener("pointermove", onPointerMove);
       hv.removeEventListener("pointerleave", onPointerLeave);
+      window.removeEventListener("resize", readPinned);
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);

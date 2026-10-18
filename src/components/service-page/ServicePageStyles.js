@@ -496,8 +496,10 @@ body:has(.svc-page) .btn-slide{display:none !important}
      some loads and not others. margin-bottom guarantees a gap between them
      and the marquee band that follows, matching the space above them. */
   .svc-page .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:14px 0 14px}
-  .svc-page .stat{min-width:0;padding:10px}
-  .svc-page .stat b{font-size:22px}
+  /* Viewport-scaled so a wide figure ("6,500+") stays inside its third of
+     the row on a 320px screen; reaches the old 22px at ~380px wide. */
+  .svc-page .stat{min-width:0;padding:10px 8px}
+  .svc-page .stat b{font-size:clamp(16px,5.8vw,22px)}
   .svc-page .stat small{font-size:8px}
   /* The pinned hero is sized in svh, deliberately.
      dvh was tried and is wrong here: it tracks the viewport CONTINUOUSLY as
@@ -506,29 +508,29 @@ body:has(.svc-page) .btn-slide{display:none !important}
      expanded) height — the worst case — so the layout is sized once for the
      tightest condition and never changes as you scroll. Any extra room the
      collapsing bar frees up simply becomes margin. */
-  .svc-page .hero-zone{height:168svh}
-  /* padding-bottom is what actually separates the stats from the marquee:
-     .hero-grid is align-content:center inside this fixed-height box, so its
-     own bottom padding lands mid-box rather than at the edge that meets the
-     marquee band.
-     The target is 80px, matching .journey's padding-top on the far side of
-     the marquee so the band sits with equal space above and below. It is
-     clamped against viewport height because a flat 80px overflows a short
-     phone (360x640) by ~2px and leaves an iPhone SE with almost no artwork:
-     below ~700px tall the gap eases back rather than eating the hero. */
-  .svc-page .hero-zone .hero{height:calc(100svh - var(--navh));min-height:0;overflow:hidden;padding:14px 0 clamp(40px,9svh,80px)}
-  /* Row 1 (artwork) absorbs slack; row 2 (copy, CTAs, stats) is auto so it
-     always gets the height it needs. */
-  .svc-page .hero-zone .hero-grid{grid-template-rows:minmax(0,1fr) auto;align-content:stretch}
-  /* No min-height here: a floor on the grid ITEM defeats the minmax(0,1fr)
-     on its row, so the grid overflowed the pin under pressure and the stats
-     were the part that got cut. The artwork now shrinks freely; the image
-     inside keeps its own sensible floor. */
-  /* svh here too, for the same reason: a dvh cap would resize the artwork
-     continuously while scrolling, reflowing the rows underneath it. */
-  .svc-page .hero-visual{height:auto;min-height:0;max-height:32svh}
-  .svc-page .hero-char{width:min(214px,38svh)}
+  /* No pin on mobile. A pinned hero has to fit the artwork, headline, copy,
+     both CTAs and the stats into one viewport, and on real phones (short
+     svh, browser chrome, enlarged system text) it did not: the overflow
+     clipped the second CTA and the whole stats row, and squeezing the
+     artwork row made the character spill over the eyebrow. The hero now
+     takes its natural height and scrolls normally; HeroZone.js detects the
+     missing pin and drives the orbit convergence from the hero scrolling
+     away instead.
+     padding-bottom matches .journey's padding-top on the far side of the
+     marquee, so the band sits with equal space above and below. */
+  .svc-page .hero-zone{height:auto}
+  .svc-page .hero-zone .hero{position:relative;top:auto;height:auto;min-height:0;overflow:hidden;padding:14px 0 clamp(40px,9svh,80px)}
+  .svc-page .hero-zone .hero-grid{grid-template-rows:auto auto;align-content:start}
+  /* A real, definite height for the artwork box: the orbit radii in
+     HeroZone.js are derived from it, and the character is capped well
+     inside it so the top pills orbit above the head, not across the face. */
+  .svc-page .hero-visual{height:clamp(270px,80vw,340px);min-height:0;max-height:none}
+  .svc-page .hero-char{width:auto;max-width:min(230px,60vw);max-height:calc(100% - 66px);object-fit:contain}
   .svc-page .hero-copy{display:flex;flex-direction:column;justify-content:center}
+  .svc-page .hero .eyebrow{line-height:1.5}
+  /* Long labels ("Talk Through Your Build Problem →") wrap on a phone;
+     balance keeps the arrow from dropping onto a line of its own. */
+  .svc-page .btn{max-width:100%;text-wrap:balance;justify-content:center;text-align:center}
 
   /* 80px, matching every other band on mobile — 52px made the gap after the
      marquee visibly tighter than the gaps further down the page. */
@@ -572,59 +574,50 @@ body:has(.svc-page) .btn-slide{display:none !important}
      right edge pointed down from a corner rather than between the cards. */
   .svc-page .node:after{content:"↓";right:auto;left:50%;transform:translateX(-50%);top:auto;bottom:-20px}
 
-  /* ---------- CINEMA (mobile) ----------
-     Keeps the concept's scattered composition — cards placed around the
-     characters — rather than collapsing to a stack. The tuning below is
-     what stops the pieces colliding at phone widths: cards are narrower and
-     pinned nearer the edges, the copy block is capped so the paragraph
-     cannot grow down into the top row, and the character band is anchored
-     to the bottom with the cards' vertical bands kept clear of it. */
+  /* ---------- CINEMA (mobile) ---------- */
   .svc-page .cinema-track{height:300vh}
-  /* --card-gap drives the 2x2 card block below: the same value is used for
-     the screen-edge inset, the gap between the two columns and the gap
-     between the rows, so the four cards sit on an even grid. */
-  .svc-page .cinema-sticky{min-height:620px;--card-gap:14px}
-  .svc-page .cinema-copy{top:6vh;width:92vw}
-  .svc-page .cinema-words{font-size:clamp(46px,13vw,70px);height:1.06em;line-height:.9;margin:10px 0 12px}
-  .svc-page .cinema-copy p{font-size:12.5px;line-height:1.5;max-width:88%}
-  /* One gap value drives the whole 2x2 block, so the spacing between the
-     two columns matches the spacing to the screen edges and between the
-     rows. Card width is derived from it rather than guessed, which is what
-     keeps the four cards reading as an even grid. */
-  /* Fixed height, not auto: row 2 is positioned a card-height below row 1,
-     so the four cards only stay on an even grid if every card is the same
-     height. 96px fits the longest of the four titles at this size. */
-  .svc-page .depth-card{width:calc((100vw - var(--card-gap) * 3) / 2);max-width:none;height:96px;padding:10px 11px;border-radius:13px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+  /* Laid out in flow, not by viewport percentages. The absolute version
+     (copy at 6vh, cards at 32vh, characters anchored to the bottom) only
+     fitted phones of a certain height: on a 360x640 screen the paragraph ran
+     into the top row of cards, and the eyebrow sat under the fixed header
+     because the stage pins at top:0. Here the stage is a column - copy,
+     then the 2x2 cards, then the characters taking whatever height is left
+     - so the pieces stack instead of colliding at any phone size.
+     --card-gap is the edge inset, column gap and row gap alike. */
+  .svc-page .cinema-sticky{height:100svh;min-height:0;--card-gap:14px;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:14px;padding:calc(var(--navh) + 8px) var(--card-gap) 28px}
+  /* Auto margins on the first and last items centre the column when there
+     is spare height (tall phones), and collapse to zero when there is not,
+     so on a short phone nothing is pushed up under the header. */
+  .svc-page .cinema-copy{position:relative;top:auto;left:auto;transform:none;width:100%;flex:0 0 auto;margin-top:auto}
+  .svc-page .cinema-words{font-size:clamp(42px,12vw,70px);height:1.06em;line-height:.9;margin:8px 0 10px}
+  .svc-page .cinema-copy p{font-size:12.5px;line-height:1.5;max-width:94%}
+  /* The wrapper is display:contents on desktop; here it is the real 2x2
+     grid. grid-auto-rows:1fr keeps both rows the same height, so the four
+     cards stay an even block whatever their copy length. */
+  .svc-page .cinema-depth{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:var(--card-gap);position:relative;z-index:3;flex:0 0 auto}
+  .svc-page .depth-card{position:relative;width:auto;max-width:none;height:auto;min-height:0;padding:10px 11px;border-radius:13px;display:flex;flex-direction:column;justify-content:center}
   .svc-page .depth-card small{font-size:7.5px;letter-spacing:.11em}
   .svc-page .depth-card b{font-size:12.5px;margin:4px 0;line-height:1.2}
   .svc-page .depth-card span{font-size:8px;line-height:1.3}
-  /* Top pair sits below the copy; bottom pair above the character band. */
-  /* Left/right insets use the same --card-gap as the centre channel, so the
-     horizontal rhythm is even: edge · card · gap · card · edge. */
-  .svc-page .d1{left:var(--card-gap);right:auto;top:32vh}
-  .svc-page .d2{right:var(--card-gap);left:auto;top:32vh}
-  /* Row 2 is offset from row 1 by the card height plus the same gap, so the
-     vertical spacing matches the horizontal. Card height is bounded by the
-     copy in it; 96px covers the tallest of the four. */
-  .svc-page .d3{left:var(--card-gap);right:auto;top:calc(32vh + 96px + var(--card-gap));bottom:auto}
-  .svc-page .d4{right:var(--card-gap);left:auto;top:calc(32vh + 96px + var(--card-gap));bottom:auto}
-  /* The characters occupy the middle channel between the card columns, so
-     they never sit underneath one. */
-  /* The tightened card grid leaves 67-120px of clear space above the
-     characters, so the artwork takes it: taller band, bigger figures. */
-  .svc-page .handoff-team{width:100vw;height:33vh;bottom:4vh}
+  .svc-page .d1,.svc-page .d2,.svc-page .d3,.svc-page .d4{left:auto;right:auto;top:auto;bottom:auto}
+  /* The characters take the rest of the column. The band is a size
+     container so each figure can be capped at its height (100cqh): on a
+     short phone the artwork shrinks rather than overlapping the cards
+     above, and on a tall one the figure stays bottom-anchored with its pill
+     directly over it instead of stranded at the top of the band. */
+  .svc-page .handoff-team{position:relative;left:auto;bottom:auto;transform:none;width:100%;height:auto;min-height:96px;max-height:62vw;flex:1 1 auto;container-type:size;margin-bottom:auto}
   /* padding-top reserves the pill's own row above each figure, so the label
      sits over clear background instead of across the character's head. */
-  .svc-page .handoff-char{width:32%;padding-top:20px}
-  .svc-page .handoff-char img{max-height:27vh}
-  .svc-page .hc1{left:2%}
+  .svc-page .handoff-char{width:32%;padding-top:28px}
+  .svc-page .handoff-char img{max-height:calc(100cqh - 28px);min-height:0}
+  .svc-page .hc1{left:0}
   .svc-page .hc2{left:50%}
-  .svc-page .hc3{right:2%}
+  .svc-page .hc3{right:0}
   .svc-page .handoff-char span{display:none}
-  /* Each pill is capped to its own column and centred in it. Without the
-     max-width the three labels grew past their characters and ran into one
-     another; nowrap plus the smaller type keeps each on one line. */
-  .svc-page .role-fx{font-size:6px;padding:3px 5px;letter-spacing:.03em;top:0;bottom:auto;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* Each pill is capped to its own column and centred in it. It wraps to a
+     second line rather than truncating with an ellipsis, which cut longer
+     labels ("META · CONTENT · ENGAGEMENT") off mid-word. */
+  .svc-page .role-fx{font-size:7px;line-height:1.25;padding:3px 6px;letter-spacing:.03em;top:0;bottom:auto;width:max-content;max-width:100%;white-space:normal;text-align:center;border-radius:10px}
   .svc-page .signal-orb{width:18px;height:18px}
   /* nowrap with tighter tracking: at .2em the label was wider than the
      screen and broke onto a second line. */
@@ -632,18 +625,29 @@ body:has(.svc-page) .btn-slide{display:none !important}
 
   .svc-page .proof-grid{grid-template-columns:1fr 1fr}
   .svc-page .proof-item:nth-child(2){border-right:0}
-  .svc-page .proof-item{padding:26px 18px;border-bottom:1px solid rgba(0,0,0,.18)}
-  /* No font-size override here: the clamp above already floors at 2.625rem
-     (42px), which is exactly what this breakpoint used to hardcode, and
-     keeping it would break the match with the case-studies strip. */
+  .svc-page .proof-item{padding:26px 14px;border-bottom:1px solid rgba(0,0,0,.18)}
+  /* The desktop clamp floors at 42px, which is wider than a half-width
+     column on a phone for figures like "₹7.2M+" — .proof-item clips its
+     overflow, so the suffix was cut off. Scaled to the viewport here. */
+  .svc-page .proof-item b{font-size:clamp(1.75rem,9vw,2.625rem)}
   .svc-page .section-top{display:block}
   .svc-page .cards,.svc-page .blogcards{grid-template-columns:1fr}
   .svc-page .method-scroller{margin-top:34px;scroll-snap-type:x mandatory}
   .svc-page .method-card{width:82vw;scroll-snap-align:start}
-  .svc-page .character-break{min-height:760px}
-  .svc-page .char-wrap{height:380px}
-  .svc-page .character-copy{padding-bottom:48px}
-  .svc-page .character-copy h2{font-size:54px}
+  /* The desktop badge positions (percentages of a fixed-height box) landed
+     straight across the characters' faces at phone width. On mobile the
+     badges get their own bands instead: two staggered above the artwork,
+     one below it, and the image sits between them in flow. The padding
+     leaves room for the image's scroll drift (up to 18px either way). */
+  .svc-page .character-break{min-height:0;padding-top:40px}
+  .svc-page .char-wrap{height:auto;display:block;padding:106px 0 66px}
+  .svc-page .char-wrap img{width:auto;max-width:min(300px,78%);max-height:340px;margin:0 auto}
+  .svc-page .float-badge{padding:10px 13px;font-size:13px;border-radius:16px;max-width:100%}
+  .svc-page .fb1{top:0;left:0;right:auto;bottom:auto}
+  .svc-page .fb2{top:48px;right:0;left:auto;bottom:auto}
+  .svc-page .fb3{bottom:0;left:6%;top:auto;right:auto}
+  .svc-page .character-copy{padding-bottom:64px}
+  .svc-page .character-copy h2{font-size:clamp(38px,12vw,54px)}
 }
     `}</style>
     </>

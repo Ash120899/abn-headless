@@ -1005,12 +1005,16 @@ pre.code-content {
   overscroll-behavior: contain;
   background: #0b1115 !important;
   border-left: 1px solid var(--site-line) !important;
-  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.45);
+  /* No shadow while closed: parked off-canvas at translateX(100%), the
+     shadow's -20px offset and 60px blur still reached back into the
+     viewport and darkened the right edge of every mobile page. */
+  box-shadow: none;
   transform: translateX(100%);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .site-mobile-nav.open {
   transform: translateX(0);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.45);
 }
 .site-mobile-nav :focus-visible {
   outline-color: var(--site-cyan) !important;
