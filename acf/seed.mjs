@@ -17,6 +17,13 @@
  * Usage (bash):
  *   WP_USER=... WP_APP_PASSWORD=... node acf/seed.mjs all
  *
+ * Sub-service pages (acf/subservice-content/<service>/<sub-service>.mjs,
+ * fields from acf/subservice-page-fields.json) are targeted as
+ * <service>/<sub-service>; "all-sub" writes every one that has a PAGE_ID.
+ * "all" still means the five service pages only.
+ *   node acf/seed.mjs digital-marketing/performance-marketing --dry-run
+ *   node acf/seed.mjs all-sub
+ *
  * The application password comes from WP Admin → Users → your profile →
  * Application Passwords. It is not your login password and can be revoked
  * afterwards. Nothing is hard-coded here.
@@ -28,6 +35,10 @@
  * folder rather than in WP. Upload the PNGs and pick them in the admin UI —
  * that is the one part worth doing by hand. Left unset, the page falls back
  * to the local files, so this is not blocking.
+ *
+ * Sub-service content files do set their images, to attachment IDs already in
+ * the media library (see subservice-content/_shared.mjs), so seeding one again
+ * overwrites any image picked by hand.
  */
 
 import { readdir } from "node:fs/promises";
@@ -36,6 +47,7 @@ import path from "node:path";
 
 const SITE = "https://abnjunction.com";
 const CONTENT_DIR = fileURLToPath(new URL("./content/", import.meta.url));
+const SUB_CONTENT_DIR = fileURLToPath(new URL("./subservice-content/", import.meta.url));
 
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes("--dry-run");
@@ -46,15 +58,43 @@ async function availableSlugs() {
   return files.filter((f) => f.endsWith(".mjs")).map((f) => path.basename(f, ".mjs")).sort();
 }
 
+// "<service>/<sub-service>" for every file under subservice-content/.
+async function availableSubSlugs() {
+  let services;
+  try {
+    services = await readdir(SUB_CONTENT_DIR, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+  const out = [];
+  for (const dir of services.filter((d) => d.isDirectory())) {
+    const files = await readdir(path.join(SUB_CONTENT_DIR, dir.name));
+    for (const f of files.filter((f) => f.endsWith(".mjs"))) out.push(`${dir.name}/${path.basename(f, ".mjs")}`);
+  }
+  return out.sort();
+}
+
+function contentUrl(slug) {
+  return slug.includes("/")
+    ? new URL(`./subservice-content/${slug}.mjs`, import.meta.url)
+    : new URL(`./content/${slug}.mjs`, import.meta.url);
+}
+
 if (!targets.length) {
-  const slugs = await availableSlugs();
-  console.error("Usage: node acf/seed.mjs <slug|all> [--dry-run]\n");
-  console.error("Available:\n  " + ["all", ...slugs].join("\n  "));
+  const all = [...(await availableSlugs()), ...(await availableSubSlugs())];
+  console.error("Usage: node acf/seed.mjs <slug|service/sub-service|all|all-sub> [--dry-run]\n");
+  console.error("Available:\n  " + ["all", "all-sub", ...all].join("\n  "));
   process.exit(1);
 }
 
-const slugs = await availableSlugs();
-const selected = targets.includes("all") ? slugs : targets;
+const serviceSlugs = await availableSlugs();
+const subSlugs = await availableSubSlugs();
+const slugs = [...serviceSlugs, ...subSlugs];
+const selected = [
+  ...new Set(
+    targets.flatMap((t) => (t === "all" ? serviceSlugs : t === "all-sub" ? subSlugs : [t]))
+  ),
+];
 
 const unknown = selected.filter((s) => !slugs.includes(s));
 if (unknown.length) {
@@ -83,10 +123,26 @@ if (!DRY_RUN) {
 let failures = 0;
 
 for (const slug of selected) {
-  const mod = await import(new URL(`./content/${slug}.mjs`, import.meta.url));
+  const mod = await import(contentUrl(slug));
   const { PAGE_ID, acf, PLACEHOLDER } = mod;
 
-  if (!PAGE_ID || !acf) {
+  // A sub-service file can exist before its WP page does (it previews in
+  // `next dev` meanwhile). Under "all-sub" that's a skip, not a failure.
+  // --dry-run still previews it.
+  if (!PAGE_ID && acf && slug.includes("/") && !DRY_RUN) {
+    const msg =
+      `${slug}: no PAGE_ID yet. Create the page in WordPress (as a child of its ` +
+      `service page), then set PAGE_ID in acf/subservice-content/${slug}.mjs.`;
+    if (targets.includes(slug)) {
+      console.error(msg);
+      failures++;
+    } else {
+      console.log(`${msg} SKIPPED.`);
+    }
+    continue;
+  }
+
+  if ((!PAGE_ID && !(DRY_RUN && slug.includes("/"))) || !acf) {
     console.error(`${slug}: content file must export PAGE_ID and acf.`);
     failures++;
     continue;
@@ -106,7 +162,7 @@ for (const slug of selected) {
   const count = Object.keys(acf).length;
 
   if (DRY_RUN) {
-    console.log(`\n=== ${slug} (page ${PAGE_ID}) — ${count} fields ===`);
+    console.log(`\n=== ${slug} (page ${PAGE_ID ?? "not created yet"}) — ${count} fields ===`);
     console.log(JSON.stringify(acf, null, 2));
     continue;
   }
@@ -158,6 +214,10 @@ for (const slug of selected) {
         `  expected to stay empty; a bigger gap usually means a field-name mismatch.`
     );
   }
+
+  // The origin throttles an IP at about 30 requests in 30 seconds, so a long
+  // run like "all-sub" has to stay under that.
+  if (selected.length > 1) await new Promise((r) => setTimeout(r, 1500));
 }
 
 if (DRY_RUN) {
@@ -168,7 +228,9 @@ if (DRY_RUN) {
       ? `\n${failures} of ${selected.length} page(s) failed.`
       : `\nDone. ${selected.length} page(s) written.`
   );
-  console.log("Images still need picking by hand in the admin UI — see the note at the top of this file.");
+  if (selected.some((s) => !s.includes("/"))) {
+    console.log("Images still need picking by hand in the admin UI — see the note at the top of this file.");
+  }
 }
 
 process.exit(failures ? 1 : 0);

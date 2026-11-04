@@ -43,6 +43,11 @@ next-env.d.ts
 # local agent tooling
 .claude/skills/
 
+# Playwright MCP screenshots and console logs. Also keeps Tailwind's source
+# scan out of it: every log write otherwise triggers a CSS rebuild, whose
+# Fast Refresh log line is written there again, and dev loops forever.
+.playwright-mcp/
+
 # Design concept sources. These are multi-MB single-file HTML mockups with
 # every image inlined as base64 — reference material for building the real
 # pages, not something the app imports. Keeping them out of history avoids
@@ -54,3 +59,4 @@ next-env.d.ts
 # `git rm --cached`.
 design-concepts.zip
 design-concepts/ABN_Digital_Marketing_V4_1_V3_Locked_Refinement.html
+design-concepts/ABN_Junction_Performance_Marketing_V2_Campaign_Lab_Leadgen.html

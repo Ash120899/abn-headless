@@ -10,8 +10,9 @@
 // optional.
 //
 // The site runs reCAPTCHA v3 globally (Contact → Integration), so CF7 scores
-// every submission and rejects unscored ones as spam. We mint a token in the
-// browser and send it as _wpcf7_recaptcha_response.
+// every submission and rejects unscored ones as spam. The token, hidden
+// fields and POST live in src/lib/cf7-client.js, shared with the
+// sub-service Campaign Lab form.
 //
 // Worth knowing when testing: reCAPTCHA grades a token server-side against
 // the key's authorised domain list. On localhost the token mints fine but
@@ -22,50 +23,7 @@
 // The concept's service pills are multi-select and are sent as one
 // comma-joined string in the `services` hidden field.
 import { useState } from "react";
-
-const ENDPOINT =
-  "https://abnjunction.com/wp-json/contact-form-7/v1/contact-forms/12775/feedback";
-
-// Public site key, read from the live page's reCAPTCHA script tag. Site keys
-// are designed to be exposed in client code; the secret stays in WordPress.
-const RECAPTCHA_KEY = "6Lei74sqAAAAABAzYZOg9Zf8RwR6wihMLl3jGpbk";
-
-// Loads the reCAPTCHA script once and resolves with a fresh token. Resolves
-// null on any failure so a CDN blip degrades to "CF7 decides" rather than
-// blocking the user from submitting at all.
-function getRecaptchaToken() {
-  return new Promise((resolve) => {
-    function execute() {
-      try {
-        window.grecaptcha.ready(() => {
-          window.grecaptcha
-            .execute(RECAPTCHA_KEY, { action: "wpcf7" })
-            .then(resolve)
-            .catch(() => resolve(null));
-        });
-      } catch {
-        resolve(null);
-      }
-    }
-
-    if (window.grecaptcha?.execute) return execute();
-
-    const existing = document.querySelector("script[data-abn-recaptcha]");
-    if (existing) {
-      existing.addEventListener("load", execute, { once: true });
-      existing.addEventListener("error", () => resolve(null), { once: true });
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_KEY}`;
-    script.async = true;
-    script.dataset.abnRecaptcha = "true";
-    script.addEventListener("load", execute, { once: true });
-    script.addEventListener("error", () => resolve(null), { once: true });
-    document.head.appendChild(script);
-  });
-}
+import { SITE_ENQUIRY_FORM_ID, submitCf7 } from "@/lib/cf7-client";
 
 const SERVICES = [
   { label: "Marketing", color: "var(--ct-dm)" },
@@ -123,26 +81,14 @@ export default function ContactForm({ content }) {
 
     setSending(true);
     try {
-      const token = await getRecaptchaToken();
-
-      const body = new FormData();
-      if (token) body.set("_wpcf7_recaptcha_response", token);
-      // CF7's own hidden fields. Without _wpcf7 the endpoint rejects the post.
-      body.set("_wpcf7", "12775");
-      body.set("_wpcf7_version", "6.1.6");
-      body.set("_wpcf7_locale", "en_US");
-      body.set("_wpcf7_unit_tag", "wpcf7-f12775-o1");
-      body.set("_wpcf7_container_post", "0");
-
-      body.set("your-name", values.name.trim());
-      body.set("your-email", values.email.trim());
-      body.set("your-phone", values.phone.trim());
-      body.set("your-company", values.company.trim());
-      body.set("your-message", values.message.trim());
-      body.set("services", selected.join(", "));
-
-      const res = await fetch(ENDPOINT, { method: "POST", body });
-      const data = await res.json().catch(() => null);
+      const data = await submitCf7(SITE_ENQUIRY_FORM_ID, {
+        "your-name": values.name.trim(),
+        "your-email": values.email.trim(),
+        "your-phone": values.phone.trim(),
+        "your-company": values.company.trim(),
+        "your-message": values.message.trim(),
+        services: selected.join(", "),
+      });
 
       if (data?.status === "mail_sent") {
         setStatus({ type: "ok", text: data.message || content.successMessage });

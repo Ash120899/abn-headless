@@ -4,7 +4,7 @@ Living reference for the WordPress → Next.js migration of **abnjunction.com**.
 Covers what exists, how it was built, why particular decisions were made, and
 what is still outstanding.
 
-Last updated: 2026-09-02
+Last updated: 2026-10-26
 
 ---
 
@@ -102,7 +102,8 @@ falling-flower-b107 → Observability instead.
 | `/blog/[slug]` | [src/app/blog/[slug]/page.js](../src/app/blog/%5Bslug%5D/page.js) | Live |
 | `/case-studies` | [src/app/case-studies/page.js](../src/app/case-studies/page.js) | Live |
 | `/case-studies/[slug]` | [src/app/case-studies/[slug]/page.js](../src/app/case-studies/%5Bslug%5D/page.js) | Live |
-| `/services/[slug]` | [src/app/services/[slug]/page.js](../src/app/services/%5Bslug%5D/page.js) | **Built, not yet routed** |
+| `/services/[slug]` | [src/app/services/[slug]/page.js](../src/app/services/%5Bslug%5D/page.js) | Live |
+| `/services/[slug]/[subslug]` | [src/app/services/[slug]/[subslug]/page.js](../src/app/services/%5Bslug%5D/%5Bsubslug%5D/page.js) | **Built, not routed** (see §4a) |
 
 Supporting code is grouped per feature:
 
@@ -218,6 +219,72 @@ imported by the app — they only feed the seeder.
 
 ---
 
+## 4a. The sub-service pages (built 2026-10-26, not live)
+
+Every child page of a service page (`/services/<service>/<sub-service>/`)
+shares **one layout**, ported from
+`design-concepts/ABN_Junction_Performance_Marketing_V2_Campaign_Lab_Leadgen.html`
+(gitignored, like the other new concepts). There is no slug list in code.
+A page renders when it is a child of the named service page **and** has
+the sub-service ACF group filled in. Anything else 404s.
+
+| Piece | Where |
+|---|---|
+| Route | `src/app/services/[slug]/[subslug]/page.js` |
+| Fetch (page + parent in parallel, then media) | `src/lib/wp-subservice.js` |
+| ACF → content object | `src/lib/subservice-acf.js` |
+| Components + scoped stylesheet (`.ssp-page`) | `src/components/subservice-page/` |
+| Field group (144 fields, 16 tabs) | `acf/subservice-page-fields.json` |
+| Seed copy | `acf/subservice-content/<service>/<sub-service>.mjs` |
+
+Section order: `SubHero → SubMarquee → SectionRail → ProblemGrid →
+OfferGrid → StoryScroll → CampaignLab (+ LeadModal) → DifferenceBlock →
+SubCaseCards → RelatedServices → SubInsights → SubFaq → SubFinalCta`.
+Every section hides when its ACF is empty. A rail link shows only when its
+section renders and has a rail label.
+
+**Inherited from the parent service page in WP:** the three accent
+colours and the case-study category, used only when the sub-service leaves
+its own blank. The breadcrumb's service name comes from
+`SERVICE_PILLARS` in `navigation.js`, because the parent's WP title is an
+SEO headline.
+
+**Campaign Lab (per page).** Steps, options, KPI tiles, plan title and
+sentences, funnel and enquiry copy all come from the page's ACF (see
+`CampaignLab.js` for the composition rules). "Get my plan" opens
+`LeadModal`, which posts to Contact Form 7 through `src/lib/cf7-client.js`
+(shared with the contact page). The page's `lead_form_id` picks the form,
+and blank means 12775. The message contains each step's question and
+answer. The same reCAPTCHA localhost caveat applies: a "spam" reply in
+local dev is expected.
+
+**Local preview.** In `next dev` only, a sub-service whose WP page has no
+ACF (or doesn't exist yet) renders from its seed file, with a fixed
+"Local preview" badge and `noindex`. The `NODE_ENV` check is compiled
+out of production builds. A 2026-10-26 build was checked: none of the
+seed copy is in `.next`.
+
+**Content files.** All 24 sub-services have one. They call `subservice()` in
+`acf/subservice-content/_shared.mjs`, which holds the common labels, the lead
+form wording, each service's colours and case-study band, and the cross-link
+cards. `performance-marketing.mjs` spells out its full payload and is the
+reference for the shape. Video and security leave the case-study band out
+until they have `case_study_category` terms.
+
+**Publishing a sub-service** (the field group is imported, 2026-11-04):
+1. Create the WP page if needed. Its parent must be the service page.
+2. Set `PAGE_ID` in the content file, then
+   `node acf/seed.mjs <service>/<sub-service>` (or `all-sub`).
+3. Images: `_shared.mjs` seeds the parent service page's art as a stand-in.
+   Set a page's own with `images` in its content file, because seeding again
+   overwrites anything picked by hand in WP Admin.
+4. Push the code, then list the path in `SUBSERVICE_PATHS` in
+   `cloudflare/router-worker.js` and paste the Worker into the dashboard.
+   Don't use a blanket `/services/*/*` rule: the route 404s a page with no
+   content, and WordPress should keep serving those.
+
+---
+
 ## 5. Key implementation decisions
 
 ### Content shaped as data, not JSX
@@ -294,6 +361,13 @@ which is what the design concept used in the first place.
 **WordPress double-escapes category labels** (`&amp;amp;`). Needs cleaning
 before display. Fixed on the service page; **still present on the case-studies
 listing insights block.**
+
+**An untracked folder in the repo can loop `next dev`.** Tailwind v4
+scans every file that isn't gitignored. Playwright MCP writes console logs
+to `.playwright-mcp/`, so each write rebuilt the CSS, and each rebuild
+logged a Fast Refresh line that was written there again. Fast Refresh then
+rebuilt every ~0.5 s, and the dev server eventually restarted on memory.
+Gitignore such folders, then restart dev.
 
 **Theme colours must come from tokens, never literals.** The story-stage
 gradient was ported from the concept with its three coral hex values intact,
@@ -396,6 +470,19 @@ Watch out for two real typos **in WordPress**, not in this code:
       then set `cases_category` in their content files
 - [ ] Fix the double-escaped category labels on the case-studies listing
       insights block (already fixed on the service page)
+
+**Sub-service pages** (see §4a)
+- [x] Import the sub-service field group; create and seed Performance Marketing
+- [x] Write content files for the other 23 sub-services
+- [x] Seed all 24 (`node acf/seed.mjs all-sub`)
+- [ ] Review the copy
+- [ ] Replace the stand-in parent art with art for each page
+- [ ] Deploy `cloudflare/router-worker.js`
+- [ ] Point `navigation.js` sub-service links at their nested URLs
+- [ ] Create `case_study_category` terms for video and security, then give
+      their pages a case-study band
+- [ ] The Digital Marketing page's three accent pickers are all `#db3f32`
+      in WP, so its sub-services set their own palette in `_shared.mjs`.
 
 **Repo hygiene**
 - [ ] 43 design-concept files are still tracked from earlier commits. New

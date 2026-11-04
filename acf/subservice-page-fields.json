@@ -1,0 +1,1448 @@
+[
+  {
+    "key": "group_abn_subservice_page",
+    "title": "Sub-service Page",
+    "description": "Drives the headless sub-service pages at /services/<service>/<sub-service>/. These fields are the page's only content source; anything left blank is not shown. Colours and the case-study category fall back to the parent service page's.",
+    "location": [
+      [
+        {
+          "param": "page_parent",
+          "operator": "==",
+          "value": "4399"
+        }
+      ],
+      [
+        {
+          "param": "page_parent",
+          "operator": "==",
+          "value": "4681"
+        }
+      ],
+      [
+        {
+          "param": "page_parent",
+          "operator": "==",
+          "value": "4692"
+        }
+      ],
+      [
+        {
+          "param": "page_parent",
+          "operator": "==",
+          "value": "4698"
+        }
+      ],
+      [
+        {
+          "param": "page_parent",
+          "operator": "==",
+          "value": "4700"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "show_in_rest": 1,
+    "fields": [
+      {
+        "key": "field_ssp_tab_seo",
+        "label": "SEO",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_meta_description",
+        "label": "Meta description",
+        "name": "meta_description",
+        "type": "textarea",
+        "instructions": "Used for the meta description and social cards when the page has no AIOSEO description. Aim for 150-160 characters.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_tab_theme",
+        "label": "Theme",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_color_primary",
+        "label": "Accent colour",
+        "name": "color_primary",
+        "type": "color_picker",
+        "instructions": "Leave blank to use the parent service page's accent colour (recommended, so every sub-service matches its service).",
+        "enable_opacity": 0,
+        "return_format": "string"
+      },
+      {
+        "key": "field_ssp_color_primary_light",
+        "label": "Accent colour — light",
+        "name": "color_primary_light",
+        "type": "color_picker",
+        "instructions": "Blank uses the parent service's. Roughly 10-12% toward white from the accent.",
+        "enable_opacity": 0,
+        "return_format": "string"
+      },
+      {
+        "key": "field_ssp_color_accent",
+        "label": "Accent colour — deep",
+        "name": "color_accent",
+        "type": "color_picker",
+        "instructions": "Blank uses the parent service's. Darker shade, used for eyebrows and small text on light sections.",
+        "enable_opacity": 0,
+        "return_format": "string"
+      },
+      {
+        "key": "field_ssp_tab_hero",
+        "label": "Hero",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_crumb_label",
+        "label": "Breadcrumb label",
+        "name": "crumb_label",
+        "type": "text",
+        "instructions": "Last item of the breadcrumb (Services / <service> / this). Blank uses the WordPress page title."
+      },
+      {
+        "key": "field_ssp_hero_eyebrow",
+        "label": "Eyebrow",
+        "name": "hero_eyebrow",
+        "type": "text",
+        "instructions": "Small caps line above the headline. e.g. \"Performance Marketing & Search Engine Marketing · ABN Junction\""
+      },
+      {
+        "key": "field_ssp_hero_heading_before",
+        "label": "Headline — part 1",
+        "name": "hero_heading_before",
+        "type": "text",
+        "instructions": "e.g. \"FROM\""
+      },
+      {
+        "key": "field_ssp_hero_heading_highlight",
+        "label": "Headline — part 2 (accent colour)",
+        "name": "hero_heading_highlight",
+        "type": "text",
+        "instructions": "e.g. \"AD SPEND\""
+      },
+      {
+        "key": "field_ssp_hero_heading_after",
+        "label": "Headline — part 3",
+        "name": "hero_heading_after",
+        "type": "text",
+        "instructions": "e.g. \"TO REAL GROWTH.\""
+      },
+      {
+        "key": "field_ssp_hero_description",
+        "label": "Intro paragraph",
+        "name": "hero_description",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_hero_cta_primary_label",
+        "label": "Primary button label",
+        "name": "hero_cta_primary_label",
+        "type": "text",
+        "instructions": "Dark button. Blank hides it."
+      },
+      {
+        "key": "field_ssp_hero_cta_primary_url",
+        "label": "Primary button URL",
+        "name": "hero_cta_primary_url",
+        "type": "text",
+        "instructions": "e.g. #campaign-lab or a full URL."
+      },
+      {
+        "key": "field_ssp_hero_cta_secondary_label",
+        "label": "Secondary button label",
+        "name": "hero_cta_secondary_label",
+        "type": "text",
+        "instructions": "Outline button. Blank hides it."
+      },
+      {
+        "key": "field_ssp_hero_cta_secondary_url",
+        "label": "Secondary button URL",
+        "name": "hero_cta_secondary_url",
+        "type": "text",
+        "instructions": "e.g. #offers"
+      },
+      {
+        "key": "field_ssp_hero_image",
+        "label": "Character artwork",
+        "name": "hero_image",
+        "type": "image",
+        "instructions": "PNG on a white or transparent background (it is blended onto the cream hero). Alt text comes from the media library.",
+        "return_format": "id",
+        "preview_size": "medium",
+        "library": "all"
+      },
+      {
+        "key": "field_ssp_hero_tags",
+        "label": "Floating tags",
+        "name": "hero_tags",
+        "type": "repeater",
+        "instructions": "Up to 3 pills floating around the artwork.",
+        "layout": "table",
+        "min": 0,
+        "button_label": "Add tag",
+        "sub_fields": [
+          {
+            "label": "Icon",
+            "name": "icon",
+            "type": "text",
+            "instructions": "One glyph, e.g. ✳ ↗ ◎",
+            "maxlength": 3,
+            "key": "field_ssp_hero_tags_icon"
+          },
+          {
+            "label": "Text",
+            "name": "text",
+            "type": "text",
+            "instructions": "e.g. Paid Search",
+            "key": "field_ssp_hero_tags_text"
+          }
+        ],
+        "max": 3
+      },
+      {
+        "key": "field_ssp_hero_highlights",
+        "label": "Highlights strip",
+        "name": "hero_highlights",
+        "type": "text",
+        "instructions": "Comma-separated, shown under the hero. e.g. \"Google Ads & PPC, Campaign Strategy, Landing Page CRO\""
+      },
+      {
+        "key": "field_ssp_tab_marquee",
+        "label": "Marquee",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_marquee_row_one",
+        "label": "Row 1 keywords",
+        "name": "marquee_row_one",
+        "type": "text",
+        "instructions": "Comma-separated. e.g. \"GOOGLE ADS, META ADS, LEAD GENERATION\""
+      },
+      {
+        "key": "field_ssp_marquee_row_two",
+        "label": "Row 2 keywords (accent colour)",
+        "name": "marquee_row_two",
+        "type": "text",
+        "instructions": "Comma-separated, scrolls the other way."
+      },
+      {
+        "key": "field_ssp_tab_section_menu",
+        "label": "Section menu",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_rail_location",
+        "label": "Menu location label",
+        "name": "rail_location",
+        "type": "text",
+        "instructions": "Left of the sticky section menu, e.g. \"DIGITAL MARKETING / PERFORMANCE\""
+      },
+      {
+        "key": "field_ssp_rail_problems",
+        "label": "Challenge link",
+        "name": "rail_problems",
+        "type": "text",
+        "instructions": "Blank leaves the section out of the menu. e.g. The Challenge"
+      },
+      {
+        "key": "field_ssp_rail_offers",
+        "label": "Offers link",
+        "name": "rail_offers",
+        "type": "text",
+        "instructions": "e.g. What We Offer"
+      },
+      {
+        "key": "field_ssp_rail_journey",
+        "label": "Journey link",
+        "name": "rail_journey",
+        "type": "text",
+        "instructions": "e.g. The Journey"
+      },
+      {
+        "key": "field_ssp_rail_lab",
+        "label": "Lab link",
+        "name": "rail_lab",
+        "type": "text",
+        "instructions": "e.g. Campaign Lab"
+      },
+      {
+        "key": "field_ssp_rail_difference",
+        "label": "Approach link",
+        "name": "rail_difference",
+        "type": "text",
+        "instructions": "e.g. Why ABN Junction"
+      },
+      {
+        "key": "field_ssp_rail_cases",
+        "label": "Case studies link",
+        "name": "rail_cases",
+        "type": "text",
+        "instructions": "e.g. Case Studies"
+      },
+      {
+        "key": "field_ssp_rail_related",
+        "label": "Related services link",
+        "name": "rail_related",
+        "type": "text",
+        "instructions": "e.g. Related Services"
+      },
+      {
+        "key": "field_ssp_rail_insights",
+        "label": "Insights link",
+        "name": "rail_insights",
+        "type": "text",
+        "instructions": "e.g. Insights"
+      },
+      {
+        "key": "field_ssp_rail_faq",
+        "label": "FAQ link",
+        "name": "rail_faq",
+        "type": "text",
+        "instructions": "e.g. FAQs"
+      },
+      {
+        "key": "field_ssp_tab_challenge",
+        "label": "Challenge",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_problems_eyebrow",
+        "label": "Eyebrow",
+        "name": "problems_eyebrow",
+        "type": "text",
+        "instructions": "e.g. 01 / The challenge"
+      },
+      {
+        "key": "field_ssp_problems_heading",
+        "label": "Heading",
+        "name": "problems_heading",
+        "type": "textarea",
+        "instructions": "One line per row; each line break shows as a line break on the page.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_problems_description",
+        "label": "Description",
+        "name": "problems_description",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_problems_items",
+        "label": "Problem cards",
+        "name": "problems_items",
+        "type": "repeater",
+        "instructions": "3 fit the row. No cards hides the section.",
+        "layout": "block",
+        "min": 0,
+        "button_label": "Add card",
+        "sub_fields": [
+          {
+            "label": "Label",
+            "name": "label",
+            "type": "text",
+            "instructions": "e.g. 01 / WASTED SPEND",
+            "key": "field_ssp_problems_items_label"
+          },
+          {
+            "label": "Symbol",
+            "name": "symbol",
+            "type": "text",
+            "instructions": "One glyph, e.g. ↘",
+            "maxlength": 3,
+            "key": "field_ssp_problems_items_symbol"
+          },
+          {
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "",
+            "key": "field_ssp_problems_items_title"
+          },
+          {
+            "label": "Description",
+            "name": "description",
+            "type": "textarea",
+            "instructions": "",
+            "rows": 3,
+            "new_lines": "",
+            "key": "field_ssp_problems_items_description"
+          }
+        ]
+      },
+      {
+        "key": "field_ssp_tab_offers",
+        "label": "Offers",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_offers_eyebrow",
+        "label": "Eyebrow",
+        "name": "offers_eyebrow",
+        "type": "text",
+        "instructions": "e.g. 02 / What we offer"
+      },
+      {
+        "key": "field_ssp_offers_heading",
+        "label": "Heading",
+        "name": "offers_heading",
+        "type": "textarea",
+        "instructions": "One line per row; each line break shows as a line break on the page.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_offers_description",
+        "label": "Description",
+        "name": "offers_description",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_offers_more_label",
+        "label": "Expand button label",
+        "name": "offers_more_label",
+        "type": "text",
+        "instructions": "e.g. What's included (a + is added)"
+      },
+      {
+        "key": "field_ssp_offers_less_label",
+        "label": "Collapse button label",
+        "name": "offers_less_label",
+        "type": "text",
+        "instructions": "e.g. Show less (a − is added)"
+      },
+      {
+        "key": "field_ssp_offers_items",
+        "label": "Capabilities",
+        "name": "offers_items",
+        "type": "repeater",
+        "instructions": "Numbered automatically. 6 fills two rows. No rows hides the section.",
+        "layout": "block",
+        "min": 0,
+        "button_label": "Add capability",
+        "sub_fields": [
+          {
+            "label": "Icon",
+            "name": "icon",
+            "type": "text",
+            "instructions": "One glyph, e.g. ⌕",
+            "maxlength": 3,
+            "key": "field_ssp_offers_items_icon"
+          },
+          {
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "",
+            "key": "field_ssp_offers_items_title"
+          },
+          {
+            "label": "Short description",
+            "name": "description",
+            "type": "textarea",
+            "instructions": "",
+            "rows": 3,
+            "new_lines": "",
+            "key": "field_ssp_offers_items_description"
+          },
+          {
+            "label": "What's included",
+            "name": "detail",
+            "type": "textarea",
+            "instructions": "Shown when the card is expanded. Blank hides the button.",
+            "rows": 3,
+            "new_lines": "",
+            "key": "field_ssp_offers_items_detail"
+          }
+        ]
+      },
+      {
+        "key": "field_ssp_tab_journey",
+        "label": "Journey",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_journey_eyebrow",
+        "label": "Eyebrow",
+        "name": "journey_eyebrow",
+        "type": "text",
+        "instructions": "e.g. 03 / The signature experience"
+      },
+      {
+        "key": "field_ssp_journey_heading",
+        "label": "Heading",
+        "name": "journey_heading",
+        "type": "textarea",
+        "instructions": "One line per row; each line break shows as a line break on the page.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_journey_description",
+        "label": "Description",
+        "name": "journey_description",
+        "type": "textarea",
+        "instructions": "Short line beside the heading.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_journey_scroll_hint",
+        "label": "Scroll hint",
+        "name": "journey_scroll_hint",
+        "type": "text",
+        "instructions": "e.g. SCROLL TO ADVANCE THE STORY →"
+      },
+      {
+        "key": "field_ssp_journey_slides",
+        "label": "Story panels",
+        "name": "journey_slides",
+        "type": "repeater",
+        "instructions": "The pinned scroller slides through these. The scroll length follows the count; 5-6 works best. No panels hides the section.",
+        "layout": "block",
+        "min": 0,
+        "button_label": "Add panel",
+        "sub_fields": [
+          {
+            "label": "Step label",
+            "name": "step",
+            "type": "text",
+            "instructions": "e.g. 01 / BUDGET",
+            "key": "field_ssp_journey_slides_step"
+          },
+          {
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "",
+            "key": "field_ssp_journey_slides_title"
+          },
+          {
+            "label": "Description",
+            "name": "description",
+            "type": "textarea",
+            "instructions": "",
+            "rows": 3,
+            "new_lines": "",
+            "key": "field_ssp_journey_slides_description"
+          },
+          {
+            "label": "Background glyph",
+            "name": "icon",
+            "type": "text",
+            "instructions": "e.g. ◎",
+            "maxlength": 3,
+            "key": "field_ssp_journey_slides_icon"
+          },
+          {
+            "label": "Mock panel title",
+            "name": "panel_title",
+            "type": "text",
+            "instructions": "e.g. BUDGET ALLOCATION",
+            "key": "field_ssp_journey_slides_panel_title"
+          },
+          {
+            "label": "Mock panel rows",
+            "name": "panel_items",
+            "type": "textarea",
+            "instructions": "One per line, 3 works best.",
+            "rows": 3,
+            "new_lines": "",
+            "key": "field_ssp_journey_slides_panel_items"
+          }
+        ]
+      },
+      {
+        "key": "field_ssp_tab_campaign_lab",
+        "label": "Campaign Lab",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_lab_eyebrow",
+        "label": "Eyebrow",
+        "name": "lab_eyebrow",
+        "type": "text",
+        "instructions": "e.g. 04 / The interactive campaign lab"
+      },
+      {
+        "key": "field_ssp_lab_heading",
+        "label": "Heading",
+        "name": "lab_heading",
+        "type": "textarea",
+        "instructions": "One line per row; each line break shows as a line break on the page.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_lab_heading_highlight",
+        "label": "Heading — last line (accent colour)",
+        "name": "lab_heading_highlight",
+        "type": "text",
+        "instructions": "e.g. YOUR GAME PLAN."
+      },
+      {
+        "key": "field_ssp_lab_description",
+        "label": "Description",
+        "name": "lab_description",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_lab_steps",
+        "label": "Steps",
+        "name": "lab_steps",
+        "type": "repeater",
+        "instructions": "The questions visitors answer. Each answer is sent with their enquiry. No steps hides the whole lab.",
+        "layout": "block",
+        "min": 0,
+        "button_label": "Add step",
+        "sub_fields": [
+          {
+            "label": "Step label",
+            "name": "label",
+            "type": "text",
+            "instructions": "e.g. STEP 01 / THE MISSION",
+            "key": "field_ssp_lab_steps_label"
+          },
+          {
+            "label": "Question",
+            "name": "question",
+            "type": "text",
+            "instructions": "e.g. What do you want your campaigns to achieve?",
+            "key": "field_ssp_lab_steps_question"
+          },
+          {
+            "label": "Type",
+            "name": "type",
+            "type": "select",
+            "instructions": "",
+            "choices": {
+              "choices": "Choice pills",
+              "range": "Slider"
+            },
+            "default_value": "choices",
+            "return_format": "value",
+            "allow_null": 0,
+            "ui": 0,
+            "key": "field_ssp_lab_steps_type"
+          },
+          {
+            "label": "Preview tile label",
+            "name": "kpi_label",
+            "type": "text",
+            "instructions": "Shows the answer as a tile in the live preview, e.g. Channels / Monthly ad budget. Blank shows no tile.",
+            "key": "field_ssp_lab_steps_kpi_label"
+          },
+          {
+            "label": "Options",
+            "name": "options",
+            "type": "repeater",
+            "instructions": "The first option starts selected.",
+            "layout": "block",
+            "min": 0,
+            "button_label": "Add option",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "choices"
+                }
+              ]
+            ],
+            "sub_fields": [
+              {
+                "label": "Label",
+                "name": "label",
+                "type": "text",
+                "instructions": "e.g. Qualified leads",
+                "key": "field_ssp_lab_steps_options_label"
+              },
+              {
+                "label": "Icon",
+                "name": "icon",
+                "type": "text",
+                "instructions": "Optional glyph or emoji before the label.",
+                "maxlength": 4,
+                "key": "field_ssp_lab_steps_options_icon"
+              },
+              {
+                "label": "Preview tile value",
+                "name": "kpi",
+                "type": "text",
+                "instructions": "Short form for the tile, e.g. Google. Blank uses the label.",
+                "key": "field_ssp_lab_steps_options_kpi"
+              },
+              {
+                "label": "Plan title",
+                "name": "plan_title",
+                "type": "text",
+                "instructions": "Sets the preview's plan title when picked, e.g. Your lead generation game plan.",
+                "key": "field_ssp_lab_steps_options_plan_title"
+              },
+              {
+                "label": "Plan sentence",
+                "name": "plan_text",
+                "type": "textarea",
+                "instructions": "Added to the plan when picked. Sentences from all steps are joined with \"; \", so start lower-case after the first step.",
+                "rows": 3,
+                "new_lines": "",
+                "key": "field_ssp_lab_steps_options_plan_text"
+              },
+              {
+                "label": "Funnel outcome",
+                "name": "outcome",
+                "type": "text",
+                "instructions": "Replaces the funnel's last stage when picked, e.g. PURCHASE.",
+                "key": "field_ssp_lab_steps_options_outcome"
+              }
+            ],
+            "key": "field_ssp_lab_steps_options"
+          },
+          {
+            "label": "Slider minimum",
+            "name": "range_min",
+            "type": "number",
+            "instructions": "",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "key": "field_ssp_lab_steps_range_min"
+          },
+          {
+            "label": "Slider maximum",
+            "name": "range_max",
+            "type": "number",
+            "instructions": "",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "key": "field_ssp_lab_steps_range_max"
+          },
+          {
+            "label": "Slider step",
+            "name": "range_step",
+            "type": "number",
+            "instructions": "",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "key": "field_ssp_lab_steps_range_step"
+          },
+          {
+            "label": "Slider start value",
+            "name": "range_default",
+            "type": "number",
+            "instructions": "",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "key": "field_ssp_lab_steps_range_default"
+          },
+          {
+            "label": "Value prefix",
+            "name": "range_prefix",
+            "type": "text",
+            "instructions": "e.g. ₹",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "key": "field_ssp_lab_steps_range_prefix"
+          },
+          {
+            "label": "Value caption",
+            "name": "range_caption",
+            "type": "text",
+            "instructions": "e.g. Monthly ad spend",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "key": "field_ssp_lab_steps_range_caption"
+          },
+          {
+            "label": "Minimum label",
+            "name": "range_min_label",
+            "type": "text",
+            "instructions": "e.g. ₹10,000",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "key": "field_ssp_lab_steps_range_min_label"
+          },
+          {
+            "label": "Maximum label",
+            "name": "range_max_label",
+            "type": "text",
+            "instructions": "e.g. ₹3,00,000+",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "key": "field_ssp_lab_steps_range_max_label"
+          },
+          {
+            "label": "Note under the slider",
+            "name": "range_note",
+            "type": "textarea",
+            "instructions": "",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "rows": 3,
+            "new_lines": "",
+            "key": "field_ssp_lab_steps_range_note"
+          },
+          {
+            "label": "Per-day tile label",
+            "name": "range_per_day_label",
+            "type": "text",
+            "instructions": "Adds a tile showing the value ÷ 30, e.g. Daily average. Blank shows none.",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "key": "field_ssp_lab_steps_range_per_day_label"
+          },
+          {
+            "label": "Plan sentence",
+            "name": "range_plan_text",
+            "type": "textarea",
+            "instructions": "Added after the plan; {value} becomes the slider value. e.g. Your {value} monthly budget is an input for planning, not a prediction of leads or revenue.",
+            "conditional_logic": [
+              [
+                {
+                  "field": "field_ssp_lab_steps_type",
+                  "operator": "==",
+                  "value": "range"
+                }
+              ]
+            ],
+            "rows": 3,
+            "new_lines": "",
+            "key": "field_ssp_lab_steps_range_plan_text"
+          }
+        ]
+      },
+      {
+        "key": "field_ssp_lab_preview_title",
+        "label": "Preview title",
+        "name": "lab_preview_title",
+        "type": "text",
+        "instructions": "e.g. ✦ ABN CAMPAIGN CONTROL ROOM"
+      },
+      {
+        "key": "field_ssp_lab_preview_badge",
+        "label": "Preview badge",
+        "name": "lab_preview_badge",
+        "type": "text",
+        "instructions": "e.g. LIVE PREVIEW"
+      },
+      {
+        "key": "field_ssp_lab_chart_label",
+        "label": "Chart label",
+        "name": "lab_chart_label",
+        "type": "text",
+        "instructions": "e.g. CAMPAIGN JOURNEY / ILLUSTRATION"
+      },
+      {
+        "key": "field_ssp_lab_funnel",
+        "label": "Funnel stages",
+        "name": "lab_funnel",
+        "type": "text",
+        "instructions": "Comma-separated. The last stage is replaced by the picked option's outcome. e.g. AD IMPRESSION, CLICK, LANDING PAGE, LEAD"
+      },
+      {
+        "key": "field_ssp_lab_plan_title",
+        "label": "Default plan title",
+        "name": "lab_plan_title",
+        "type": "text",
+        "instructions": "Used when no picked option sets one."
+      },
+      {
+        "key": "field_ssp_lab_plan_text",
+        "label": "Default plan text",
+        "name": "lab_plan_text",
+        "type": "textarea",
+        "instructions": "Used when no picked option adds a sentence.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_lab_cta_label",
+        "label": "Plan button label",
+        "name": "lab_cta_label",
+        "type": "text",
+        "instructions": "Opens the enquiry form, e.g. Get My Campaign Plan ↗. Blank hides the form."
+      },
+      {
+        "key": "field_ssp_lab_replay_label",
+        "label": "Replay link label",
+        "name": "lab_replay_label",
+        "type": "text",
+        "instructions": "Links back to the journey, e.g. Replay the story ↑"
+      },
+      {
+        "key": "field_ssp_lab_disclaimer",
+        "label": "Disclaimer",
+        "name": "lab_disclaimer",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_tab_lab_enquiry_form",
+        "label": "Lab enquiry form",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_lead_form_id",
+        "label": "Contact Form 7 form ID",
+        "name": "lead_form_id",
+        "type": "number",
+        "instructions": "Blank uses the site's shared enquiry form (12775). Another form must use the same field names: your-name, your-email, your-phone, your-company, your-message, services.",
+        "min": 1
+      },
+      {
+        "key": "field_ssp_lead_services_label",
+        "label": "\"Services\" value",
+        "name": "lead_services_label",
+        "type": "text",
+        "instructions": "What the enquiry's services field says. Blank uses \"<service> / <this page>\"."
+      },
+      {
+        "key": "field_ssp_lead_eyebrow",
+        "label": "Eyebrow",
+        "name": "lead_eyebrow",
+        "type": "text",
+        "instructions": "e.g. Your campaign brief is ready"
+      },
+      {
+        "key": "field_ssp_lead_heading",
+        "label": "Heading",
+        "name": "lead_heading",
+        "type": "text",
+        "instructions": "e.g. Let's turn your plan into a conversation."
+      },
+      {
+        "key": "field_ssp_lead_description",
+        "label": "Description",
+        "name": "lead_description",
+        "type": "textarea",
+        "instructions": "e.g. Your campaign selections will be included in the enquiry.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_lead_consent",
+        "label": "Consent checkbox text",
+        "name": "lead_consent",
+        "type": "textarea",
+        "instructions": "Blank hides the checkbox.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_lead_submit_label",
+        "label": "Submit button label",
+        "name": "lead_submit_label",
+        "type": "text",
+        "instructions": "e.g. Send My Campaign Brief ↗"
+      },
+      {
+        "key": "field_ssp_lead_success_message",
+        "label": "Success message",
+        "name": "lead_success_message",
+        "type": "textarea",
+        "instructions": "Blank uses Contact Form 7's own message.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_lead_error_message",
+        "label": "Error message",
+        "name": "lead_error_message",
+        "type": "textarea",
+        "instructions": "Shown when sending fails or is flagged as spam. Worth including a direct email address.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_tab_approach",
+        "label": "Approach",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_diff_eyebrow",
+        "label": "Eyebrow",
+        "name": "diff_eyebrow",
+        "type": "text",
+        "instructions": "e.g. 05 / The ABN Junction approach"
+      },
+      {
+        "key": "field_ssp_diff_heading",
+        "label": "Heading",
+        "name": "diff_heading",
+        "type": "textarea",
+        "instructions": "One line per row; each line break shows as a line break on the page.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_diff_description",
+        "label": "Description",
+        "name": "diff_description",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_diff_image",
+        "label": "Artwork",
+        "name": "diff_image",
+        "type": "image",
+        "instructions": "PNG on a white or transparent background. Blank lays the copy out full width.",
+        "return_format": "id",
+        "preview_size": "medium",
+        "library": "all"
+      },
+      {
+        "key": "field_ssp_diff_image_label",
+        "label": "Artwork label",
+        "name": "diff_image_label",
+        "type": "text",
+        "instructions": "e.g. PERFORMANCE, WITH A PLAN ✳"
+      },
+      {
+        "key": "field_ssp_diff_points",
+        "label": "Ticked points",
+        "name": "diff_points",
+        "type": "repeater",
+        "instructions": "",
+        "layout": "block",
+        "min": 0,
+        "button_label": "Add point",
+        "sub_fields": [
+          {
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "",
+            "key": "field_ssp_diff_points_title"
+          },
+          {
+            "label": "Description",
+            "name": "description",
+            "type": "textarea",
+            "instructions": "",
+            "rows": 3,
+            "new_lines": "",
+            "key": "field_ssp_diff_points_description"
+          }
+        ]
+      },
+      {
+        "key": "field_ssp_tab_case_studies",
+        "label": "Case studies",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_cases_category",
+        "label": "Show case studies from",
+        "name": "cases_category",
+        "type": "taxonomy",
+        "instructions": "Blank uses the parent service page's category, then any category. The two most recent are shown; none hides the section.",
+        "taxonomy": "case_study_category",
+        "field_type": "select",
+        "allow_null": 1,
+        "add_term": 0,
+        "save_terms": 0,
+        "load_terms": 0,
+        "return_format": "id",
+        "multiple": 0
+      },
+      {
+        "key": "field_ssp_cases_eyebrow",
+        "label": "Eyebrow",
+        "name": "cases_eyebrow",
+        "type": "text",
+        "instructions": "e.g. 06 / Proof in action"
+      },
+      {
+        "key": "field_ssp_cases_heading",
+        "label": "Heading",
+        "name": "cases_heading",
+        "type": "textarea",
+        "instructions": "One line per row; each line break shows as a line break on the page.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_cases_description",
+        "label": "Description",
+        "name": "cases_description",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_cases_card_label",
+        "label": "Card label",
+        "name": "cases_card_label",
+        "type": "text",
+        "instructions": "e.g. SELECTED CASE STUDY"
+      },
+      {
+        "key": "field_ssp_cases_link_label",
+        "label": "Card link label",
+        "name": "cases_link_label",
+        "type": "text",
+        "instructions": "e.g. Explore this case study ↗"
+      },
+      {
+        "key": "field_ssp_tab_related_services",
+        "label": "Related services",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_related_eyebrow",
+        "label": "Eyebrow",
+        "name": "related_eyebrow",
+        "type": "text",
+        "instructions": "e.g. 07 / The connected growth system"
+      },
+      {
+        "key": "field_ssp_related_heading",
+        "label": "Heading",
+        "name": "related_heading",
+        "type": "textarea",
+        "instructions": "One line per row; each line break shows as a line break on the page.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_related_description",
+        "label": "Description",
+        "name": "related_description",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_related_items",
+        "label": "Service cards",
+        "name": "related_items",
+        "type": "repeater",
+        "instructions": "4 fill the row. Cards without a URL are dropped.",
+        "layout": "block",
+        "min": 0,
+        "button_label": "Add card",
+        "sub_fields": [
+          {
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "",
+            "key": "field_ssp_related_items_title"
+          },
+          {
+            "label": "Description",
+            "name": "description",
+            "type": "textarea",
+            "instructions": "",
+            "rows": 3,
+            "new_lines": "",
+            "key": "field_ssp_related_items_description"
+          },
+          {
+            "label": "URL",
+            "name": "url",
+            "type": "text",
+            "instructions": "Full URL, e.g. https://abnjunction.com/services/digital-marketing/seo/",
+            "key": "field_ssp_related_items_url"
+          },
+          {
+            "label": "Link label",
+            "name": "link_label",
+            "type": "text",
+            "instructions": "e.g. EXPLORE SERVICE →",
+            "key": "field_ssp_related_items_link_label"
+          }
+        ]
+      },
+      {
+        "key": "field_ssp_tab_insights",
+        "label": "Insights",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_insights_category",
+        "label": "Show posts from",
+        "name": "insights_category",
+        "type": "taxonomy",
+        "instructions": "Blog category for the three posts. Blank (or an empty category) shows the latest posts.",
+        "taxonomy": "category",
+        "field_type": "select",
+        "allow_null": 1,
+        "add_term": 0,
+        "save_terms": 0,
+        "load_terms": 0,
+        "return_format": "id",
+        "multiple": 0
+      },
+      {
+        "key": "field_ssp_insights_eyebrow",
+        "label": "Eyebrow",
+        "name": "insights_eyebrow",
+        "type": "text",
+        "instructions": "e.g. 08 / From the people doing the work"
+      },
+      {
+        "key": "field_ssp_insights_heading",
+        "label": "Heading",
+        "name": "insights_heading",
+        "type": "textarea",
+        "instructions": "One line per row; each line break shows as a line break on the page. The typing word follows the last line.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_insights_heading_switch",
+        "label": "Typing words",
+        "name": "insights_heading_switch",
+        "type": "text",
+        "instructions": "Comma-separated; the heading's last word types through these. e.g. SEARCH, AD AUCTION, FUNNEL, DATA"
+      },
+      {
+        "key": "field_ssp_insights_description",
+        "label": "Description",
+        "name": "insights_description",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_insights_link_label",
+        "label": "Card link label",
+        "name": "insights_link_label",
+        "type": "text",
+        "instructions": "e.g. Read article →"
+      },
+      {
+        "key": "field_ssp_tab_faq",
+        "label": "FAQ",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_faq_eyebrow",
+        "label": "Eyebrow",
+        "name": "faq_eyebrow",
+        "type": "text",
+        "instructions": "e.g. 09 / Real questions, useful answers"
+      },
+      {
+        "key": "field_ssp_faq_heading",
+        "label": "Heading",
+        "name": "faq_heading",
+        "type": "textarea",
+        "instructions": "One line per row; each line break shows as a line break on the page.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_faq_intro",
+        "label": "Intro",
+        "name": "faq_intro",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_faq_items",
+        "label": "Questions",
+        "name": "faq_items",
+        "type": "repeater",
+        "instructions": "The first one starts open.",
+        "layout": "block",
+        "min": 0,
+        "button_label": "Add question",
+        "sub_fields": [
+          {
+            "label": "Question",
+            "name": "question",
+            "type": "text",
+            "instructions": "",
+            "key": "field_ssp_faq_items_question"
+          },
+          {
+            "label": "Answer",
+            "name": "answer",
+            "type": "textarea",
+            "instructions": "",
+            "rows": 3,
+            "new_lines": "",
+            "key": "field_ssp_faq_items_answer"
+          }
+        ]
+      },
+      {
+        "key": "field_ssp_tab_final_cta",
+        "label": "Final CTA",
+        "name": "",
+        "type": "tab",
+        "placement": "top"
+      },
+      {
+        "key": "field_ssp_final_eyebrow",
+        "label": "Eyebrow",
+        "name": "final_eyebrow",
+        "type": "text",
+        "instructions": "e.g. 10 / Let's build what comes next"
+      },
+      {
+        "key": "field_ssp_final_heading",
+        "label": "Heading",
+        "name": "final_heading",
+        "type": "textarea",
+        "instructions": "One line per row; each line break shows as a line break on the page.",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_final_description",
+        "label": "Description",
+        "name": "final_description",
+        "type": "textarea",
+        "instructions": "",
+        "rows": 3,
+        "new_lines": ""
+      },
+      {
+        "key": "field_ssp_final_cta_label",
+        "label": "Button label",
+        "name": "final_cta_label",
+        "type": "text",
+        "instructions": ""
+      },
+      {
+        "key": "field_ssp_final_cta_url",
+        "label": "Button URL",
+        "name": "final_cta_url",
+        "type": "text",
+        "instructions": "e.g. https://abnjunction.com/contact-us/ or #campaign-lab"
+      }
+    ]
+  }
+]

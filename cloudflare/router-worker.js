@@ -26,12 +26,43 @@ const FRESH_SECONDS = 300;
 // throttling or down.
 const STALE_SECONDS = 86400;
 
+// Sub-service pages whose ACF content is filled in. Listed one by one, not as
+// /services/*/*: the Next.js route 404s a page without content, and WordPress
+// should keep serving any nested URL that isn't ready.
+const SUBSERVICE_PATHS = new Set([
+  "/services/digital-marketing/performance-marketing",
+  "/services/digital-marketing/seo",
+  "/services/digital-marketing/social-media-marketing",
+  "/services/digital-marketing/social-media-optimization",
+  "/services/digital-marketing/search-engine-marketing",
+  "/services/digital-marketing/programmatic-advertising",
+  "/services/digital-marketing/email-whatsapp-marketing",
+  "/services/web-and-graphic-design/ui-ux-design",
+  "/services/web-and-graphic-design/web-design",
+  "/services/web-and-graphic-design/graphic-design",
+  "/services/web-and-graphic-design/illustrations-3d-designs",
+  "/services/web-development/website-development",
+  "/services/web-development/content-management-system",
+  "/services/web-development/app-development",
+  "/services/web-development/adaptive-software-development",
+  "/services/video-production/content-marketing",
+  "/services/video-production/video-editing",
+  "/services/video-production/vfx-animation",
+  "/services/video-production/audio-editing-sfx",
+  "/services/web-data-security/network-penetration-testing",
+  "/services/web-data-security/server-penetration-testing",
+  "/services/web-data-security/ethical-hacking",
+  "/services/web-data-security/ethical-hacking-bug-bounty",
+  "/services/web-data-security/firewall-datasecuity",
+]);
+
 // Paths served by the Next.js app on Cloudflare Pages.
 function isPagesPath(pathname) {
   return (
     /^\/case-studies\/[^\/]+\/?$/.test(pathname) || // /case-studies/[slug]
     /^\/blog\/[^\/]+\/?$/.test(pathname) || // /blog/[slug]
     /^\/services\/[^\/]+\/?$/.test(pathname) || // /services/[slug], first-level only
+    SUBSERVICE_PATHS.has(pathname.replace(/\/$/, "")) ||
     pathname === "/contact-us" ||
     pathname === "/contact-us/" ||
     pathname.startsWith("/contact/") || // contact page artwork

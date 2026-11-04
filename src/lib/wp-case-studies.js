@@ -163,16 +163,39 @@ export async function getAggregateData(totalCount) {
   }
 }
 
-export async function getInsightsPosts() {
+// WP renders titles and excerpts with HTML entities (&#8217;, &amp;, &hellip;).
+// These strings are shown as plain text, so the entities are decoded here.
+function decodeEntities(value) {
+  return String(value || "")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+    .replace(/&hellip;/g, "…")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
+// `categoryId` (optional) narrows to one blog category, as the sub-service
+// pages do. A category with no posts falls back to the latest from any.
+export async function getInsightsPosts({ categoryId = null } = {}) {
   try {
-    const { data } = await fetchWithRetry(`${WP_API_URL}/posts?per_page=3&_embed`, { tries: 2 });
+    let { data } = await fetchWithRetry(
+      `${WP_API_URL}/posts?per_page=3&_embed${categoryId ? `&categories=${categoryId}` : ""}`,
+      { tries: 2 }
+    );
+    if (!data.length && categoryId) {
+      ({ data } = await fetchWithRetry(`${WP_API_URL}/posts?per_page=3&_embed`, { tries: 2 }));
+    }
     if (!data.length) throw new Error("no posts");
     return data.map((p) => {
       const term = p._embedded?.["wp:term"]?.[0]?.[0];
       return {
         label: term ? term.name : "Blog",
-        title: p.title.rendered.replace(/&amp;/g, "&"),
-        desc: p.excerpt.rendered.replace(/<[^>]+>/g, "").trim().slice(0, 120),
+        title: decodeEntities(p.title.rendered),
+        // Decoded after stripping tags, so "Google&#8217;s" reads "Google’s".
+        desc: decodeEntities(p.excerpt.rendered.replace(/<[^>]+>/g, "")).trim().slice(0, 120),
         image: p._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null,
         href: `/blog/${p.slug}`, // internal route — this app already serves it
       };
