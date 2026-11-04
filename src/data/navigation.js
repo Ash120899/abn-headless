@@ -69,6 +69,7 @@ export const SERVICE_DETAILS = {
       { label: "Meta Ads", href: "https://abnjunction.com/services/digital-marketing/meta-ads/" },
       { label: "SEO", href: "https://abnjunction.com/services/digital-marketing/seo/" },
       { label: "Social Media", href: "https://abnjunction.com/services/digital-marketing/social-media-marketing/" },
+      { label: "Social Media Optimization", href: "https://abnjunction.com/services/digital-marketing/social-media-optimization/" },
       { label: "Email, WhatsApp & CRM", href: "https://abnjunction.com/services/digital-marketing/email-whatsapp-marketing/" },
       { label: "Analytics & Conversion Tracking", href: "https://abnjunction.com/services/digital-marketing/analytics-conversion-tracking/" },
       { label: "Programmatic Advertising", href: "https://abnjunction.com/services/digital-marketing/programmatic-advertising/" },

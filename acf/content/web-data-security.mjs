@@ -47,11 +47,11 @@ export const acf = {
     { prefix: "", value: "360", suffix: "°", label: "Network to application" },
   ],
   hero_tools: [
-    { glyph: "⌗", label: "Nmap" },
-    { glyph: "◈", label: "Burp Suite" },
-    { glyph: "M", label: "Metasploit" },
-    { glyph: "▤", label: "Wireshark" },
-    { glyph: "⛨", label: "Firewall" },
+    { glyph: "⌗", label: "Network Testing" },
+    { glyph: "◈", label: "Server Testing" },
+    { glyph: "⛨", label: "Firewall & Data" },
+    { glyph: "▤", label: "Ethical Hacking" },
+    { glyph: "✦", label: "Bug Bounty" },
     { glyph: "◉", label: "Monitoring" },
   ],
 

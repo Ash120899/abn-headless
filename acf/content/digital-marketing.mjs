@@ -97,7 +97,16 @@ export const acf = {
       link_url: `${SITE}/services/digital-marketing/social-media-marketing/`,
     },
     {
-      num: "06 · NURTURE & RETENTION",
+      num: "06 · SOCIAL PRESENCE",
+      title: "Social Media Optimization",
+      description:
+        "Your profiles are often the first thing people check. We tidy them up, keep your brand consistent and make your content easier to discover across every platform.",
+      chips: "Profile Audits, Content Scheduling, Hashtag Research, Social Listening",
+      link_label: "Explore Social Media Optimization →",
+      link_url: `${SITE}/services/digital-marketing/social-media-optimization/`,
+    },
+    {
+      num: "07 · NURTURE & RETENTION",
       title: "Email, WhatsApp & CRM",
       description:
         "Turn enquiries into conversations and conversations into customers. Connect follow-ups, reminders, segmentation and lifecycle messaging instead of letting leads disappear.",
@@ -106,7 +115,7 @@ export const acf = {
       link_url: `${SITE}/services/digital-marketing/email-whatsapp-marketing/`,
     },
     {
-      num: "07 · MEASUREMENT",
+      num: "08 · MEASUREMENT",
       title: "Analytics & Conversion Tracking",
       description:
         "Know what actually worked. GA4, GTM, enhanced conversions, e-commerce tracking and clean event architecture make optimisation possible.",
@@ -115,7 +124,7 @@ export const acf = {
       link_url: `${SITE}/services/digital-marketing/analytics-conversion-tracking/`,
     },
     {
-      num: "08 · ADVANCED MEDIA",
+      num: "09 · ADVANCED MEDIA",
       title: "Programmatic & Audience Activation",
       description:
         "Extend reach intelligently with audience strategy, display, remarketing and advanced media where they genuinely support the growth plan.",

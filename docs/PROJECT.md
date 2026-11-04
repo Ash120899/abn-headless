@@ -446,8 +446,7 @@ menu and the mobile drawer. Scene titles on the service pages match it exactly.
 Sub-service pages live at nested URLs (`/services/<service>/<sub-service>/`),
 and the nav links to them directly. The menu list and the scenes on each service
 page are kept in step: a sub-service in one belongs in the other, with one scene
-per sub-service. Social Media Optimization is the exception, in neither (its only
-inbound link is a card on Social Media Marketing).
+per sub-service.
 
 Watch out for two real typos **in WordPress**, not in this code:
 - category slug `web-graphics-deisgn` (term 15)
@@ -493,12 +492,14 @@ Watch out for two real typos **in WordPress**, not in this code:
       Iteration, Production & Direction, Campaign & Platform Delivery, Meta Ads.
 - [x] Deploy the Worker with the 8 new paths, push the nav links and point the
       Explore links at the new pages.
-- [x] Digital Marketing: add Google Ads and Meta Ads scenes (8 scenes). Web & Data
-      Security: rewrite the scenes from the five sub-service pages (5 scenes; the
-      Monitoring scene was removed because it has no page).
-- [ ] Web & Data Security: `hero_tools` in WP still say Malware Cleanup, SEO
-      Recovery and so on, and the scene art still shows the old topics.
-- [ ] Own art for the Google Ads and Meta Ads scenes (stand-ins for now).
+- [x] Digital Marketing: add Google Ads, Meta Ads and Social Media Optimization
+      scenes (9 scenes). Web & Data Security: rewrite the scenes and hero labels
+      from the five sub-service pages (5 scenes; the Monitoring scene was removed
+      because it has no page).
+- [x] AIOSEO title and description on the 8 new pages, set through
+      `/aioseo/v1/posts-list/update-details-column`.
+- [ ] Art: the security scenes still show the old topics, and the Google Ads,
+      Meta Ads and Social Media Optimization scenes use stand-ins.
 - [ ] Fill Insights → Description on all five service pages (the text is in each
       seed file, `insights_description`).
 - [ ] Don't re-seed a service page to change one field. Seed files lack the 11
