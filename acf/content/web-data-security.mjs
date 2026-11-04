@@ -65,8 +65,8 @@ export const acf = {
       num: "01 · NETWORK LAYER",
       title: "Network Penetration Testing",
       description:
-        "Find the way in before someone else does. Simulated attacks against the network surface expose misconfigurations, exposed services and weak segmentation while they are still cheap to fix.",
-      chips: "External Testing, Internal Testing, Segmentation, Exposed Services",
+        "A network can look secure until someone tests it properly. With your written permission, we simulate real attack paths, then show you what we found and how to fix it.",
+      chips: "Vulnerability Scanning, Exploit Testing, Wireless Analysis, Internal Network Review",
       link_label: "Explore Network Testing →",
       link_url: `${SITE}/services/web-data-security/network-penetration-testing/`,
     },
@@ -74,8 +74,8 @@ export const acf = {
       num: "02 · SERVER LAYER",
       title: "Server Penetration Testing",
       description:
-        "Harden what everything else runs on. Server configuration, patch levels, permissions and privilege escalation paths are tested the way a real attacker would probe them.",
-      chips: "Configuration Review, Patch Gaps, Privilege Escalation, Hardening",
+        "Servers hold your applications, databases and customer data. With your written permission, we test their configuration and access controls, then show you what to fix first.",
+      chips: "OS Assessment, Service Evaluation, Database Testing, Patch Management Audit",
       link_label: "Explore Server Testing →",
       link_url: `${SITE}/services/web-data-security/server-penetration-testing/`,
     },
@@ -83,8 +83,8 @@ export const acf = {
       num: "03 · DATA PROTECTION",
       title: "Data & Firewall Protection",
       description:
-        "Control what gets in and what can leave. Firewall rules, access control, encryption and backup strategy protect the data itself rather than only the perimeter around it.",
-      chips: "Firewall Rules, Access Control, Encryption, Backups",
+        "Customer records, finances and business plans all live on your network. We strengthen firewalls, access and encryption so sensitive data stays better protected.",
+      chips: "Firewall Configuration, Data Encryption, Intrusion Detection, Network Segmentation",
       link_label: "Explore Data Protection →",
       link_url: `${SITE}/services/web-data-security/firewall-datasecuity/`,
     },
@@ -92,28 +92,19 @@ export const acf = {
       num: "04 · OFFENSIVE TESTING",
       title: "Ethical Hacking",
       description:
-        "Think like the attacker on purpose. Authorised offensive testing across applications and infrastructure shows how far a real intrusion could actually get, not just which ports are open.",
-      chips: "Application Testing, Exploit Validation, Attack Paths, Reporting",
+        "The best way to understand your defences is to challenge them. With written authorisation, we test your systems using the same thinking as real attackers, then help you close the gaps.",
+      chips: "Network Testing, Web App Security, Social Engineering, Mobile & IoT Testing",
       link_label: "Explore Ethical Hacking →",
       link_url: `${SITE}/services/web-data-security/ethical-hacking/`,
     },
     {
-      num: "05 · CONTINUOUS DISCOVERY",
+      num: "05 · RESPONSIBLE DISCLOSURE",
       title: "Ethical Hacking Bug Bounty",
       description:
-        "Keep looking after the report is filed. A structured bug bounty approach turns security from a once-a-year exercise into continuous discovery as the platform changes.",
-      chips: "Ongoing Discovery, Responsible Disclosure, Triage, Remediation",
+        "Skilled researchers can find issues internal teams miss. We help you set clear rules, handle reports responsibly and turn each valid finding into a fix.",
+      chips: "Programme Consultation, Responsible Disclosure, Report Verification, Remediation Guidance",
       link_label: "Explore Bug Bounty →",
       link_url: `${SITE}/services/web-data-security/ethical-hacking-bug-bounty/`,
-    },
-    {
-      num: "06 · MONITORING & RESPONSE",
-      title: "Monitoring & Incident Readiness",
-      description:
-        "Know quickly when something changes. Logging, alerting, uptime monitoring and a rehearsed response plan decide whether an incident is an inconvenience or a crisis.",
-      chips: "Logging, Alerting, Uptime, Incident Response",
-      link_label: "Explore Monitoring →",
-      link_url: `${SITE}/services/web-data-security/`,
     },
   ],
 

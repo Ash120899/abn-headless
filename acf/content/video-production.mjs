@@ -105,7 +105,7 @@ export const acf = {
         "Get the footage the edit will need. Shot planning, direction, lighting and on-set decisions are made with the final cut in mind rather than fixed afterwards.",
       chips: "Shot Planning, Direction, Lighting, On-set Capture",
       link_label: "Explore Production →",
-      link_url: `${SITE}/services/video-production/`,
+      link_url: `${SITE}/services/video-production/production-direction/`,
     },
     {
       num: "06 · DISTRIBUTION",
@@ -114,7 +114,7 @@ export const acf = {
         "One shoot should not become one video. Aspect ratios, cutdowns, captions and platform-native versions let a single production work across ads, social, site and sales.",
       chips: "Cutdowns, Aspect Ratios, Captions, Ad Variants",
       link_label: "Explore Campaign Delivery →",
-      link_url: `${SITE}/services/video-production/`,
+      link_url: `${SITE}/services/video-production/campaign-platform-delivery/`,
     },
   ],
 

@@ -66,11 +66,12 @@ export const SERVICE_DETAILS = {
     links: [
       { label: "Performance Marketing", href: "https://abnjunction.com/services/digital-marketing/performance-marketing/" },
       { label: "Google Ads", href: "https://abnjunction.com/services/digital-marketing/search-engine-marketing/" },
-      { label: "Meta Ads", href: "#" },
+      { label: "Meta Ads", href: "https://abnjunction.com/services/digital-marketing/meta-ads/" },
       { label: "SEO", href: "https://abnjunction.com/services/digital-marketing/seo/" },
       { label: "Social Media", href: "https://abnjunction.com/services/digital-marketing/social-media-marketing/" },
       { label: "Email, WhatsApp & CRM", href: "https://abnjunction.com/services/digital-marketing/email-whatsapp-marketing/" },
-      { label: "Analytics & Conversion Tracking", href: "#" },
+      { label: "Analytics & Conversion Tracking", href: "https://abnjunction.com/services/digital-marketing/analytics-conversion-tracking/" },
+      { label: "Programmatic Advertising", href: "https://abnjunction.com/services/digital-marketing/programmatic-advertising/" },
     ],
   },
   "web-design": {
@@ -80,7 +81,9 @@ export const SERVICE_DETAILS = {
       { label: "UI/UX Design", href: "https://abnjunction.com/services/web-and-graphic-design/ui-ux-design/" },
       { label: "Creative Web Design", href: "https://abnjunction.com/services/web-and-graphic-design/web-design/" },
       { label: "Graphic Design", href: "https://abnjunction.com/services/web-and-graphic-design/graphic-design/" },
+      { label: "Branding & Visual Identity", href: "https://abnjunction.com/services/web-and-graphic-design/branding-visual-identity/" },
       { label: "Illustrations & 3D Models", href: "https://abnjunction.com/services/web-and-graphic-design/illustrations-3d-designs/" },
+      { label: "Campaign & Content Design", href: "https://abnjunction.com/services/web-and-graphic-design/campaign-content-design/" },
     ],
   },
   "web-development": {
@@ -91,6 +94,8 @@ export const SERVICE_DETAILS = {
       { label: "Content Management System", href: "https://abnjunction.com/services/web-development/content-management-system/" },
       { label: "App Development", href: "https://abnjunction.com/services/web-development/app-development/" },
       { label: "Adaptive Software Development", href: "https://abnjunction.com/services/web-development/adaptive-software-development/" },
+      { label: "Performance & Infrastructure", href: "https://abnjunction.com/services/web-development/performance-infrastructure/" },
+      { label: "Maintenance & Iteration", href: "https://abnjunction.com/services/web-development/maintenance-iteration/" },
     ],
   },
   "video-production": {
@@ -101,6 +106,8 @@ export const SERVICE_DETAILS = {
       { label: "Video Editing", href: "https://abnjunction.com/services/video-production/video-editing/" },
       { label: "VFX & Animation", href: "https://abnjunction.com/services/video-production/vfx-animation/" },
       { label: "Audio Editing & SFX", href: "https://abnjunction.com/services/video-production/audio-editing-sfx/" },
+      { label: "Production & Direction", href: "https://abnjunction.com/services/video-production/production-direction/" },
+      { label: "Campaign & Platform Delivery", href: "https://abnjunction.com/services/video-production/campaign-platform-delivery/" },
     ],
   },
   "data-security": {

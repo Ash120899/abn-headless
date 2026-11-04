@@ -106,7 +106,7 @@ export const acf = {
         "A build is only as good as how it runs. Caching, image strategy, hosting, CDN and monitoring keep the platform fast under real traffic instead of only in a test environment.",
       chips: "Caching, CDN, Hosting, Monitoring",
       link_label: "Explore Performance Engineering →",
-      link_url: `${SITE}/services/web-development/`,
+      link_url: `${SITE}/services/web-development/performance-infrastructure/`,
     },
     {
       num: "06 · CONTINUOUS DELIVERY",
@@ -115,7 +115,7 @@ export const acf = {
         "Launch is the start, not the finish. Updates, security patches, analytics review and incremental releases keep the platform healthy and improving after go-live.",
       chips: "Updates, Security Patches, QA, Incremental Releases",
       link_label: "Explore Maintenance →",
-      link_url: `${SITE}/services/web-development/`,
+      link_url: `${SITE}/services/web-development/maintenance-iteration/`,
     },
   ],
 

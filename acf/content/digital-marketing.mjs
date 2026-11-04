@@ -67,10 +67,28 @@ export const acf = {
         "Search, Shopping, PMax, Meta and Microsoft campaigns engineered around commercial outcomes — not vanity traffic.",
       chips: "Google Ads, Meta Ads, Shopping / PMax, Microsoft Ads",
       link_label: "Explore Performance Marketing →",
-      link_url: `${SITE}/services/digital-marketing/`,
+      link_url: `${SITE}/services/digital-marketing/performance-marketing/`,
     },
     {
-      num: "03 · SOCIAL GROWTH",
+      num: "03 · SEARCH INTENT",
+      title: "Google Ads",
+      description:
+        "Reach people at the moment they are looking for what you offer. Keyword research, ad copy and landing pages are planned to turn that intent into visits and enquiries.",
+      chips: "PPC Management, Keyword Research, Ad Copywriting, Landing Pages",
+      link_label: "Explore Google Ads →",
+      link_url: `${SITE}/services/digital-marketing/search-engine-marketing/`,
+    },
+    {
+      num: "04 · SOCIAL ACQUISITION",
+      title: "Meta Ads",
+      description:
+        "Reach people before they start searching. Facebook and Instagram campaigns combine audience strategy, creative testing and retargeting, built around real enquiries and sales.",
+      chips: "Facebook Ads, Instagram Ads, Lead Generation, Retargeting",
+      link_label: "Explore Meta Ads →",
+      link_url: `${SITE}/services/digital-marketing/meta-ads/`,
+    },
+    {
+      num: "05 · SOCIAL GROWTH",
       title: "Social Media Growth",
       description:
         "Paid and organic social working together: content, creative testing, communities, lead generation and retargeting built around the audience journey.",
@@ -79,7 +97,7 @@ export const acf = {
       link_url: `${SITE}/services/digital-marketing/social-media-marketing/`,
     },
     {
-      num: "04 · NURTURE & RETENTION",
+      num: "06 · NURTURE & RETENTION",
       title: "Email, WhatsApp & CRM",
       description:
         "Turn enquiries into conversations and conversations into customers. Connect follow-ups, reminders, segmentation and lifecycle messaging instead of letting leads disappear.",
@@ -88,22 +106,22 @@ export const acf = {
       link_url: `${SITE}/services/digital-marketing/email-whatsapp-marketing/`,
     },
     {
-      num: "05 · MEASUREMENT",
+      num: "07 · MEASUREMENT",
       title: "Analytics & Conversion Tracking",
       description:
         "Know what actually worked. GA4, GTM, enhanced conversions, e-commerce tracking and clean event architecture make optimisation possible.",
       chips: "GA4, GTM, Enhanced Conversions, Attribution",
       link_label: "Explore Tracking & Analytics →",
-      link_url: `${SITE}/services/digital-marketing/`,
+      link_url: `${SITE}/services/digital-marketing/analytics-conversion-tracking/`,
     },
     {
-      num: "06 · ADVANCED MEDIA",
+      num: "08 · ADVANCED MEDIA",
       title: "Programmatic & Audience Activation",
       description:
         "Extend reach intelligently with audience strategy, display, remarketing and advanced media where they genuinely support the growth plan.",
       chips: "Programmatic, Display, Remarketing, Audience Strategy",
       link_label: "Explore Advanced Media →",
-      link_url: `${SITE}/services/digital-marketing/`,
+      link_url: `${SITE}/services/digital-marketing/programmatic-advertising/`,
     },
   ],
 

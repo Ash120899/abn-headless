@@ -219,7 +219,7 @@ imported by the app — they only feed the seeder.
 
 ---
 
-## 4a. The sub-service pages (built 2026-10-26, not live)
+## 4a. The sub-service pages (live since 2026-11-04, all 24)
 
 Every child page of a service page (`/services/<service>/<sub-service>/`)
 shares **one layout**, ported from
@@ -443,10 +443,11 @@ image.
 truth** for service and sub-service naming — it drives both the desktop mega
 menu and the mobile drawer. Scene titles on the service pages match it exactly.
 
-The live WordPress sub-pages exist at nested URLs
-(`/services/<service>/<sub-service>/`) and all resolve. Note the nav file's
-own links still point at parent pages in several places; the content files use
-the real nested URLs instead.
+Sub-service pages live at nested URLs (`/services/<service>/<sub-service>/`),
+and the nav links to them directly. The menu list and the scenes on each service
+page are kept in step: a sub-service in one belongs in the other, with one scene
+per sub-service. Social Media Optimization is the exception, in neither (its only
+inbound link is a card on Social Media Marketing).
 
 Watch out for two real typos **in WordPress**, not in this code:
 - category slug `web-graphics-deisgn` (term 15)
@@ -475,10 +476,36 @@ Watch out for two real typos **in WordPress**, not in this code:
 - [x] Import the sub-service field group; create and seed Performance Marketing
 - [x] Write content files for the other 23 sub-services
 - [x] Seed all 24 (`node acf/seed.mjs all-sub`)
-- [ ] Review the copy
+- [x] Deploy `cloudflare/router-worker.js` (24 paths routed, page cache on)
+- [x] Point `navigation.js` sub-service links at their nested URLs
+- [ ] Review the copy, especially that each page's offers are ones ABN sells
+- [ ] Send one real enquiry through a sub-service Campaign Lab form
+- [ ] Set the AIOSEO title and description on Performance Marketing (13406).
+      It shows the default title and a fallback description from the seed file.
 - [ ] Replace the stand-in parent art with art for each page
-- [ ] Deploy `cloudflare/router-worker.js`
-- [ ] Point `navigation.js` sub-service links at their nested URLs
+- [ ] Decide on the Meta Ads and Analytics menu links (no page behind them)
+- [x] Analytics & Conversion Tracking (WP page 13410): seeded, and the Digital
+      Marketing links fixed with `acf/patch-scene-links.mjs`, which keeps images
+      and hand edits. Credentials go in a gitignored `.env.wp`, passed with
+      `node --env-file=.env.wp`.
+- [x] Create and seed 7 more pages (WP 13412–13418): Branding & Visual Identity,
+      Campaign & Content Design, Performance & Infrastructure, Maintenance &
+      Iteration, Production & Direction, Campaign & Platform Delivery, Meta Ads.
+- [x] Deploy the Worker with the 8 new paths, push the nav links and point the
+      Explore links at the new pages.
+- [x] Digital Marketing: add Google Ads and Meta Ads scenes (8 scenes). Web & Data
+      Security: rewrite the scenes from the five sub-service pages (5 scenes; the
+      Monitoring scene was removed because it has no page).
+- [ ] Web & Data Security: `hero_tools` in WP still say Malware Cleanup, SEO
+      Recovery and so on, and the scene art still shows the old topics.
+- [ ] Own art for the Google Ads and Meta Ads scenes (stand-ins for now).
+- [ ] Fill Insights → Description on all five service pages (the text is in each
+      seed file, `insights_description`).
+- [ ] Don't re-seed a service page to change one field. Seed files lack the 11
+      image fields set in WP, so they could be blanked (not tested). The security
+      seed is also out of date on 43 fields and would overwrite the WP copy, and
+      Digital Marketing would lose its WP colours and badge edits. Edit in WP Admin.
+- [ ] Watch the 24 URLs in Search Console
 - [ ] Create `case_study_category` terms for video and security, then give
       their pages a case-study band
 - [ ] The Digital Marketing page's three accent pickers are all `#db3f32`

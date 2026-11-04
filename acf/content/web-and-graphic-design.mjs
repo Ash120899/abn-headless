@@ -94,7 +94,7 @@ export const acf = {
         "Create a visual identity that holds together across websites, campaigns, decks and social channels. Colour, typography, imagery and design rules become one reusable brand language.",
       chips: "Identity, Typography, Colour Systems, Brand Guidelines",
       link_label: "Explore Branding →",
-      link_url: `${SITE}/services/web-and-graphic-design/`,
+      link_url: `${SITE}/services/web-and-graphic-design/branding-visual-identity/`,
     },
     {
       num: "05 · VISUAL STORYTELLING",
@@ -112,7 +112,7 @@ export const acf = {
         "Scale the visual system across real campaigns. Ad creatives, content assets, presentations and motion-ready designs stay recognisable while adapting to each platform.",
       chips: "Ad Creatives, Content Design, Presentations, Motion Assets",
       link_label: "Explore Creative Production →",
-      link_url: `${SITE}/services/web-and-graphic-design/`,
+      link_url: `${SITE}/services/web-and-graphic-design/campaign-content-design/`,
     },
   ],
 

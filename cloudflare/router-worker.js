@@ -41,6 +41,14 @@ const PAGE_FRESH_SECONDS = 60;
 // should keep serving any nested URL that isn't ready.
 const SUBSERVICE_PATHS = new Set([
   "/services/digital-marketing/performance-marketing",
+  "/services/digital-marketing/analytics-conversion-tracking",
+  "/services/digital-marketing/meta-ads",
+  "/services/web-and-graphic-design/branding-visual-identity",
+  "/services/web-and-graphic-design/campaign-content-design",
+  "/services/web-development/performance-infrastructure",
+  "/services/web-development/maintenance-iteration",
+  "/services/video-production/production-direction",
+  "/services/video-production/campaign-platform-delivery",
   "/services/digital-marketing/seo",
   "/services/digital-marketing/social-media-marketing",
   "/services/digital-marketing/social-media-optimization",
