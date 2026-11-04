@@ -56,19 +56,16 @@ export const SERVICE_PILLARS = [
 ];
 
 // Per-pillar drill-down content for the mobile drawer (and, for Digital
-// Marketing, the desktop mega menu's column 2). Digital Marketing's
-// sub-services each have their own real URL; the other four pillars are
-// single long-scroll pages on the live site with no distinct sub-service
-// URLs, so their sub-service links point back to the parent service page's
-// relevant section — same "#" placeholder pattern already used above for
-// links that don't have a confirmed destination yet.
+// Marketing, the desktop mega menu's column 2). Sub-services link to their own
+// pages. A "#" href is the same placeholder used above, for links without a
+// confirmed destination yet.
 export const SERVICE_DETAILS = {
   "digital-marketing": {
     eyebrow: "The growth engine",
     description: "Choose the discipline that matches the current growth constraint.",
     links: [
-      { label: "Performance Marketing", href: "#" },
-      { label: "Google Ads", href: "#" },
+      { label: "Performance Marketing", href: "https://abnjunction.com/services/digital-marketing/performance-marketing/" },
+      { label: "Google Ads", href: "https://abnjunction.com/services/digital-marketing/search-engine-marketing/" },
       { label: "Meta Ads", href: "#" },
       { label: "SEO", href: "https://abnjunction.com/services/digital-marketing/seo/" },
       { label: "Social Media", href: "https://abnjunction.com/services/digital-marketing/social-media-marketing/" },
@@ -80,41 +77,41 @@ export const SERVICE_DETAILS = {
     eyebrow: "Design & experience",
     description: "Branding, UX/UI and creative work that makes the brand tangible.",
     links: [
-      { label: "UI/UX Design", href: "https://abnjunction.com/services/web-and-graphic-design/" },
-      { label: "Creative Web Design", href: "https://abnjunction.com/services/web-and-graphic-design/" },
-      { label: "Graphic Design", href: "https://abnjunction.com/services/web-and-graphic-design/" },
-      { label: "Illustrations & 3D Models", href: "https://abnjunction.com/services/web-and-graphic-design/" },
+      { label: "UI/UX Design", href: "https://abnjunction.com/services/web-and-graphic-design/ui-ux-design/" },
+      { label: "Creative Web Design", href: "https://abnjunction.com/services/web-and-graphic-design/web-design/" },
+      { label: "Graphic Design", href: "https://abnjunction.com/services/web-and-graphic-design/graphic-design/" },
+      { label: "Illustrations & 3D Models", href: "https://abnjunction.com/services/web-and-graphic-design/illustrations-3d-designs/" },
     ],
   },
   "web-development": {
     eyebrow: "Build & engineering",
     description: "Websites, apps and platforms built to scale.",
     links: [
-      { label: "Website Development", href: "https://abnjunction.com/services/web-development/" },
-      { label: "Content Management System", href: "https://abnjunction.com/services/web-development/" },
-      { label: "App Development", href: "https://abnjunction.com/services/web-development/" },
-      { label: "Adaptive Software Development", href: "https://abnjunction.com/services/web-development/" },
+      { label: "Website Development", href: "https://abnjunction.com/services/web-development/website-development/" },
+      { label: "Content Management System", href: "https://abnjunction.com/services/web-development/content-management-system/" },
+      { label: "App Development", href: "https://abnjunction.com/services/web-development/app-development/" },
+      { label: "Adaptive Software Development", href: "https://abnjunction.com/services/web-development/adaptive-software-development/" },
     ],
   },
   "video-production": {
     eyebrow: "Story & motion",
     description: "Video and content that moves an audience to act.",
     links: [
-      { label: "Content Marketing", href: "https://abnjunction.com/services/video-production/" },
-      { label: "Video Editing", href: "https://abnjunction.com/services/video-production/" },
-      { label: "VFX & Animation", href: "https://abnjunction.com/services/video-production/" },
-      { label: "Audio Editing & SFX", href: "https://abnjunction.com/services/video-production/" },
+      { label: "Content Marketing", href: "https://abnjunction.com/services/video-production/content-marketing/" },
+      { label: "Video Editing", href: "https://abnjunction.com/services/video-production/video-editing/" },
+      { label: "VFX & Animation", href: "https://abnjunction.com/services/video-production/vfx-animation/" },
+      { label: "Audio Editing & SFX", href: "https://abnjunction.com/services/video-production/audio-editing-sfx/" },
     ],
   },
   "data-security": {
     eyebrow: "Protection & trust",
     description: "Testing, hardening and monitoring that keeps the system safe.",
     links: [
-      { label: "Network Penetration Testing", href: "https://abnjunction.com/services/web-data-security/" },
-      { label: "Server Penetration Testing", href: "https://abnjunction.com/services/web-data-security/" },
-      { label: "Data & Firewall Protection", href: "https://abnjunction.com/services/web-data-security/" },
-      { label: "Ethical Hacking", href: "https://abnjunction.com/services/web-data-security/" },
-      { label: "Ethical Hacking Bug Bounty", href: "https://abnjunction.com/services/web-data-security/" },
+      { label: "Network Penetration Testing", href: "https://abnjunction.com/services/web-data-security/network-penetration-testing/" },
+      { label: "Server Penetration Testing", href: "https://abnjunction.com/services/web-data-security/server-penetration-testing/" },
+      { label: "Data & Firewall Protection", href: "https://abnjunction.com/services/web-data-security/firewall-datasecuity/" },
+      { label: "Ethical Hacking", href: "https://abnjunction.com/services/web-data-security/ethical-hacking/" },
+      { label: "Ethical Hacking Bug Bounty", href: "https://abnjunction.com/services/web-data-security/ethical-hacking-bug-bounty/" },
     ],
   },
 };
