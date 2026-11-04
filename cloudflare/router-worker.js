@@ -7,6 +7,7 @@
  * - Routes the migrated Next.js pages to Cloudflare Pages
  * - Routes everything else to the WordPress backend (Hostinger)
  * - Caches public WordPress REST GETs (/wp-json/...) at the edge
+ * - Keeps the last good copy of each Next.js page, for when a render fails
  *
  * Why the cache: Hostinger throttles each client IP at roughly 30 requests
  * per 30 seconds, before PHP runs (429, empty body, `platform: hostinger`).
@@ -15,6 +16,10 @@
  * exhausted that budget and the pages 500'd. With this cache each REST URL
  * reaches Hostinger at most once per FRESH_SECONDS, and if Hostinger does
  * throttle or fail, the last good copy is served instead (stale-if-error).
+ *
+ * The REST cache can't help a URL that isn't cached yet: while Hostinger is
+ * throttling, one such URL still 500s the whole page (seen on /blogs and the
+ * sub-service pages, 2026-11-04). So pages keep a last good copy as well.
  */
 
 const PAGES_ORIGIN = "https://abn-headless.pages.dev";
@@ -25,6 +30,11 @@ const FRESH_SECONDS = 300;
 // How long a stale copy is kept as a fallback for when WordPress is
 // throttling or down.
 const STALE_SECONDS = 86400;
+// How long a cached page is served without re-rendering it. Short on purpose:
+// a re-render reads from the REST cache above, so it costs WordPress little,
+// and the stale copy is what keeps a page up. A WP edit shows on a page within
+// FRESH_SECONDS + PAGE_FRESH_SECONDS.
+const PAGE_FRESH_SECONDS = 60;
 
 // Sub-service pages whose ACF content is filled in. Listed one by one, not as
 // /services/*/*: the Next.js route 404s a page without content, and WordPress
@@ -82,16 +92,32 @@ function isPagesPath(pathname) {
 // Only anonymous, public REST reads are cached. Anything carrying a login
 // (editor sessions, block editor, previews, application passwords) goes
 // straight to WordPress so nobody ever sees someone else's private data.
-function isCacheableRest(request, url) {
+function isAnonymousGet(request) {
   if (request.method !== "GET") return false;
-  if (!url.pathname.startsWith("/wp-json/")) return false;
   if (request.headers.has("Authorization") || request.headers.has("X-WP-Nonce")) return false;
   const cookie = request.headers.get("Cookie") || "";
   if (/wordpress_logged_in|wp-postpass|wordpress_sec/.test(cookie)) return false;
   return true;
 }
 
-async function cachedRest(request, url, ctx) {
+function isCacheableRest(request, url) {
+  return url.pathname.startsWith("/wp-json/") && isAnonymousGet(request);
+}
+
+// Rendered pages only. Next's client-side navigation asks for the same path
+// with an RSC header and gets a data payload back, which must never be stored
+// as, or served in place of, the HTML.
+function isCacheablePage(request, url) {
+  if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/_next/")) return false;
+  if (url.pathname.startsWith("/contact/")) return false; // artwork files
+  if (request.headers.has("RSC") || url.searchParams.has("_rsc")) return false;
+  return isAnonymousGet(request);
+}
+
+// `browserCacheControl` replaces the stored copy's long max-age on the way out.
+// That max-age is for this cache: a browser holding a page for a day would
+// never see an update.
+async function cachedRead(url, ctx, freshSeconds, fetchOrigin, browserCacheControl) {
   const cache = caches.default;
   // Keyed on the URL alone, so differing request headers don't fragment it.
   const key = new Request(url.toString(), { method: "GET" });
@@ -99,15 +125,15 @@ async function cachedRest(request, url, ctx) {
   const cachedAt = cached ? Number(cached.headers.get("X-Cached-At")) || 0 : 0;
   const ageSeconds = (Date.now() - cachedAt) / 1000;
 
-  if (cached && ageSeconds < FRESH_SECONDS) {
-    return withStatus(cached, "HIT");
+  if (cached && ageSeconds < freshSeconds) {
+    return withStatus(cached, "HIT", browserCacheControl);
   }
 
   let origin;
   try {
-    origin = await fetch(request);
+    origin = await fetchOrigin();
   } catch (err) {
-    if (cached) return withStatus(cached, "STALE");
+    if (cached) return withStatus(cached, "STALE", browserCacheControl);
     throw err;
   }
 
@@ -119,20 +145,21 @@ async function cachedRest(request, url, ctx) {
     stored.headers.set("X-Cached-At", String(Date.now()));
     stored.headers.delete("Set-Cookie");
     ctx.waitUntil(cache.put(key, stored));
-    return withStatus(origin, "MISS");
+    return withStatus(origin, "MISS", browserCacheControl);
   }
 
   // Throttled (429) or failing: the last good copy beats an error page.
   if (cached && (origin.status === 429 || origin.status >= 500)) {
-    return withStatus(cached, "STALE");
+    return withStatus(cached, "STALE", browserCacheControl);
   }
   return origin;
 }
 
-function withStatus(response, status) {
+function withStatus(response, status, browserCacheControl) {
   const res = new Response(response.body, response);
   res.headers.set("X-Edge-Cache", status);
   res.headers.delete("X-Cached-At");
+  if (browserCacheControl) res.headers.set("Cache-Control", browserCacheControl);
   return res;
 }
 
@@ -146,17 +173,22 @@ export default {
       // Next's trailing-slash 308 (/blog/ -> /blog) back to the browser.
       // The default "follow" resolves it here and serves the page at the
       // slash URL, which is what the WordPress canonicals use.
-      return fetch(
-        new Request(`${PAGES_ORIGIN}${url.pathname}${url.search}`, {
-          method: request.method,
-          headers: request.headers,
-          body: request.body,
-        })
-      );
+      const fetchPages = () =>
+        fetch(
+          new Request(`${PAGES_ORIGIN}${url.pathname}${url.search}`, {
+            method: request.method,
+            headers: request.headers,
+            body: request.body,
+          })
+        );
+
+      return isCacheablePage(request, url)
+        ? cachedRead(url, ctx, PAGE_FRESH_SECONDS, fetchPages, "public, max-age=0, must-revalidate")
+        : fetchPages();
     }
 
     if (isCacheableRest(request, url)) {
-      return cachedRest(request, url, ctx);
+      return cachedRead(url, ctx, FRESH_SECONDS, () => fetch(request));
     }
 
     // Everything else -> pass through (WordPress)
