@@ -565,7 +565,7 @@ body:has(.svc-page) .btn-slide{display:none !important}
   /* Scenes stay stacked on top of each other (only one is visible at a
      time), but are now positioned within the copy row rather than the
      whole stage. */
-  .svc-page .scene{inset:auto 7vw;top:0;position:relative;grid-area:1/1}
+  .svc-page .scene{inset:auto;top:0;position:relative;grid-area:1/1}
   .svc-page .story-copy{display:grid}
   .svc-page .scene h3{font-size:clamp(30px,8.5vw,44px)}
   .svc-page .scene p{font-size:14px;line-height:1.5;color:rgba(11,13,15,.78)}

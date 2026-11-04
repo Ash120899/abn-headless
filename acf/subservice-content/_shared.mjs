@@ -116,6 +116,10 @@ const RELATED = {
 
 const pad = (n) => String(n).padStart(2, "0");
 
+// "Campaign" reads as "your campaign brief" mid-sentence, but acronyms and
+// names ("SEO", "UX", "Meta Ads") keep their capitals.
+const briefInSentence = (brief) => (/^[A-Z][a-z]+$/.test(brief) ? brief.toLowerCase() : brief);
+
 const choices = (n, name, question, kpiLabel, options) => ({
   label: `STEP ${pad(n)} / ${name}`,
   question,
@@ -259,12 +263,12 @@ export function subservice(c) {
 
     lead_form_id: null,
     lead_services_label: c.crumb,
-    lead_eyebrow: `Your ${lab.brief.toLowerCase()} brief is ready`,
+    lead_eyebrow: `Your ${briefInSentence(lab.brief)} brief is ready`,
     lead_heading: "Let's turn your plan into a conversation.",
     lead_description: "Your selections are included with your enquiry, so we can come back with a plan that fits your goals.",
     lead_consent: "I agree to include these details in an enquiry to ABN Junction and be contacted about my request.",
     lead_submit_label: `Send My ${lab.brief} Brief ↗`,
-    lead_success_message: `Thanks! Your ${lab.brief.toLowerCase()} brief is with us. We'll be in touch within one working day.`,
+    lead_success_message: `Thanks! Your ${briefInSentence(lab.brief)} brief is with us. We'll be in touch within one working day.`,
     lead_error_message: "We couldn't send that just now. Please try again, or email abnjunction@gmail.com and we'll pick it up right away.",
 
     diff_eyebrow: eyebrow("The ABN Junction approach"),
